@@ -1,0 +1,5 @@
+env/
+etc/
+__pycache__/
+*.ui
+*.pyc
