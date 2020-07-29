@@ -3,3 +3,4 @@ etc/
 __pycache__/
 *.ui
 *.pyc
+*.sqlite
