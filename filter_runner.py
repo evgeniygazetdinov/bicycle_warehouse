@@ -1,13 +1,14 @@
 import sys
 from PySide2 import QtWidgets
-from PySide2.QtCore import Qt, Slot
+from PySide2.QtCore import Qt, Slot, QFile
 from PySide2.QtGui import QPainter
 from PySide2.QtWidgets import (QAction, QApplication, QHeaderView, QHBoxLayout, QLabel, QLineEdit,
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem,
                                QVBoxLayout, QWidget)
 from PySide2.QtCharts import QtCharts
+from PySide2.QtUiTools import QUiLoader
 import sys
-from categories_template  import Ui_Window as Ui_MainWindow
+# from filter_template  import   Ui_MainWindow
 
 
 
@@ -15,8 +16,9 @@ from categories_template  import Ui_Window as Ui_MainWindow
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        ui_file = QFile("filter.ui")
+        loader = QUiLoader()
+        window = loader.load(ui_file)
  
  
 if __name__ == '__main__':

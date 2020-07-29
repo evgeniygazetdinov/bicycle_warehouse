@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtWidgets import QHeaderView,QTableWidget
 
 class Ui_Window(object):
     def setupUi(self, Window):
@@ -35,9 +36,12 @@ class Ui_Window(object):
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setGeometry(QtCore.QRect(200, 60, 101, 51))
         self.pushButton_4.setObjectName("pushButton_4")
-        self.cashier = QtWidgets.QListView(self.centralwidget)
-        self.cashier.setGeometry(QtCore.QRect(0, 120, 801, 181))
-        self.cashier.setObjectName("cashier")
+        self.table = QTableWidget()
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["Description", "Price"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.table.setGeometry(QtCore.QRect(0, 120, 801, 181))
+        self.table.setObjectName("cashier")
         self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_5.setGeometry(QtCore.QRect(260, 0, 80, 24))
         self.pushButton_5.setObjectName("pushButton_5")
@@ -47,7 +51,7 @@ class Ui_Window(object):
         self.dateTimeEdit.raise_()
         self.dateTimeEdit_2.raise_()
         self.pushButton_4.raise_()
-        self.cashier.raise_()
+        self.table.raise_()
         self.pushButton.raise_()
         self.pushButton_5.raise_()
         Window.setCentralWidget(self.centralwidget)
@@ -60,7 +64,7 @@ class Ui_Window(object):
         Window.setStatusBar(self.statusbar)
 
         self.retranslateUi(Window)
-        self.pushButton_4.clicked.connect(self.cashier.selectAll)
+        self.pushButton_4.clicked.connect(self.table.selectAll)
         QtCore.QMetaObject.connectSlotsByName(Window)
 
     def retranslateUi(self, Window):
