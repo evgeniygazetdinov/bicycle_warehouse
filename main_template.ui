@@ -295,7 +295,42 @@
       </item>
       <item row="1" column="0">
        <property name="text">
-        <string/>
+        <string>ф2003001</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>3105</string>
+       </property>
+      </item>
+      <item row="1" column="2">
+       <property name="text">
+        <string>Масло RockShow 5WT 10ml, 11 4015.354.010</string>
+       </property>
+      </item>
+      <item row="1" column="3">
+       <property name="text">
+        <string>0.3</string>
+       </property>
+      </item>
+      <item row="1" column="4">
+       <property name="text">
+        <string>1%</string>
+       </property>
+      </item>
+      <item row="1" column="5">
+       <property name="text">
+        <string>0.3</string>
+       </property>
+      </item>
+      <item row="1" column="6">
+       <property name="text">
+        <string>435</string>
+       </property>
+      </item>
+      <item row="1" column="7">
+       <property name="text">
+        <string>10</string>
        </property>
       </item>
      </widget>
@@ -1792,7 +1827,7 @@
     <property name="title">
      <string>Товары</string>
     </property>
-    <addaction name="action_3"/>
+    <addaction name="add_goods_action"/>
     <addaction name="action_4"/>
     <addaction name="action_CSV"/>
    </widget>
@@ -1839,7 +1874,7 @@
     <string>выход</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="add_goods_action">
    <property name="text">
     <string>добавить товары</string>
    </property>
@@ -1886,6 +1921,38 @@
     <hint type="destinationlabel">
      <x>329</x>
      <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>sortByColumn(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>506</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellActivated(int,int)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>sortByColumn(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>606</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>606</x>
+     <y>167</y>
     </hint>
    </hints>
   </connection>

@@ -1,7 +1,6 @@
 *WARHOUSE on qt5*
 
-
-%install%
+install
 
 chmod +x install.sh
 ./install.sh
