@@ -80,3 +80,39 @@ class Insert_Into_Window(QMainWindow):
         self.pushButton.setText(_translate("Insert_FORM", "добавить строку"))
         self.pushButton_2.setText(_translate("Insert_FORM", "загрузить в базу"))
         self.pushButton_3.setText(_translate("Insert_FORM", "удалить строку"))
+        self.add_action()
+
+
+    def add_action(self):
+        self.pushButton.clicked.connect(self.add_row)
+        self.pushButton_3.clicked.connect(self.remove_row)
+        self.pushButton_2.clicked.connect(self.upload_to_base)
+
+
+    def add_row(self):
+        rowPosition = self.tableWidget.rowCount()
+        self.tableWidget.insertRow(rowPosition)
+
+    def remove_row(self,selected):
+        rowPosition = self.tableWidget.rowCount()
+        if rowPosition <= 1:
+            pass
+        else:
+            self.tableWidget.removeRow(rowPosition-1)
+        
+        
+    
+    def upload_to_base(self):
+        widget = self.tableWidget
+        row = widget.currentItem()
+        headercount = widget.columnCount()
+        for x in range(0,headercount,1):
+            headertext = widget.horizontalHeaderItem(x).text()
+            if columnname == headertext:
+                cell = widget.item(row, x).text()   # get cell at row, col
+                return cell
+
+
+
+        print(cell)
+ 
