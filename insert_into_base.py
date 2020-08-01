@@ -2,7 +2,7 @@ import sys
 from PySide2 import QtGui, QtWidgets, QtCore
 from PySide2.QtWidgets import (QApplication, QMainWindow, QPushButton, 
                              QToolTip, QMessageBox, QLabel,QDialog)
-
+from db import Bicycle_db
 
 class Insert_Into_Window(QMainWindow): 
     def __init__(self):
@@ -80,3 +80,58 @@ class Insert_Into_Window(QMainWindow):
         self.pushButton.setText(_translate("Insert_FORM", "добавить строку"))
         self.pushButton_2.setText(_translate("Insert_FORM", "загрузить в базу"))
         self.pushButton_3.setText(_translate("Insert_FORM", "удалить строку"))
+        self.add_action()
+
+
+    def add_action(self):
+        self.pushButton.clicked.connect(self.add_row)
+        self.pushButton_3.clicked.connect(self.remove_row)
+        self.pushButton_2.clicked.connect(self.upload_to_base)
+
+
+    def add_row(self):
+        rowPosition = self.tableWidget.rowCount()
+        self.tableWidget.insertRow(rowPosition)
+
+    def remove_row(self,selected):
+        rowPosition = self.tableWidget.rowCount()
+        if rowPosition <= 1:
+            pass
+        else:
+            self.tableWidget.removeRow(rowPosition-1)
+    
+        
+            
+
+    def get_values_from_table(self):
+        values = []
+        headers = []
+        for column in range(self.tableWidget.columnCount()):
+            header = self.tableWidget.horizontalHeaderItem(column)
+            if header is not None:
+                    headers.append(header.text())
+        for row in range(self.tableWidget.rowCount()):
+            rowdata = []
+            for column in range(self.tableWidget.columnCount()):
+                item = self.tableWidget.item(row, column)
+                if item is not None:
+                    rowdata.append(item.text())
+                else:
+                    rowdata.append('""')
+
+            values.append(dict(zip(headers,rowdata)))
+        return values
+    
+    def upload_to_base(self):
+        res = []
+        db = Bicycle_db()
+        #add course
+        values = self.get_values_from_table()
+        for row in values:
+            values = ','.join(map(str, row.values()))
+            db.edit("insert into goods(article, article_old, name, qty, buy, profit, category, sell_uah ) values({});".format(values))
+        print('executed')
+        
+
+
+ 

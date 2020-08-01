@@ -8,12 +8,11 @@
 
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
-from insert_into_base import Insert_Into_Window
+from main_action import Views_Main_Window
 
-
-
-class Ui_MainWindow(object):
+class Ui_MainWindow(Views_Main_Window):
     def setupUi(self, MainWindow):
+        
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1266, 874)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -24,27 +23,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
-        self.listWidget = QtWidgets.QListWidget(self.tab)
-        self.listWidget.setGeometry(QtCore.QRect(0, 40, 131, 741))
-        self.listWidget.setObjectName("listWidget")
-        item = QtWidgets.QListWidgetItem()
-        icon = QtGui.QIcon.fromTheme("2")
-        item.setIcon(icon)
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+       
         self.label = QtWidgets.QLabel(self.tab)
         self.label.setGeometry(QtCore.QRect(0, 10, 121, 21))
         font = QtGui.QFont()
@@ -234,7 +213,7 @@ class Ui_MainWindow(object):
         self.label_5 = QtWidgets.QLabel(self.tab)
         self.label_5.setGeometry(QtCore.QRect(970, 560, 81, 21))
         self.label_5.setObjectName("label_5")
-        self.listWidget.raise_()
+        #self.treeWidget.raise_()
         self.label.raise_()
         self.label_4.raise_()
         self.pushButton_8.raise_()
@@ -678,25 +657,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        __sortingEnabled = self.listWidget.isSortingEnabled()
-        self.listWidget.setSortingEnabled(False)
-        item = self.listWidget.item(0)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(1)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(2)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(3)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(4)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(5)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(6)
-        item.setText(_translate("MainWindow", "New Item"))
-        item = self.listWidget.item(7)
-        item.setText(_translate("MainWindow", "New Item"))
-        self.listWidget.setSortingEnabled(__sortingEnabled)
         self.label.setText(_translate("MainWindow", "категории"))
         self.label_4.setText(_translate("MainWindow", "фильтр"))
         item = self.tableWidget.verticalHeaderItem(0)
@@ -933,21 +893,7 @@ class Ui_MainWindow(object):
         self.add_goods_action.setText(_translate("MainWindow", "добавить товары"))
         self.action_4.setText(_translate("MainWindow", "добавить категории"))
         self.action_CSV.setText(_translate("MainWindow", "добавить товары из CSV"))
-        #######
-        self.dialogs = list()
         self.add_actions()
-    
-    
-    def show_insert_window(self):
-        widget = QDialog()
-        ui = Insert_Into_Window()
-        ui.setupUi(widget)
-        widget.exec_()
-
-    def add_actions(self):
-        self.add_goods_action.triggered.connect(self.show_insert_window)
-
-
 
 if __name__ == "__main__":
     import sys
