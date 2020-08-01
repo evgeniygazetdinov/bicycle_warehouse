@@ -28,6 +28,7 @@ class Bicycle_db():
         if self.db.open():
             sql_query = QSqlQuery()
             res = sql_query.exec_(query)
+            print(res)
             self.db.close()
 
 
