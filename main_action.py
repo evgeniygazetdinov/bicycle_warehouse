@@ -45,10 +45,11 @@ class Views_Main_Window:
 
 
     def fill_tree(self):
-        cg = QtWidgets.QTreeWidgetItem(self.treeWidget,['top_carrot'])
-        c1 = QtWidgets.QTreeWidgetItem(cg,['carrot','0.99'])
-        h = QtWidgets.QTreeWidgetItem(['ham','50.15'])
-        self.treeWidget.addTopLevelItem(h)
+        pass
+        # cg = QtWidgets.QTreeWidgetItem(self.treeWidget,['top_carrot'])
+        # c1 = QtWidgets.QTreeWidgetItem(cg,['carrot','0.99'])
+        # h = QtWidgets.QTreeWidgetItem(['ham','50.15'])
+        # self.treeWidget.addTopLevelItem(h)
 
     
     
