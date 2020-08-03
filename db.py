@@ -99,12 +99,4 @@ class Bicycle_db():
             
         
         
-      
-
-
-
-
-
-if __name__ =="__main__":
-    db = Bicycle_db()
-    db.put_dump()    
+       
