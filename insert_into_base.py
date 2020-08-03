@@ -12,7 +12,6 @@ class Insert_Into_Window(QMainWindow):
         self.left = 100
         self.width = 680
         self.height = 500
-                          # <===
 
     def setupUi(self, Insert_FORM):
         Insert_FORM.setObjectName("Insert_FORM")

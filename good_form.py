@@ -6,6 +6,9 @@ from db import Bicycle_db
 
 
 class GoodsForm(QMainWindow):
+    def __init__(self,values=False):
+        super().__init__()
+        self.values = values
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(544, 297)
@@ -120,6 +123,7 @@ class GoodsForm(QMainWindow):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        self.additional_actions()
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -139,6 +143,15 @@ class GoodsForm(QMainWindow):
         self.USD_value.setText(_translate("Form", "30"))
         self.label_10.setText(_translate("Form", "Артикул"))
         self.category_title.setText(_translate("Form", "Категория"))
+
+    def parse_values(self,values):
+        print(values)
+        field1 = self.tableWidget.item(r,0).text()
+
+    def additional_actions(self):
+        if self.values:
+            self.parse_values(self.values)
+
 
     def add_row(self):
         rowPosition = self.tableWidget.rowCount()

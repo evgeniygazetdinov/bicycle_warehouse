@@ -20,10 +20,13 @@ class Views_Main_Window:
         #fill_table_by_default
         self.display_goods_from_category(True)
 
+    def parse_table(self):
+        self.tbl_anggota.item(r,0).text()
        
     
 
     def show_insert_window(self):
+        #self.parse_table()
         widget = QDialog()
         ui = GoodsForm()
         ui.setupUi(widget)
