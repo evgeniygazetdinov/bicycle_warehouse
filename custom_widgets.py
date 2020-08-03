@@ -1,7 +1,7 @@
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QDialog
 from new_category_window import Ui_New_Category_Form
-
+from db import Bicycle_db
 
 
 
@@ -29,11 +29,10 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                   item = self.currentItem()
                   for SelectedItem in self.selectedItems():
                      if SelectedItem.text(0) == item.text(0):
-                            print(SelectedItem.text(0))
                             SelectedItem.removeChild(item)
-                     
+                            db = Bicycle_db()
+                            db.edit("DELETE FROM artists_backup WHERE name LIKE '%{}%';".format(item.text(0)))
            if action == edit_category_Action:
-
                   if self.selectedItems():
                      item = self.selectedItems()[0]
                      text, ok = QtWidgets.QInputDialog.getText(self, "Редактировать", "редактировать:", QtWidgets.QLineEdit.Normal, item.text(0))
@@ -46,3 +45,8 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                             QtWidgets.QTreeWidgetItem(self.selectedItems()[0], [text])
                          else:
                             QtWidgets.QTreeWidgetItem(self, [text])
+
+
+class TreeWidgetGoods(CustomTreeWidget):
+       def contextMenuEvent(self,event):
+              pass
