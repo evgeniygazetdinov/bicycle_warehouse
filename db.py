@@ -57,6 +57,8 @@ class Bicycle_db():
                     res.append(sql_query.value(0)) 
             self.db.close()    
             return res
+    def close(self):
+        self.connection.close()
 
 
     def put_csv_into_table(file,table):

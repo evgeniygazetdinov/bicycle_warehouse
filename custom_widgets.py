@@ -48,5 +48,23 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
 
 class TreeWidgetGoods(CustomTreeWidget):
+
        def contextMenuEvent(self,event):
               pass
+
+
+class CustomTableWithGoods(QtWidgets.QTableWidget):
+       def __init__(self, parent = None):
+           QtWidgets.QTableWidget.__init__(self, parent)
+
+       def contextMenuEvent(self,event):
+              menu = QtWidgets.QMenu(self)
+              add_Action = menu.addAction("добавить")
+              edit_Action = menu.addAction("редактировать")
+              remove_Action = menu.addAction("удалить")
+              action = menu.exec_(self.mapToGlobal(event.pos()))
+              if action == remove_Action:
+                     print('remove')
+              if action == edit_Action:
+                     print("edit")
+
