@@ -4,3 +4,4 @@ __pycache__/
 *.ui
 *.pyc
 *.sqlite
+*.csv

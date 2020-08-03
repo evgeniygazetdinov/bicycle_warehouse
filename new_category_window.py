@@ -44,7 +44,6 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
         self.label.setText(_translate("Form", "имя для категории"))
 
     def edit_category_handler(self,tree_widget):
-        #
         print('this edit')
 
     def new_category_handler(self,tree_widget):
