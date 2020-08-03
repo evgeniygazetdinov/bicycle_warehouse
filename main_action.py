@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
-from insert_into_base import Insert_Into_Window
+from good_form import GoodsForm
 from custom_widgets import CustomTreeWidget
 import sqlite3
 from db import Bicycle_db
@@ -13,11 +13,12 @@ class Views_Main_Window:
 
     def add_additional_custom_elements(self):
         self.add_custom_tree()
-        self.fill_tree()        
+        self.fill_tree()
+        self.fill_combobox_with_categories()        
 
     def show_insert_window(self):
         widget = QDialog()
-        ui = Insert_Into_Window()
+        ui = GoodsForm()
         ui.setupUi(widget)
         widget.exec_()
 
@@ -30,13 +31,19 @@ class Views_Main_Window:
         self.treeWidget.insertTopLevelItems(index, item_name)
 
 
-
     def add_custom_tree(self):
         self.treeWidget = CustomTreeWidget(self.tab)
         self.treeWidget.setGeometry(QtCore.QRect(0, 40, 131, 741))
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "имя")
 
+    def fill_combobox_with_categories(self):
+        categories = self.get_category_values()
+        _translate = QtCore.QCoreApplication.translate
+        for category in range(len(categories)):
+            self.comboBox.addItem("")
+            self.comboBox.setItemText(category,(categories[category]['name_category']))
+            
 
     def find_child_category(self,list_with_results):
         id_with_child =[]
@@ -49,16 +56,11 @@ class Views_Main_Window:
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
 
-
-    def fill_tree(self):
-        #separate_this
+      
+    def get_category_values(self):
         list_dict_with_results = []
         db = Bicycle_db()
-        db = sqlite3.connect('bicycle_db.sqlite')
-        cursor = db.cursor()
-        sql1="Select * FROM categories"
-        cursor.execute(sql1)
-        result = cursor.fetchall()
+        result = db.edit("Select * FROM categories")
         count = (len(result))
         for item in result:
             id = item[0]
@@ -66,12 +68,13 @@ class Views_Main_Window:
             parent_id = item[2]
             export_date = item[3]
             list_dict_with_results.append({'id':id,'name_category':name_category,'parent_id':parent_id,'export_date':export_date})
-        #print(list_dict_with_results)
         #sort_by_id
-        list_with_results = sorted(list_dict_with_results, key=lambda k: k['parent_id'])
+        return sorted(list_dict_with_results, key=lambda k: k['parent_id'])
+        
+    def fill_tree(self):
+        list_with_results = self.get_category_values()
         childs_categories = self.find_child_category(list_with_results)
-
-        for res in list_dict_with_results:
+        for res in list_with_results:
             if res['parent_id'] == -1:
                 item =QtWidgets.QTreeWidgetItem([res['name_category']])
                 current_index = self.treeWidget.currentItem()
@@ -80,27 +83,9 @@ class Views_Main_Window:
                     if res['id'] == child['id']:
                         if len(child['childs'])!=0:
                             for element in child['childs']:
-                          
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
-
-
-
-#        cursor.close()
-        # cg = QtWidgets.QTreeWidgetItem(self.treeWidget,['top_carrot'])
-        # c1 = QtWidgets.QTreeWidgetItem(cg,['carrot','0.99'])
-        # h = QtWidgets.QTreeWidgetItem(['ham','50.15'])
-        # self.treeWidget.addTopLevelItem(h)
-
     
-    
-    @QtCore.Slot()
-    def actionClicked(self):
-        action = self.sender()
-        print('Action: ', action.text())
-    def mouseMoveEvent(self, event):
-        self.label.setText('Mouse coords: ( %d : %d )' % (event.x(), event.y()))
-
     def add_actions(self):
         #calling in UI
         self.add_additional_custom_elements()

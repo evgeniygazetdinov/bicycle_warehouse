@@ -10,6 +10,7 @@ import sys
 from PySide2 import QtGui, QtWidgets, QtCore
 from PySide2.QtWidgets import (QApplication, QMainWindow, QPushButton, 
                              QToolTip, QMessageBox, QLabel,QDialog)
+from db import Bicycle_db
 
 class Ui_New_Category_Form(QtWidgets.QMainWindow):
     def __init__(self,treeWidget,text_for_change=None,subcategory=False):
@@ -54,7 +55,17 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
         category_name = self.textEdit.toPlainText()
         if category_name != None:
             self.treeWidget.topLevelItem(rowcount).setText(0,category_name)
+            db =Bicycle_db()
+            #get_last_id
+            id = db.edit('select max(id) from categories')
+            schema = ','.join(db.schema['categories'])
+            #INSERT INTO `categories`(`id`,`name`,`parent_id`,`export`) VALUES (214,"es",-1,0);
+            query = "insert into categories({}) values({},{},-1,0)".format(schema,214,'"'+category_name+'"')
+            res = db.edit(query)
+            print(res)
+        
 
+            
 
     def add_subcategory_handler(self,tree_widget):
         rowcount = self.treeWidget.topLevelItemCount()

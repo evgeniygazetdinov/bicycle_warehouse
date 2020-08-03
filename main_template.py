@@ -135,8 +135,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.comboBox = QtWidgets.QComboBox(self.tab)
         self.comboBox.setGeometry(QtCore.QRect(470, 40, 111, 21))
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
+        
         self.lineEdit_6 = QtWidgets.QLineEdit(self.tab)
         self.lineEdit_6.setGeometry(QtCore.QRect(970, 120, 141, 16))
         self.lineEdit_6.setObjectName("lineEdit_6")
@@ -721,8 +720,6 @@ class Ui_MainWindow(Views_Main_Window):
         item.setText(_translate("MainWindow", "10"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.pushButton_8.setText(_translate("MainWindow", "x"))
-        self.comboBox.setItemText(0, _translate("MainWindow", "все "))
-        self.comboBox.setItemText(1, _translate("MainWindow", "не все "))
         self.label_7.setText(_translate("MainWindow", "работа мастерской"))
         self.label_9.setText(_translate("MainWindow", "исчезновение"))
         self.label_6.setText(_translate("MainWindow", "Корзина"))
