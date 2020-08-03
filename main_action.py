@@ -33,14 +33,10 @@ class Views_Main_Window:
         widget.exec_()
     
     def resize_tableWidget(self):
-        self.tableWidget.setColumnWidth(0,50)
-        self.tableWidget.setColumnWidth(1,50)   
-        self.tableWidget.setColumnWidth(2,500)   
-        self.tableWidget.setColumnWidth(3,50)   
-        self.tableWidget.setColumnWidth(4,40)   
-        self.tableWidget.setColumnWidth(5,50)   
-        self.tableWidget.setColumnWidth(6,50)   
-        self.tableWidget.setColumnWidth(7,50)   
+        values = [50, 50, 500, 50, 40, 50, 50, 50]
+        for i in range(8):
+            self.tableWidget.setColumnWidth(i,values[i])
+         
 
     def get_values_from_db(self):
         self.set_into_table_goods()
@@ -56,69 +52,26 @@ class Views_Main_Window:
         self.treeWidget.setGeometry(QtCore.QRect(0, 40, 131, 741))
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.headerItem().setText(0, "имя")
+
+        
     def add_custom_table(self):
+        #refactor after code from design-generator
         _translate = QtCore.QCoreApplication.translate
         self.tableWidget = CustomTableWithGoods(self.tab)
         self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 721))
         self.tableWidget.setMaximumSize(QtCore.QSize(801, 16777215))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(8)
-        item = QtWidgets.QTableWidgetItem()
-        item.setText("Aрт.Ст")
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setBackground(QtGui.QColor(192, 252, 187))
-        self.tableWidget.setHorizontalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsTristate)
-        self.tableWidget.setItem(0, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsDropEnabled|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-        self.tableWidget.setItem(0, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 6, item)
-        item = QtWidgets.QTableWidgetItem()
-        brush = QtGui.QBrush(QtGui.QColor(192, 252, 187))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        item.setBackground(brush)
-        self.tableWidget.setItem(0, 7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 7, item)
-
+        for i in range(8):
+            item = QtWidgets.QTableWidgetItem()
+            self.tableWidget.setHorizontalHeaderItem(i, item)
+        for i in range(8):
+            item = QtWidgets.QTableWidgetItem()
+            self.tableWidget.setItem(0,i, item)
+        # for i in range(8):
+        #     item = QtWidgets.QTableWidgetItem()
+        #     self.tableWidget.setItem(1,i, item)
+        #refactor after
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Арт.Cт"))
         item = self.tableWidget.horizontalHeaderItem(1)
@@ -252,12 +205,6 @@ class Views_Main_Window:
             self.tableWidget.setItem(row,7,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
 
             
-
-
-
-
-        
-
 
     
     def add_actions(self):
