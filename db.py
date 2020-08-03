@@ -55,7 +55,6 @@ class Bicycle_db():
             sql_query.exec_(query)
             while sql_query.next():
                     res.append(sql_query.value(0)) 
-            
             self.db.close()    
             return res
 

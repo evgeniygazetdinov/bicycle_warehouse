@@ -14,7 +14,8 @@ class Views_Main_Window:
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.fill_tree()
-        self.fill_combobox_with_categories()        
+        self.fill_combobox_with_categories()   
+    
 
     def show_insert_window(self):
         widget = QDialog()
@@ -43,6 +44,7 @@ class Views_Main_Window:
         for category in range(len(categories)):
             self.comboBox.addItem("")
             self.comboBox.setItemText(category,(categories[category]['name_category']))
+
 
     def find_child_category(self,list_with_results):
         id_with_child =[]
@@ -84,9 +86,83 @@ class Views_Main_Window:
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
 
+    def from_sqlgoods_to_dict(self,goods):
+        res = []
+        for value in goods:
+            article_old = value[0]
+            name = value[1]
+            qty = value[2]
+            buy = value[3]
+            sell = value[4]
+            profit = value[5]
+            category = value[6]
+            currency = value[7]
+            sell_uah = value[8]
+            article = value[9]
+            res.append({'article_old':article_old,"name":name,
+                        'qty':qty,"buy":buy,"sell":sell,
+                        "profit":profit,"category":category,
+                        "currency":currency,"sell_uah":sell_uah,
+                        "article":article})
+        return res
+
+
+
+
+
+    def get_goods(self,category_name):
+        db = Bicycle_db()
+        category_id = db.select('SELECT id from categories  where name like "%{}%"'.format(category_name))
+        goods = db.edit('Select * from goods where category like "%{}%";'.format(category_id[0]))
+        return self.from_sqlgoods_to_dict(goods)
+    
+    def set_current_category(self):
+        text = self.treeWidget.currentItem().text(0)
+        index = self.comboBox.findText(text, QtCore.Qt.MatchFixedString)
+        if index >= 0:
+            self.comboBox.setCurrentIndex(index)
+
+
+
+    
+    def display_goods_from_category(self):
+        current_category = self.comboBox.currentText()
+        list_with_goods = self.get_goods(current_category)
+        
+        self.tableWidget.insertRow(len(list_with_goods))
+        self.tableWidget.setRowCount(len(list_with_goods))
+        row = len(list_with_goods)
+        for good in list_with_goods:
+            #self.tableWidget.setHorizontalHeaderItem(7, item)
+
+            # item = QtWidgets.QTableWidgetItem()
+            # item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsTristate)
+            # self.tableWidget.setItem(0, 0, item)
+            row -=1
+            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article_old"])))
+            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["article"])))
+            self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["name"])))
+            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["buy"])))
+            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
+            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good["qty"])))
+            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem('None'))
+
+            self.tableWidget.setItem(row,7,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
+            # self.tableWidget.setItem(0,4,QtWidgets.QTableWidgetItem(str(good['name'])))
+            
+            #self.tableWidget.insertRow(len(list_with_goods))
+            
+
+
+
+
+        
+
+
     
     def add_actions(self):
         #calling in UI
         self.add_additional_custom_elements()
-        self.add_goods_action.triggered.connect(self.show_insert_window)
-        self.treeWidget.clicked.connect(self.show_insert_window)
+        #self.add_goods_action.triggered.connect(self.show_insert_window)
+        self.treeWidget.clicked.connect(self.set_current_category)
+        self.comboBox.activated.connect(self.display_goods_from_category)
