@@ -43,6 +43,7 @@ class Views_Main_Window:
         for category in range(len(categories)):
             self.comboBox.addItem("")
             self.comboBox.setItemText(category,(categories[category]['name_category']))
+            
 
     def find_child_category(self,list_with_results):
         id_with_child =[]
@@ -55,6 +56,7 @@ class Views_Main_Window:
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
 
+      
     def get_category_values(self):
         list_dict_with_results = []
         db = Bicycle_db()
@@ -82,7 +84,6 @@ class Views_Main_Window:
                         if len(child['childs'])!=0:
                             for element in child['childs']:
                                 QtWidgets.QTreeWidgetItem(item, [element])
-
 
     
     def add_actions(self):
