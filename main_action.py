@@ -4,6 +4,7 @@ from good_form import GoodsForm
 from custom_widgets import CustomTreeWidget,CustomTableWithGoods
 import sqlite3
 from db import Bicycle_db
+import re
 
 
 
@@ -12,6 +13,7 @@ from db import Bicycle_db
 class Views_Main_Window: 
     def __init__(self):
         self.current_row = {}
+        self.goods_from_category = []
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.add_custom_table()
@@ -31,6 +33,8 @@ class Views_Main_Window:
         self.tabWidget.setTabText(2, "Настройки")
         self.label_22.setText('Наличные')
         self.label_22.setFont(QtGui.QFont('Sans Serif', 11)) 
+        #set no editable
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
     
     def fixes_on_cart(self):
         self.lineEdit_3.setFixedWidth(50)
@@ -133,8 +137,8 @@ class Views_Main_Window:
                     if id_with_child[number]['id'] == result['parent_id']:
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
-
-    def get_category_values(self):
+    @staticmethod
+    def get_category_values():
         list_dict_with_results = []
         db = Bicycle_db()
         result = db.edit("Select * FROM categories")
@@ -147,9 +151,9 @@ class Views_Main_Window:
             list_dict_with_results.append({'id':id,'name_category':name_category,'parent_id':parent_id,'export_date':export_date})
         #sort_by_id
         return sorted(list_dict_with_results, key=lambda k: k['parent_id'])
-        
+
     def fill_tree(self):
-        list_with_results = self.get_category_values()
+        list_with_results = Views_Main_Window.get_category_values()
         childs_categories = self.find_child_category(list_with_results)
         for res in list_with_results:
             if res['parent_id'] == -1:
@@ -181,6 +185,7 @@ class Views_Main_Window:
                         "profit":profit,"category":category,
                         "currency":currency,"sell_uah":sell_uah,
                         "article":article})
+        self.goods_from_category = res
         return res
 
 
@@ -199,16 +204,21 @@ class Views_Main_Window:
 
 
     
-    def display_goods_from_category(self):
+    def display_goods_from_category(self,for_search=False):
+        list_with_goods = []
         try:
             current_category = self.treeWidget.currentItem().text(0)
         except:
             current_category = None
         #warning here
-        list_with_goods = self.get_goods(current_category)
+        if isinstance(for_search, list):
+            list_with_goods = for_search
+        else:
+            list_with_goods = self.get_goods(current_category)
         self.tableWidget.insertRow(len(list_with_goods))
         self.tableWidget.setRowCount(len(list_with_goods))
         row = len(list_with_goods)
+        
         for good in list_with_goods:
             row -=1
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
@@ -220,6 +230,32 @@ class Views_Main_Window:
 
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
 
+    def finder(self,window_for_search):
+        values = []
+        row =self.tableWidget.rowCount()
+        
+        for i in range(row):
+            item =self.tableWidget.item(i, 0)
+            values.append(item.text())
+        text = re.compile(r"{}".format(window_for_search.text()))
+        return  list(filter(text.match, values))
+
+
+    def find_in(self,textinput,where):
+        res = self.finder(textinput)
+        values_for_dispay = []
+        for good in self.goods_from_category:
+            for article in res:
+                if str(good[where]) == article:
+                    values_for_dispay.append(good)
+        self.goods_from_category = values_for_dispay
+        self.display_goods_from_category(values_for_dispay)
+        
+        
+        # if text_for_search == headertext:
+        #     cell = widget.item(row, 0).text()   # get cell at row, col
+        #     print(cell)
+
             
 
     
@@ -229,5 +265,10 @@ class Views_Main_Window:
         #self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.clicked.connect(self.parse_row)
-        self.statusBar.showMessage('Message in statusbar.')
+        self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name'))
+        self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
+        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name'))
+        #self.statusBar.showMessage()
+
         

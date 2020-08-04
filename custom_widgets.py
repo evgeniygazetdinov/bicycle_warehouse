@@ -32,7 +32,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                      if SelectedItem.text(0) == item.text(0):
                             SelectedItem.removeChild(item)
                             db = Bicycle_db()
-                            db.edit("DELETE FROM artists_backup WHERE name LIKE '%{}%';".format(item.text(0)))
+                            db.edit("DELETE FROM categories WHERE name LIKE '%{}%';".format(item.text(0)))
            if action == edit_category_Action:
                   if self.selectedItems():
                      item = self.selectedItems()[0]
@@ -58,12 +58,12 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
        def __init__(self, parent = None,values=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
-
+           self.last_added_category = 'Всі'
+           
 
        def parse_row(self):
               article = self.item(self.currentRow(), 0).text()
               name = self.item(self.currentRow(), 1).text()
-              
               buy =   self.item(self.currentRow(), 2).text()
               sell = self.item(self.currentRow(), 3).text()
               profit = self.item(self.currentRow(), 4).text()
@@ -84,8 +84,14 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
               edit_Action = menu.addAction("редактировать")
               remove_Action = menu.addAction("удалить")
               action = menu.exec_(self.mapToGlobal(event.pos()))
+              if action == add_Action:
+                     widget = QDialog()
+                     ui = GoodsForm()
+                     ui.setupUi(widget)
+                     widget.exec_()
+
               if action == remove_Action:
-                     print('remove')
+                     values = self.parse_row()
               if action == edit_Action:
                      widget = QDialog()
                      ui = GoodsForm(values=self.parse_row())
