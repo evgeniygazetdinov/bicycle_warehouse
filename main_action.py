@@ -15,10 +15,46 @@ class Views_Main_Window:
         self.add_custom_tree()
         self.add_custom_table()
         self.fill_tree()
-        self.fill_combobox_with_categories()
+        #self.fill_combobox_with_categories()
         self.resize_tableWidget()
         #fill_table_by_default
-        self.display_goods_from_category(True)
+         #if pass true  ==> display all categories 
+         #when in treewidget without choose treewidget.current item is none
+        self.display_goods_from_category()
+        self.change_search_widget_section()
+        self.fixes_on_cart()
+        self.ui_fixes()
+
+    def ui_fixes(self):
+        item = self.tableWidget_6.horizontalHeaderItem(8)
+        item.setText("Доход")
+        self.tabWidget.setTabText(2, "Настройки")
+        self.label_22.setText('Наличные')
+        self.label_22.setFont(QtGui.QFont('Sans Serif', 11)) 
+    
+    def fixes_on_cart(self):
+        self.lineEdit_3.setFixedWidth(50)
+        self.lineEdit_5.setFixedWidth(50)
+        self.lineEdit_6.setFixedWidth(50)
+        self.label_7.setGeometry(QtCore.QRect(1030, 60, 141,21))
+        self.label_8.setGeometry(QtCore.QRect(1030, 90, 131, 20))
+        self.label_9.setGeometry(QtCore.QRect(1030, 120, 131, 20))
+        self.label_9.setText('скидка')
+        
+        self.tableWidget_2.verticalHeader().setDefaultSectionSize(9)
+        self.tableWidget_2.verticalHeader().setVisible(False)
+        self.pushButton_5.setText('Наличные')
+
+
+    def change_search_widget_section(self):
+        # m = self.lineEdit.textMargins()
+        # m.setLeft(10)
+        self.lineEdit.setFixedWidth(50)
+        self.lineEdit_4.setFixedWidth(200)
+        self.lineEdit_4.setGeometry(QtCore.QRect(190, 40, 101, 20))
+        self.pushButton_8.setGeometry(QtCore.QRect(390, 40, 31, 21))
+        self.comboBox.hide()
+
 
     def parse_table(self):
         self.tbl_anggota.item(r,0).text()
@@ -33,7 +69,7 @@ class Views_Main_Window:
         widget.exec_()
     
     def resize_tableWidget(self):
-        values = [50, 50, 500, 50, 40, 50, 50, 50]
+        values = [50, 480, 50, 50, 50, 50, 50, 70]
         for i in range(8):
             self.tableWidget.setColumnWidth(i,values[i])
          
@@ -61,36 +97,33 @@ class Views_Main_Window:
         self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 721))
         self.tableWidget.setMaximumSize(QtCore.QSize(801, 16777215))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(8)
-        for i in range(8):
+        self.tableWidget.setColumnCount(7)
+        for i in range(7):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setHorizontalHeaderItem(i, item)
-        for i in range(8):
+        for i in range(7):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setItem(0,i, item)
-        # for i in range(8):
-        #     item = QtWidgets.QTableWidgetItem()
-        #     self.tableWidget.setItem(1,i, item)
-        #refactor after
+        #refactor this after
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Арт.Cт"))
+        item.setText(_translate("MainWindow", "Арт"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Арт.H"))
-        item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Название"))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "Закупка"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "закупка"))
+        item.setText(_translate("MainWindow", "Нац"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "нац"))
+        item.setText(_translate("MainWindow", "Продаж"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Продаж."))
+        item.setText(_translate("MainWindow", "Кол-во."))
         item = self.tableWidget.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "К-ть"))
-        item = self.tableWidget.horizontalHeaderItem(7)
         item.setText(_translate("MainWindow", "ГРН"))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setSortingEnabled(__sortingEnabled)
+        self.tableWidget.verticalHeader().setDefaultSectionSize(9)
+        self.tableWidget.verticalHeader().setVisible(False)
 
     def fill_combobox_with_categories(self):
         categories = self.get_category_values()
@@ -143,7 +176,7 @@ class Views_Main_Window:
     def from_sqlgoods_to_dict(self,goods):
         res = []
         for value in goods:
-            article_old = value[0]
+            #article_old = value[0]
             name = value[1]
             qty = value[2]
             buy = value[3]
@@ -153,7 +186,7 @@ class Views_Main_Window:
             currency = value[7]
             sell_uah = value[8]
             article = value[9]
-            res.append({'article_old':article_old,"name":name,
+            res.append({"name":name,
                         'qty':qty,"buy":buy,"sell":sell,
                         "profit":profit,"category":category,
                         "currency":currency,"sell_uah":sell_uah,
@@ -166,7 +199,7 @@ class Views_Main_Window:
 
     def get_goods(self,category_name,default=False):
         db = Bicycle_db()
-        if default:
+        if category_name is None:
             category_name ='Всі'
         category_id = db.select('SELECT id from categories  where name like "%{}%"'.format(category_name))
         goods = db.edit('Select * from goods where category like "%{}%";'.format(category_id[0]))
@@ -175,34 +208,33 @@ class Views_Main_Window:
     
     def set_current_category(self):
         text = self.treeWidget.currentItem().text(0)
-        index = self.comboBox.findText(text, QtCore.Qt.MatchFixedString)
-        if index >= 0:
-            self.comboBox.setCurrentIndex(index)
+        # index = self.comboBox.findText(text, QtCore.Qt.MatchFixedString)
+        # if index >= 0:
+        #     self.comboBox.setCurrentIndex(index)
 
 
 
     
-    def display_goods_from_category(self,default=False):
-        current_category = self.comboBox.currentText()
+    def display_goods_from_category(self):
+        try:
+            current_category = self.treeWidget.currentItem().text(0)
+        except:
+            current_category = None
         #warning here
-        if default == True:
-            list_with_goods = self.get_goods(current_category,default)
-        else:
-            list_with_goods = self.get_goods(current_category)
+        list_with_goods = self.get_goods(current_category)
         self.tableWidget.insertRow(len(list_with_goods))
         self.tableWidget.setRowCount(len(list_with_goods))
         row = len(list_with_goods)
         for good in list_with_goods:
             row -=1
-            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article_old"])))
-            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["article"])))
-            self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["name"])))
-            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["buy"])))
-            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
-            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["qty"])))
-            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem('None'))
+            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
+            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
+            self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["buy"])))
+            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["sell"])))
+            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["profit"])))
+            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
 
-            self.tableWidget.setItem(row,7,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
+            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
 
             
 
@@ -211,7 +243,8 @@ class Views_Main_Window:
         #calling in UI
         self.add_additional_custom_elements()
         #self.add_goods_action.triggered.connect(self.show_insert_window)
-        self.treeWidget.clicked.connect(self.set_current_category)
+        self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.clicked.connect(self.show_insert_window)
-        self.comboBox.activated.connect(lambda:self.display_goods_from_category())
-        self.comboBox.currentIndexChanged.connect(lambda:self.display_goods_from_category())
+        self.statusBar.showMessage('Message in statusbar.')
+        #self.comboBox.activated.connect(lambda:self.display_goods_from_category())
+        #self.comboBox.currentIndexChanged.connect(lambda:self.display_goods_from_category())
