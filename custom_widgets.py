@@ -1,6 +1,7 @@
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QDialog
 from new_category_window import Ui_New_Category_Form
+from good_form import GoodsForm
 from db import Bicycle_db
 
 
@@ -58,6 +59,25 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
 
+
+       def parse_row(self):
+              article = self.item(self.currentRow(), 0).text()
+              name = self.item(self.currentRow(), 1).text()
+              
+              buy =   self.item(self.currentRow(), 2).text()
+              sell = self.item(self.currentRow(), 3).text()
+              profit = self.item(self.currentRow(), 4).text()
+              qty = self.item(self.currentRow(), 5).text()
+              sell_uah = self.item(self.currentRow(), 6).text()
+              return  {"name":name,"article":article,
+                     'qty':qty,"buy":buy,"sell":sell,
+                     "profit":profit,"sell_uah":sell_uah}
+
+
+       def remove_values_from_row(self):
+              pass
+
+        
        def contextMenuEvent(self,event):
               menu = QtWidgets.QMenu(self)
               add_Action = menu.addAction("добавить")
@@ -67,5 +87,8 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
               if action == remove_Action:
                      print('remove')
               if action == edit_Action:
-                     print("edit")
+                     widget = QDialog()
+                     ui = GoodsForm(values=self.parse_row())
+                     ui.setupUi(widget)
+                     widget.exec_()
 

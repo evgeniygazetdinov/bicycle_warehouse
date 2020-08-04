@@ -10,12 +10,12 @@ from db import Bicycle_db
 
 
 class Views_Main_Window: 
-
+    def __init__(self):
+        self.current_row = {}
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.add_custom_table()
         self.fill_tree()
-        #self.fill_combobox_with_categories()
         self.resize_tableWidget()
         #fill_table_by_default
          #if pass true  ==> display all categories 
@@ -56,17 +56,14 @@ class Views_Main_Window:
         self.comboBox.hide()
 
 
-    def parse_table(self):
-        self.tbl_anggota.item(r,0).text()
-       
-    
+    def parse_row(self):
+        name = self.tableWidget.item(self.tableWidget.currentRow(), 1).text()
+        self.statusBar.showMessage(name)
+        
 
     def show_insert_window(self):
         #self.parse_table()
-        widget = QDialog()
-        ui = GoodsForm()
-        ui.setupUi(widget)
-        widget.exec_()
+        pass
     
     def resize_tableWidget(self):
         values = [50, 480, 50, 50, 50, 50, 50, 70]
@@ -124,13 +121,6 @@ class Views_Main_Window:
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.tableWidget.verticalHeader().setDefaultSectionSize(9)
         self.tableWidget.verticalHeader().setVisible(False)
-
-    def fill_combobox_with_categories(self):
-        categories = self.get_category_values()
-        _translate = QtCore.QCoreApplication.translate
-        for category in range(len(categories)):
-            self.comboBox.addItem("")
-            self.comboBox.setItemText(category,(categories[category]['name_category']))
 
 
     def find_child_category(self,list_with_results):
@@ -206,12 +196,6 @@ class Views_Main_Window:
         db.close()
         return self.from_sqlgoods_to_dict(goods)
     
-    def set_current_category(self):
-        text = self.treeWidget.currentItem().text(0)
-        # index = self.comboBox.findText(text, QtCore.Qt.MatchFixedString)
-        # if index >= 0:
-        #     self.comboBox.setCurrentIndex(index)
-
 
 
     
@@ -244,7 +228,6 @@ class Views_Main_Window:
         self.add_additional_custom_elements()
         #self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
-        self.tableWidget.clicked.connect(self.show_insert_window)
+        self.tableWidget.clicked.connect(self.parse_row)
         self.statusBar.showMessage('Message in statusbar.')
-        #self.comboBox.activated.connect(lambda:self.display_goods_from_category())
-        #self.comboBox.currentIndexChanged.connect(lambda:self.display_goods_from_category())
+        

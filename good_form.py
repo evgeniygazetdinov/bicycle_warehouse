@@ -24,12 +24,12 @@ class GoodsForm(QMainWindow):
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(160, 180, 71, 16))
         self.label_3.setObjectName("label_3")
-        # self.lineEdit = QtWidgets.QLineEdit(Form)
-        # self.lineEdit.setGeometry(QtCore.QRect(160, 100, 371, 21))
-        # self.lineEdit.setObjectName("lineEdit")
-        # self.lineEdit_2 = QtWidgets.QLineEdit(Form)
-        # self.lineEdit_2.setGeometry(QtCore.QRect(160, 200, 81, 21))
-        # self.lineEdit_2.setObjectName("lineEdit_2")
+        self.lineEdit = QtWidgets.QLineEdit(Form)
+        self.lineEdit.setGeometry(QtCore.QRect(160, 100, 371, 21))
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_2.setGeometry(QtCore.QRect(160, 200, 81, 21))
+        self.lineEdit_2.setObjectName("lineEdit_2")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(250, 180, 71, 16))
         self.label_4.setObjectName("label_4")
@@ -108,9 +108,6 @@ class GoodsForm(QMainWindow):
         self.lineEdit_6 = QtWidgets.QLineEdit(Form)
         self.lineEdit_6.setGeometry(QtCore.QRect(380, 20, 81, 21))
         self.lineEdit_6.setObjectName("lineEdit_6")
-        self.lineEdit_7 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_7.setGeometry(QtCore.QRect(470, 20, 61, 21))
-        self.lineEdit_7.setObjectName("lineEdit_7")
         self.category_title = QtWidgets.QLabel(Form)
         self.category_title.setGeometry(QtCore.QRect(180, 50, 171, 16))
         font = QtGui.QFont()
@@ -143,27 +140,39 @@ class GoodsForm(QMainWindow):
         self.USD_value.setText(_translate("Form", "30"))
         self.label_10.setText(_translate("Form", "Артикул"))
         self.category_title.setText(_translate("Form", "Категория"))
+   
+   
 
-    def parse_values(self,values):
-        print(values)
-        field1 = self.tableWidget.item(r,0).text()
+
+
+
 
     def additional_actions(self):
+        self.pushButton_2.clicked.connect(self.store_values_from_form)
         if self.values:
-            self.parse_values(self.values)
+            #change_item
+            print(self.values)
+            self.lineEdit_4.setText(self.values['profit'])
+            self.lineEdit_3.setText(self.values['sell'])
+            self.lineEdit_2.setText(self.values['buy'])
+            self.lineEdit_6.setText(self.values['article'])
+            self.lineEdit_5.setText(self.values['sell_uah'])
+            self.lineEdit.setText(self.values['name'])
+            self.spinBox.setValue(int(self.values['qty']))
 
 
-    def add_row(self):
-        rowPosition = self.tableWidget.rowCount()
-        self.tableWidget.insertRow(rowPosition)
+   
+            
+    def store_values_from_form(self):
 
-    def remove_row(self,selected):
-        rowPosition = self.tableWidget.rowCount()
-        if rowPosition <= 1:
+        def get_values_from_form():
             pass
-        else:
-            self.tableWidget.removeRow(rowPosition-1)
-    
+        def store_data_from_form():
+            pass
+
+        from_form = get_values_from_form()
+        store_data_from_form()
+
         
             
 
