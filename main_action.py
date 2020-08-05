@@ -14,11 +14,12 @@ class Views_Main_Window:
     def __init__(self):
         self.current_row = {}
         self.goods_from_category = []
-        self.try_for_search = 0
+        self.cart_items = []
         
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.add_custom_table()
+        self.add_custom_cart_table()
         self.fill_tree()
         self.resize_tableWidget()
         #fill_table_by_default
@@ -37,7 +38,14 @@ class Views_Main_Window:
         self.label_22.setFont(QtGui.QFont('Sans Serif', 11)) 
         #set no editable
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-    
+        # self.tableWidget.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # sizePolicy.setHorizontalStretch(8)
+        # sizePolicy.setVerticalStretch(8)
+        # sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
+        # self.tableWidget.setSizePolicy(sizePolicy)
+        self.tableWidget.raise_()
+
     def fixes_on_cart(self):
         self.lineEdit_3.setFixedWidth(50)
         self.lineEdit_5.setFixedWidth(50)
@@ -62,9 +70,9 @@ class Views_Main_Window:
         self.comboBox.hide()
 
 
-    def parse_row(self):
-        name = self.tableWidget.item(self.tableWidget.currentRow(), 1).text()
-        self.statusBar.showMessage(name)
+    def parse_row_and_move_to_cart(self):
+        
+        print(self.tableWidget.parse_row())
         
 
     def show_insert_window(self):
@@ -88,16 +96,54 @@ class Views_Main_Window:
 
     def add_custom_tree(self):
         self.treeWidget = CustomTreeWidget(self.tab)
-        self.treeWidget.setGeometry(QtCore.QRect(0, 40, 131, 741))
+        self.treeWidget.setGeometry(QtCore.QRect(0, 40, 131, 850))
         self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.headerItem().setText(0, "имя")
+        self.treeWidget.setHeaderHidden(True)
+    def add_custom_cart_table(self):
+        self.tableWidget_2 = QtWidgets.QTableWidget(self.tab)
+        self.tableWidget_2.setGeometry(QtCore.QRect(960, 170, 321, 301))
+        self.tableWidget_2.setObjectName("tableWidget_2")
+        self.tableWidget_2.setColumnCount(3)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(2, item)
+        # item = self.tableWidget_2.verticalHeaderItem(0)
+        # item.setText(_translate("MainWindow", "1"))
+        # item = self.tableWidget_2.verticalHeaderItem(1)
+        # item.setText(_translate("MainWindow", "2"))
+        # item = self.tableWidget_2.verticalHeaderItem(2)
+        # item.setText(_translate("MainWindow", "3"))
+        # item = self.tableWidget_2.verticalHeaderItem(3)
+        # item.setText(_translate("MainWindow", "4"))
+        # item = self.tableWidget_2.verticalHeaderItem(4)
+        # item.setText(_translate("MainWindow", "5"))
+        item = self.tableWidget_2.horizontalHeaderItem(0)
+        item.setText("название")
+        item = self.tableWidget_2.horizontalHeaderItem(1)
+        item.setText("цена")
+        item = self.tableWidget_2.horizontalHeaderItem(2)
+        item.setText( "сумма")
+        self.tableWidget_2.raise_()
 
         
     def add_custom_table(self):
         #refactor after code from design-generator
         _translate = QtCore.QCoreApplication.translate
         self.tableWidget = CustomTableWithGoods(self.tab)
-        self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 721))
+        self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 821))
         self.tableWidget.setMaximumSize(QtCore.QSize(801, 16777215))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(7)
@@ -244,7 +290,7 @@ class Views_Main_Window:
         text = re.compile(r"{}".format(window_for_search.text()))
         if word_search:
             #find substring in string
-            res = [s for s in values if "{}".format(window_for_search.text()) in s]
+            res = [s for s in values if "{}".format((window_for_search.text()).lower()) in s.lower()]
         else:
             #find by first
             res = list(filter(text.search, values))
@@ -262,7 +308,6 @@ class Views_Main_Window:
             for article in res:
                 if str(good[where]) == article:
                     values_for_dispay.append(good)
-        self.try_for_search+=1
         self.display_goods_from_category(values_for_dispay)
         
         
@@ -273,14 +318,14 @@ class Views_Main_Window:
         self.add_additional_custom_elements()
         #self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
-        self.tableWidget.clicked.connect(self.parse_row)
+        self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
+        #show name good on bottom
+        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), 1).text()))
+        self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
-
-        #self.statusBar.showMessage()
-
         
