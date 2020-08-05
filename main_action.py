@@ -5,7 +5,7 @@ from custom_widgets import CustomTreeWidget,CustomTableWithGoods
 import sqlite3
 from db import Bicycle_db
 import re
-
+from collections import OrderedDict
 
 
 
@@ -14,6 +14,8 @@ class Views_Main_Window:
     def __init__(self):
         self.current_row = {}
         self.goods_from_category = []
+        self.try_for_search = 0
+        
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.add_custom_table()
@@ -230,25 +232,41 @@ class Views_Main_Window:
 
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
 
-    def finder(self,window_for_search):
+    def finder(self,window_for_search,word_search=False):
         values = []
+        self.display_goods_from_category(self.goods_from_category)
         row =self.tableWidget.rowCount()
-        
+        if word_search:
+            column_for_search = 1
+        else:
+            column_for_search = 0
         for i in range(row):
-            item =self.tableWidget.item(i, 0)
+            item =self.tableWidget.item(i, column_for_search)
             values.append(item.text())
         text = re.compile(r"{}".format(window_for_search.text()))
-        return  list(filter(text.match, values))
+        if word_search:
+           res = [s for s in values if "{}".format(window_for_search.text()) in s]
+        else:
+            res = list(filter(text.search, values))
+        return  res
 
 
-    def find_in(self,textinput,where):
-        res = self.finder(textinput)
+    def find_in(self,textinput,where,word_search=False):
+        if word_search:
+            res = self.finder(textinput,True)
+        else:
+            res = self.finder(textinput)
+     
         values_for_dispay = []
+    
         for good in self.goods_from_category:
             for article in res:
                 if str(good[where]) == article:
                     values_for_dispay.append(good)
-        self.goods_from_category = values_for_dispay
+        self.try_for_search+=1
+        # if len(res) ==1:
+        #     #pop last element from ordered dict
+        #     self.goods_from_category = self.try_for_search.pop([next[reversed[self.try_for_search]]])
         self.display_goods_from_category(values_for_dispay)
         
         
@@ -266,9 +284,9 @@ class Views_Main_Window:
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.clicked.connect(self.parse_row)
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
-        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name'))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
-        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name'))
+        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         #self.statusBar.showMessage()
 
         
