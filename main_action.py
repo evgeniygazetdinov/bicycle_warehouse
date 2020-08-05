@@ -245,8 +245,10 @@ class Views_Main_Window:
             values.append(item.text())
         text = re.compile(r"{}".format(window_for_search.text()))
         if word_search:
-           res = [s for s in values if "{}".format(window_for_search.text()) in s]
+            #find substring in string
+            res = [s for s in values if "{}".format(window_for_search.text()) in s]
         else:
+            #find by first
             res = list(filter(text.search, values))
         return  res
 
@@ -258,21 +260,14 @@ class Views_Main_Window:
             res = self.finder(textinput)
      
         values_for_dispay = []
-    
         for good in self.goods_from_category:
             for article in res:
                 if str(good[where]) == article:
                     values_for_dispay.append(good)
         self.try_for_search+=1
-        # if len(res) ==1:
-        #     #pop last element from ordered dict
-        #     self.goods_from_category = self.try_for_search.pop([next[reversed[self.try_for_search]]])
         self.display_goods_from_category(values_for_dispay)
         
         
-        # if text_for_search == headertext:
-        #     cell = widget.item(row, 0).text()   # get cell at row, col
-        #     print(cell)
 
             
 
