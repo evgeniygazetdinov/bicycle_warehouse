@@ -192,8 +192,6 @@ class Views_Main_Window:
 
 
 
-
-
     def get_goods(self,category_name,default=False):
         db = Bicycle_db()
         if category_name is None:
@@ -269,8 +267,6 @@ class Views_Main_Window:
         
         
 
-            
-
     
     def add_actions(self):
         #calling in UI
@@ -282,6 +278,9 @@ class Views_Main_Window:
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
+        self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
+        self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
+
         #self.statusBar.showMessage()
 
         
