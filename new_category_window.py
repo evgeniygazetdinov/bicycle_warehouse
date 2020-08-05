@@ -18,6 +18,7 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
         self.text_for_change = text_for_change
         self.treeWidget = treeWidget
         self.subcategory = subcategory
+
     
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -62,9 +63,7 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
             query = "insert into categories({}) values({},{},-1,0)".format(schema,214,'"'+category_name+'"')
             res = db.edit(query)
             print(res)
-        
-
-            
+    
 
     def add_subcategory_handler(self,tree_widget):
         rowcount = self.treeWidget.topLevelItemCount()
@@ -88,6 +87,7 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
             
             self.pushButton.clicked.connect(lambda:self.new_category_handler(self.treeWidget))
             self.pushButton.clicked.connect(QtWidgets.qApp.quit)
+
 
 
 

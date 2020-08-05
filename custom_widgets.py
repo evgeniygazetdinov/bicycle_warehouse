@@ -55,7 +55,6 @@ class TreeWidgetGoods(CustomTreeWidget):
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
-       
        def __init__(self, parent = None,values=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
