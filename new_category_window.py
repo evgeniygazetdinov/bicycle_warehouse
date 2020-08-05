@@ -14,10 +14,10 @@ from db import Bicycle_db
 
 class Ui_New_Category_Form(QtWidgets.QMainWindow):
     def __init__(self,treeWidget,text_for_change=None,subcategory=False):
+        super(QtWidgets.QMainWindow).__init__()
         self.text_for_change = text_for_change
         self.treeWidget = treeWidget
         self.subcategory = subcategory
-        super(QtWidgets.QMainWindow).__init__()
     
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -85,7 +85,9 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
             self.pushButton.clicked.connect(lambda:self.add_subcategory_handler(self.treeWidget))
         else:
             #if it's new category
+            
             self.pushButton.clicked.connect(lambda:self.new_category_handler(self.treeWidget))
+            self.pushButton.clicked.connect(QtWidgets.qApp.quit)
 
 
 

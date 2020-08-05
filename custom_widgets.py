@@ -21,11 +21,11 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
            remove_category_Action = menu.addAction("удалить категорию")
            action = menu.exec_(self.mapToGlobal(event.pos()))
            if action == add_category_Action:
-                     widget = QDialog()
-                     #send_to form
-                     ui = Ui_New_Category_Form(self)
-                     ui.setupUi(widget)
-                     widget.exec_()
+              text, ok = QtWidgets.QInputDialog.getText(self, "Добавить подкатегорию", "Имя для подкатегории:")
+              if ok and text != "":
+                     rowcount = self.topLevelItemCount()
+                     self.addTopLevelItem(QtWidgets.QTreeWidgetItem(rowcount))
+                     self.topLevelItem(rowcount).setText(0,text)
            if action == remove_category_Action:
                   item = self.currentItem()
                   for SelectedItem in self.selectedItems():
@@ -55,6 +55,7 @@ class TreeWidgetGoods(CustomTreeWidget):
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
+       
        def __init__(self, parent = None,values=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
