@@ -1,12 +1,45 @@
-*WARHOUSE on qt5*
-
-install
-
-chmod +x install.sh
-./install.sh
+*WAREHOUSE on qt5*
 
 
-features:
+*compile project*
+
+pyinstaller -D -F -n main -c "main.py"
+
+*for run*
+
+python3 -m venv env 
+
+source env/bin/activate
+
+pip install -r requirements.txt
+
+python3 main.py
+
+###########################################
+
+release notes:
+
+release 0.2:
+
+categories 
+get values from sqlite file
+
+
+release 0.3:
+
 search 
 change resolution elements
-fix new good window
+new good window
+
+release 0.4:
+
+fix word case for search good
+same window for add/edit  category
+change height beetween line edits in cart
+enlarge height cart
+make tab widget responsible(tabwidget and tree widget in process)
+add status bar for cart table for any column
+fix price column in good table(add formula)
+add basic behavior for add good to card
+add displaying total cost and total profit
+

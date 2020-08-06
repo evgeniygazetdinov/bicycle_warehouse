@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets,QtCore,QtGui
 from PySide2.QtWidgets import QDialog
 from new_category_window import Ui_New_Category_Form
 from good_form import GoodsForm
@@ -55,23 +55,21 @@ class TreeWidgetGoods(CustomTreeWidget):
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
+       
        def __init__(self, parent = None,values=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
            self.last_added_category = 'Всі'
-           
 
        def parse_row(self):
-              article = self.item(self.currentRow(), 0).text()
-              name = self.item(self.currentRow(), 1).text()
-              buy =   self.item(self.currentRow(), 2).text()
-              sell = self.item(self.currentRow(), 3).text()
-              profit = self.item(self.currentRow(), 4).text()
-              qty = self.item(self.currentRow(), 5).text()
-              sell_uah = self.item(self.currentRow(), 6).text()
-              return  {"name":name,"article":article,
-                     'qty':qty,"buy":buy,"sell":sell,
-                     "profit":profit,"sell_uah":sell_uah}
+              columns = self.columnCount()
+              names = []
+              values = []
+              for i in range(columns):
+                  names.append(self.horizontalHeaderItem(i).text())
+              for i in range(columns):
+                     values.append(self.item(self.currentRow(),i).text())
+              return dict(zip(names,values))
 
 
        def remove_values_from_row(self):
@@ -98,3 +96,9 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      ui.setupUi(widget)
                      widget.exec_()
 
+class CartTable(CustomTableWithGoods):
+
+
+
+       def contextMenuEvent(self,event):
+              pass

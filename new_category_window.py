@@ -90,4 +90,3 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
 
 
 
-
