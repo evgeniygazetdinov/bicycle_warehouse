@@ -1,179 +1,65 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from good_form import GoodsForm
-from custom_widgets import CustomTreeWidget,CustomTableWithGoods
 import sqlite3
 from db import Bicycle_db
 import re
 from collections import OrderedDict
+from main_ui_fixes import FixesMainWindow
+from decimal import Decimal
 
 
-
-
-class Views_Main_Window: 
+class Views_Main_Window(FixesMainWindow): 
     def __init__(self):
         self.current_row = {}
         self.goods_from_category = []
         self.cart_items = []
+        self.total_price = 0
+        self.total_income = 0
+        self.course = 27.69
         
-    def add_additional_custom_elements(self):
-        self.add_custom_tree()
-        self.add_custom_table()
-        self.add_custom_cart_table()
-        self.fill_tree()
-        self.resize_tableWidget()
-        #fill_table_by_default
-         #if pass true  ==> display all categories 
-         #when in treewidget without choose treewidget.current item is none
-        self.display_goods_from_category()
-        self.change_search_widget_section()
-        self.fixes_on_cart()
-        self.ui_fixes()
-
-    def ui_fixes(self):
-        item = self.tableWidget_6.horizontalHeaderItem(8)
-        item.setText("Доход")
-        self.tabWidget.setTabText(2, "Настройки")
-        self.label_22.setText('Наличные')
-        self.label_22.setFont(QtGui.QFont('Sans Serif', 11)) 
-        #set no editable
-        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        # self.tableWidget.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(8)
-        # sizePolicy.setVerticalStretch(8)
-        # sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
-        # self.tableWidget.setSizePolicy(sizePolicy)
-        self.tableWidget.raise_()
-
-    def fixes_on_cart(self):
-        self.lineEdit_3.setFixedWidth(50)
-        self.lineEdit_5.setFixedWidth(50)
-        self.lineEdit_6.setFixedWidth(50)
-        self.label_7.setGeometry(QtCore.QRect(1030, 60, 141,21))
-        self.label_8.setGeometry(QtCore.QRect(1030, 90, 131, 20))
-        self.label_9.setGeometry(QtCore.QRect(1030, 120, 131, 20))
-        self.label_9.setText('скидка')
         
-        self.tableWidget_2.verticalHeader().setDefaultSectionSize(9)
-        self.tableWidget_2.verticalHeader().setVisible(False)
-        self.pushButton_5.setText('Наличные')
-
-
-    def change_search_widget_section(self):
-        # m = self.lineEdit.textMargins()
-        # m.setLeft(10)
-        self.lineEdit.setFixedWidth(50)
-        self.lineEdit_4.setFixedWidth(200)
-        self.lineEdit_4.setGeometry(QtCore.QRect(190, 40, 101, 20))
-        self.pushButton_8.setGeometry(QtCore.QRect(390, 40, 31, 21))
-        self.comboBox.hide()
-
-
     def parse_row_and_move_to_cart(self):
-        
-        print(self.tableWidget.parse_row())
+        self.total_price = 0
+        row = self.tableWidget_2.rowCount()
+        values = self.tableWidget.parse_row()
+        self.tableWidget_2.insertRow(row+1)
+        self.tableWidget_2.setRowCount(row+1)
+        self.tableWidget_2.setItem(row,0,QtWidgets.QTableWidgetItem(str(values['Название'])))
+        self.tableWidget_2.setItem(row,1,QtWidgets.QTableWidgetItem(str(values['ГРН'])))
+        self.cart_items.append(values)
+        self.counting_price_income_from_cart_items("Продаж",'Закупка',"ГРН")
+        self.label_37.setText(str(self.total_price))
+        self.label_38.setText(str(round(self.total_income)))
+        self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
+    
+    
+    def remove_from_cart(self):
+        values = self.tableWidget_2.parse_row()
+        #self.cart_items.pop()
+
+    def calculate_good_income(self,sell,buy):
+        income = round(abs((float(sell)-float(buy)))*self.course,1)
+        self.total_income+=income
         
 
+
+    def counting_price_income_from_cart_items(self,sell_keyword,buy_keyword,grivna_keyword):
+        for item in self.cart_items:
+            self.total_price+=(int(item[grivna_keyword]))
+        income = self.calculate_good_income(item[sell_keyword],item[buy_keyword])
+
+        
     def show_insert_window(self):
         #self.parse_table()
         pass
     
-    def resize_tableWidget(self):
-        values = [50, 480, 50, 50, 50, 50, 50, 70]
-        for i in range(8):
-            self.tableWidget.setColumnWidth(i,values[i])
+    
          
 
     def get_values_from_db(self):
         self.set_into_table_goods()
         self.set_into_categories_table()
-
-    def add_top_element_in_tree_widget(self,item_name):
-        current_index = self.treeWidget.current_item()
-        self.treeWidget.insertTopLevelItems(index, item_name)
-
-
-    def add_custom_tree(self):
-        self.treeWidget = CustomTreeWidget(self.tab)
-        self.treeWidget.setGeometry(QtCore.QRect(0, 40, 131, 850))
-        self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.setHeaderHidden(True)
-    def add_custom_cart_table(self):
-        self.tableWidget_2 = QtWidgets.QTableWidget(self.tab)
-        self.tableWidget_2.setGeometry(QtCore.QRect(960, 170, 321, 301))
-        self.tableWidget_2.setObjectName("tableWidget_2")
-        self.tableWidget_2.setColumnCount(3)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(2, item)
-        # item = self.tableWidget_2.verticalHeaderItem(0)
-        # item.setText(_translate("MainWindow", "1"))
-        # item = self.tableWidget_2.verticalHeaderItem(1)
-        # item.setText(_translate("MainWindow", "2"))
-        # item = self.tableWidget_2.verticalHeaderItem(2)
-        # item.setText(_translate("MainWindow", "3"))
-        # item = self.tableWidget_2.verticalHeaderItem(3)
-        # item.setText(_translate("MainWindow", "4"))
-        # item = self.tableWidget_2.verticalHeaderItem(4)
-        # item.setText(_translate("MainWindow", "5"))
-        item = self.tableWidget_2.horizontalHeaderItem(0)
-        item.setText("название")
-        item = self.tableWidget_2.horizontalHeaderItem(1)
-        item.setText("цена")
-        item = self.tableWidget_2.horizontalHeaderItem(2)
-        item.setText( "сумма")
-        self.tableWidget_2.raise_()
-
-        
-    def add_custom_table(self):
-        #refactor after code from design-generator
-        _translate = QtCore.QCoreApplication.translate
-        self.tableWidget = CustomTableWithGoods(self.tab)
-        self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 821))
-        self.tableWidget.setMaximumSize(QtCore.QSize(801, 16777215))
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(7)
-        for i in range(7):
-            item = QtWidgets.QTableWidgetItem()
-            self.tableWidget.setHorizontalHeaderItem(i, item)
-        for i in range(7):
-            item = QtWidgets.QTableWidgetItem()
-            self.tableWidget.setItem(0,i, item)
-        #refactor this after
-        item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Арт"))
-        item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Название"))
-        item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Закупка"))
-        item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Нац"))
-        item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Продаж"))
-        item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Кол-во."))
-        item = self.tableWidget.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "ГРН"))
-        __sortingEnabled = self.tableWidget.isSortingEnabled()
-        self.tableWidget.setSortingEnabled(False)
-        self.tableWidget.setSortingEnabled(__sortingEnabled)
-        self.tableWidget.verticalHeader().setDefaultSectionSize(9)
-        self.tableWidget.verticalHeader().setVisible(False)
-
 
     def find_child_category(self,list_with_results):
         id_with_child =[]
@@ -185,6 +71,10 @@ class Views_Main_Window:
                     if id_with_child[number]['id'] == result['parent_id']:
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
+
+   
+
+
     @staticmethod
     def get_category_values():
         list_dict_with_results = []
@@ -247,7 +137,11 @@ class Views_Main_Window:
         db.close()
         return self.from_sqlgoods_to_dict(goods)
     
-
+    def calculate_sell_price(self,sell,buy):
+        # difference = (float(sell) -float(buy))
+        # return  str((round((difference/sell),2)*200 ))  #str(((round(difference /float(sell)*100))*2))
+        dif = abs(float(buy) - float(sell))
+        return str(round((dif/buy)*100,1))
 
     
     def display_goods_from_category(self,for_search=False):
@@ -270,8 +164,11 @@ class Views_Main_Window:
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
             self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
             self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["buy"])))
-            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["sell"])))
-            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["profit"])))
+            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
+            if good['profit'] != '':
+                self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["profit"])))
+            else:
+                self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
             self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
 
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
@@ -320,7 +217,8 @@ class Views_Main_Window:
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         #show name good on bottom
-        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), 1).text()))
+        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), self.tableWidget.currentColumn()).text()))
+        self.tableWidget_2.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget_2.item(self.tableWidget_2.currentRow(), self.tableWidget_2.currentColumn()).text()))
         self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
@@ -328,4 +226,5 @@ class Views_Main_Window:
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
+        self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
         
