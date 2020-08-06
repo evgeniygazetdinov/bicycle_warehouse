@@ -19,19 +19,20 @@ python3 main.py
 
 release notes:
 
-release 0.2:
+
+|release 0.2|:
 
 categories 
 get values from sqlite file
 
 
-release 0.3:
+|release 0.3|:
 
 search 
 change resolution elements
 new good window
 
-release 0.4:
+|release 0.4|:
 
 fix word case for search good
 same window for add/edit  category
@@ -42,4 +43,3 @@ add status bar for cart table for any column
 fix price column in good table(add formula)
 add basic behavior for add good to card
 add displaying total cost and total profit
-
