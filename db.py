@@ -27,6 +27,7 @@ class Bicycle_db():
 
         self.db = self.create_db()
         self.connection = sqlite3.connect('bicycle_db.sqlite')
+        self.cursor = self.connection.cursor()
         if not os.path.exists(self.base_path):
             if not self.db.open():
                 query = QSqlQuery()
@@ -40,7 +41,14 @@ class Bicycle_db():
         db = QSqlDatabase.addDatabase("QSQLITE")
         db.setDatabaseName(self.base_path)
         return db
-    
+
+    def insert(self,query):
+        query_res = self.cursor.execute(query)
+        res = query_res.fetchall()
+        self.connection.commit()
+        return res
+
+
     def edit(self, query):
         db = self.connection
         cursor = db.cursor()
