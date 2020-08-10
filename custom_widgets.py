@@ -10,8 +10,6 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, parent = None):
            QtWidgets.QTreeWidget.__init__(self, parent)
-
-
     def contextMenuEvent(self, event):
            #handle right_click
            menu = QtWidgets.QMenu(self)
@@ -35,11 +33,14 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                   for SelectedItem in self.selectedItems():
                      if SelectedItem.text(0) == item.text(0):
                             #check category is not null
-                            SelectedItem.removeChild(item)
-                            text = item.text(0)
-                            query = 'DELETE FROM categories WHERE name LIKE "%{}%";'.format(text)
-                            db.insert(query)
-                            db.close()
+                            qm = QtWidgets.QMessageBox()
+                            ret = qm.question(self,'', "Удалить категорию?", qm.Yes | qm.No)
+                            if ret == qm.Yes:
+                                   SelectedItem.removeChild(item)
+                                   text = item.text(0)
+                                   query = 'DELETE FROM categories WHERE name LIKE "%{}%";'.format(text)
+                                   db.insert(query)
+                                   db.close()
            if action == edit_category_Action:
                   if self.selectedItems():
                      old_name = self.currentItem().text(0)
@@ -73,11 +74,13 @@ class TreeWidgetGoods(CustomTreeWidget):
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
        
-       def __init__(self, parent = None,values=None):
+       def __init__(self, parent = None,values=None,category_widget=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
            self.last_added_category = 'Всі'
+           self.category_widget = category_widget
 
+   
        def parse_row(self):
               columns = self.columnCount()
               names = []
@@ -109,7 +112,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      values = self.parse_row()
               if action == edit_Action:
                      widget = QDialog()
-                     ui = GoodsForm(values=self.parse_row())
+                     ui = GoodsForm(values=self.parse_row(),category_widget=self.category_widget)
                      ui.setupUi(widget)
                      widget.exec_()
 

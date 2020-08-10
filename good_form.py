@@ -5,14 +5,22 @@ from PySide2.QtWidgets import (QApplication, QMainWindow, QPushButton,
 from db import Bicycle_db
 
 
+class Communicate(QtCore.QObject):
+
+    closeApp = QtCore.Signal()
+
+
+
 class GoodsForm(QMainWindow):
-    def __init__(self,new_good=False,values=False):
+    def __init__(self,new_good=False,values=False,category_widget=False):
         super().__init__()
         self.values = values
         self.new_good = new_good
+        self.category_widget = category_widget
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(544, 297)
+        self.c = Communicate()
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(160, 80, 53, 16))
         self.label.setObjectName("label")
@@ -156,7 +164,8 @@ class GoodsForm(QMainWindow):
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
 
-   
+
+
     def get_category_values(self):
         list_dict_with_results = []
         db = Bicycle_db()
@@ -183,90 +192,84 @@ class GoodsForm(QMainWindow):
                     if res['id'] == child['id']:
                         if len(child['childs'])!=0:
                             for element in child['childs']:
-                                QtWidgets.QTreeWidgetItem(item, [element])
+                                QtWidgets.QTreeWidgetItem(item, [element])  
+
+    def transtlate_category(self,category):
+        db = Bicycle_db()
+        category_id = db.insert('SELECT id from categories where name like "%{}%"'.format(category))
+        return category_id[0]
 
 
+    def get_values_from_good_windows(self):
+        good_values = {}
+        good_values['article'] = self.lineEdit_6.text()
+        good_values['profit'] = self.lineEdit_3.text()
+        good_values['buy'] = self.lineEdit_2.text()
+        good_values['sell'] = self.lineEdit_4.text()
+        good_values['name'] = self.lineEdit.text()
+        good_values['sell_uah'] = self.lineEdit_5.text()
+        good_values['category'] = self.transtlate_category(self.category_title.text())
+        good_values['qty'] = str(self.spinBox.value()) 
+        print(good_values)
+        return good_values
 
-
-
-
-
+    def store_good(self):
+        values = self.get_values_from_good_windows()
+        db = Bicycle_db()
+        schema = db.schema['goods']
+        str_schema = ','.join(schema)
+        query = 'insert into goods({}) values('',"{}",{},{},{},{},"{}","{}",{},{})'.format(
+            str_schema,values['name'],values['qty'], 
+            values['buy'],values['sell'],values['profit'],
+            values['category'],"USD",values['sell_uah'],
+            values['article'])
+        db.insert(query)
     def additional_actions(self):
         self.add_actions()
      
         self.fill_tree()
+        self.treeWidget.setHeaderHidden(True)
         if self.values:
             #when change_item
-            self.lineEdit_4.setText(self.values['profit'])
-            self.lineEdit_3.setText(self.values['sell'])
+            self.lineEdit_4.setText(self.values['Продаж'])
+            self.lineEdit_3.setText(self.values['Нац'])
             self.lineEdit_3.setEnabled(False)
-            self.lineEdit_2.setText(self.values['buy'])
-            self.lineEdit_6.setText(self.values['article'])
-            self.lineEdit_5.setText(self.values['sell_uah'])
-            self.lineEdit.setText(self.values['name'])
-            self.spinBox.setValue(int(self.values['qty']))
+            self.lineEdit_2.setText(self.values['Закупка'])
+            self.lineEdit_6.setText(self.values['Арт'])
+            self.lineEdit_5.setText(self.values['ГРН'])
+            self.lineEdit.setText(self.values['Название'])
+            self.spinBox.setValue(int(self.values['Кол-во.']))
             self.lineEdit_3.setEnabled(False)
             self.lineEdit_5.setEnabled(False)
+            self.lineEdit_6.setEnabled(False)
             self.label_9.setText('')
             self.comboBox.hide()
             self.label_4.hide()
             # move categories
             db = Bicycle_db()
-            res = db.edit('Select category from goods where name like "%{}%"'.format(self.values['name']))
+            res = db.edit('Select category from goods where name like "%{}%"'.format(self.values['Название']))
             ids = (str(res[0][0]).split())
-            category_title = db.edit('select name from categories where id like "%{}%"'.format(res[0]))
-            
+            #category_title = db.edit('select name from categories where id like "%{}%"'.format(res[0]))
 
 
-   
-            
-    def store_values_from_form(self):
 
-        def get_values_from_form():
-            #get_data_from windows
-            #get data from category 
-            pass
-        def store_data_from_form():
-            pass
+        else:
+            self.lineEdit_6.setEnabled(False)
+            ids_for_new_good = 'SELECT MAX(article)from goods'
+            db = Bicycle_db()
+            good_id = (db.insert(ids_for_new_good))[0][0]+1
+            self.lineEdit_6.setText(str(good_id))
+            self.spinBox.setValue(1)
+            self.treeWidget.setCurrentItem(QtWidgets.QTreeWidgetItem('Bci'))
 
-        from_form = get_values_from_form()
-        store_data_from_form()
 
         
-            
 
-    def get_values_from_table(self):
-        values = []
-        headers = []
-        for column in range(self.tableWidget.columnCount()):
-            header = self.tableWidget.horizontalHeaderItem(column)
-            if header is not None:
-                    headers.append(header.text())
-        for row in range(self.tableWidget.rowCount()):
-            rowdata = []
-            for column in range(self.tableWidget.columnCount()):
-                item = self.tableWidget.item(row, column)
-                if item is not None:
-                    rowdata.append(item.text())
-                else:
-                    rowdata.append('""')
-
-            values.append(dict(zip(headers,rowdata)))
-        return values
-    
-    def upload_to_base(self):
-        res = []
-        db = Bicycle_db()
-        #add course
-        values = self.get_values_from_table()
-        for row in values:
-            values = ','.join(map(str, row.values()))
-            db.edit("insert into goods(article, article_old, name, qty, buy, profit, category, sell_uah ) values({});".format(values))
-        print('executed')
         
 
 
     def add_actions(self):
-        self.pushButton_2.clicked.connect(self.store_values_from_form)
+        self.pushButton.clicked.connect(lambda : sys.exit(app.exec_()))
+        self.pushButton_2.clicked.connect(self.store_good)
         self.treeWidget.clicked.connect(lambda : self.category_title.setText(self.treeWidget.currentItem().text(0)))
         
