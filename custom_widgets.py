@@ -109,7 +109,12 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      widget.exec_()
 
               if action == remove_Action:
-                     values = self.parse_row()
+                     reply = QtWidgets.QMessageBox.question(self, 'Удалить товар?',
+                                     'Вы уверенны что хотите удалить?',
+                                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+
+                     if reply == QtWidgets.QMessageBox.Yes:
+                            print(self.parse_row())
               if action == edit_Action:
                      widget = QDialog()
                      ui = GoodsForm(values=self.parse_row(),category_widget=self.category_widget)
@@ -122,3 +127,18 @@ class CartTable(CustomTableWithGoods):
 
        def contextMenuEvent(self,event):
               pass
+
+
+
+class CustomMainWindow(QtWidgets.QMainWindow):
+       def __init__(self):
+              super().__init__()
+
+       
+
+     
+       def closeEvent(self, event):
+              db = Bicycle_db()
+              db.insert('drop table if exists cur_category')
+              db.close()
+              event.accept()

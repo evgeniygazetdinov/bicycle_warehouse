@@ -1,9 +1,9 @@
 import sys
-from PySide2 import QtGui, QtWidgets, QtCore
+from PySide2 import QtGui, QtWidgets, QtCore,Qt
 from PySide2.QtWidgets import (QApplication, QMainWindow, QPushButton, 
                              QToolTip, QMessageBox, QLabel,QDialog)
 from db import Bicycle_db
-
+import time
 
 class Communicate(QtCore.QObject):
 
@@ -130,7 +130,7 @@ class GoodsForm(QMainWindow):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.additional_actions()
+        self.additional_actions(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -164,7 +164,9 @@ class GoodsForm(QMainWindow):
                         id_with_child[number]['childs'].append(result['name_category'])
         return id_with_child
 
-
+    
+    def closeEvent(self, event):
+        pass
 
     def get_category_values(self):
         list_dict_with_results = []
@@ -197,8 +199,8 @@ class GoodsForm(QMainWindow):
     def transtlate_category(self,category):
         db = Bicycle_db()
         category_id = db.insert('SELECT id from categories where name like "%{}%"'.format(category))
+        
         return category_id[0]
-
 
     def get_values_from_good_windows(self):
         good_values = {}
@@ -224,8 +226,23 @@ class GoodsForm(QMainWindow):
             values['category'],"USD",values['sell_uah'],
             values['article'])
         db.insert(query)
-    def additional_actions(self):
-        self.add_actions()
+
+    def cur_category_handler(self):
+        db = Bicycle_db()
+        cur_category = db.exists('cur_category')
+        if cur_category:
+            res = db.insert('select name_category from cur_category where id=(select max(id) from cur_category)')
+            cur_category = (res[0][0])
+        else:
+            cur_category = 'Всі'
+        return cur_category
+            
+
+
+
+        
+    def additional_actions(self,Form):
+        self.add_actions(Form)
      
         self.fill_tree()
         self.treeWidget.setHeaderHidden(True)
@@ -246,11 +263,12 @@ class GoodsForm(QMainWindow):
             self.comboBox.hide()
             self.label_4.hide()
             # move categories
-            db = Bicycle_db()
-            res = db.edit('Select category from goods where name like "%{}%"'.format(self.values['Название']))
-            ids = (str(res[0][0]).split())
-            #category_title = db.edit('select name from categories where id like "%{}%"'.format(res[0]))
-
+            category = self.cur_category_handler()
+            item = QtWidgets.QTreeWidgetItem(category)
+            self.category_title.setText(category)
+            current_index = 1
+            #res = db.edit('Select name_category if from cur_category where id = (SELECT MAX(id) from cur_category)')
+            #print(res)
 
 
         else:
@@ -261,15 +279,21 @@ class GoodsForm(QMainWindow):
             self.lineEdit_6.setText(str(good_id))
             self.spinBox.setValue(1)
             self.treeWidget.setCurrentItem(QtWidgets.QTreeWidgetItem('Bci'))
+            category = self.cur_category_handler()
+            self.category_title.setText(category)
+            db.close()
 
 
-        
+    def close_window(self,Form):
+        print("Program terminating...")
+        Form.close()
 
-        
+    
 
 
-    def add_actions(self):
-        self.pushButton.clicked.connect(lambda : sys.exit(app.exec_()))
+    def add_actions(self,Form):
+        self.pushButton.clicked.connect(lambda : self.close_window(Form))
         self.pushButton_2.clicked.connect(self.store_good)
         self.treeWidget.clicked.connect(lambda : self.category_title.setText(self.treeWidget.currentItem().text(0)))
+        # self.treeWidget.clicked.connect())
         

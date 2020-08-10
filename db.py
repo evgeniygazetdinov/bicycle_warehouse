@@ -19,7 +19,7 @@ class Bicycle_db():
         self.create_basket_query = "CREATE TABLE [basket] ( [id] integer, [price] text, [qty] integer, [total_price] integer, [article] text, [payment] text, [profit] integer, [dated] text, [article_old] text, [name] text );"
         self.create_goods_query = "CREATE TABLE [goods] ( [article_old] text, [name] text, [qty] integer, [buy] real, [sell] real, [profit] text, [category] text, [currency] text, [sell_uah] integer, [article] integer )"
         self.create_settings = "CREATE TABLE [settings] ( [Код] integer, [name] text, [value] text, [type] text );"
-        self.create_cur_category = "CREATE TABLE [cur_category] ( [name] text );""
+        self.create_cur_category = "CREATE TABLE [cur_category] ( [name] text );"
         self.tables_scheme = ['categories','basket','goods','settings']
         self.schema = {'categories':['id',"name","parent_id","export"],
             'basket':['id','price','qty','total_price','article','payment','profit','dated','article_old','name'],
@@ -78,6 +78,13 @@ class Bicycle_db():
         for tbl in mdb.list_tables(mdb_db):
             tables.append(tbl)
         return tables
+
+    def exists(self,table_name):
+        query = "SELECT * FROM sqlite_master WHERE type='table' AND  name='{}'".format(table_name)
+        res = self.insert(query)
+        if len(res)> 0 :
+            return True
+        return False
 
     def make_db_from_csv_files(self):
         options = csv_to_sqlite.CsvOptions(typing_style="full") 
