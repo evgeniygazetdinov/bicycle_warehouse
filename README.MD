@@ -1,9 +1,14 @@
 *WAREHOUSE on qt5*
 
 
+*from designer to py with runner*
+
+ pyuic5 -x template.ui -o template.py
+
 *compile project*
 
 pyinstaller -D -F -n main -c "main.py"
+
 
 *for run*
 
@@ -43,3 +48,14 @@ add status bar for cart table for any column
 fix price column in good table(add formula)
 add basic behavior for add good to card
 add displaying total cost and total profit
+
+
+|release 0.5|:
+
+add queries for add/edit/delete categories
+in process add queries from add/edit/delete good
+window for new cat and sub category are same now
+
+
+
+

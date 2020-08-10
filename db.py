@@ -19,6 +19,7 @@ class Bicycle_db():
         self.create_basket_query = "CREATE TABLE [basket] ( [id] integer, [price] text, [qty] integer, [total_price] integer, [article] text, [payment] text, [profit] integer, [dated] text, [article_old] text, [name] text );"
         self.create_goods_query = "CREATE TABLE [goods] ( [article_old] text, [name] text, [qty] integer, [buy] real, [sell] real, [profit] text, [category] text, [currency] text, [sell_uah] integer, [article] integer )"
         self.create_settings = "CREATE TABLE [settings] ( [Код] integer, [name] text, [value] text, [type] text );"
+        self.create_cur_category = "CREATE TABLE [cur_category] ( [name] text );""
         self.tables_scheme = ['categories','basket','goods','settings']
         self.schema = {'categories':['id',"name","parent_id","export"],
             'basket':['id','price','qty','total_price','article','payment','profit','dated','article_old','name'],
@@ -27,6 +28,7 @@ class Bicycle_db():
 
         self.db = self.create_db()
         self.connection = sqlite3.connect('bicycle_db.sqlite')
+        self.cursor = self.connection.cursor()
         if not os.path.exists(self.base_path):
             if not self.db.open():
                 query = QSqlQuery()
@@ -40,7 +42,14 @@ class Bicycle_db():
         db = QSqlDatabase.addDatabase("QSQLITE")
         db.setDatabaseName(self.base_path)
         return db
-    
+
+    def insert(self,query):
+        query_res = self.cursor.execute(query)
+        res = query_res.fetchall()
+        self.connection.commit()
+        return res
+
+
     def edit(self, query):
         db = self.connection
         cursor = db.cursor()

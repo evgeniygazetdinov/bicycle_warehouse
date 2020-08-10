@@ -7,6 +7,9 @@ import re
 from collections import OrderedDict
 from main_ui_fixes import FixesMainWindow
 from decimal import Decimal
+import time
+from random import randint
+
 
 
 class Views_Main_Window(FixesMainWindow): 
@@ -106,7 +109,7 @@ class Views_Main_Window(FixesMainWindow):
 
 
     def from_sqlgoods_to_dict(self,goods):
-        res = []
+        res = tuple()
         for value in goods:
             #article_old = value[0]
             name = value[1]
@@ -118,11 +121,11 @@ class Views_Main_Window(FixesMainWindow):
             currency = value[7]
             sell_uah = value[8]
             article = value[9]
-            res.append({"name":name,
-                        'qty':qty,"buy":buy,"sell":sell,
+            data ={'name':name,'qty':qty,"buy":buy,"sell":sell,
                         "profit":profit,"category":category,
                         "currency":currency,"sell_uah":sell_uah,
-                        "article":article})
+                        "article":article}
+            res+=(data,)
         self.goods_from_category = res
         return res
 
@@ -138,8 +141,6 @@ class Views_Main_Window(FixesMainWindow):
         return self.from_sqlgoods_to_dict(goods)
     
     def calculate_sell_price(self,sell,buy):
-        # difference = (float(sell) -float(buy))
-        # return  str((round((difference/sell),2)*200 ))  #str(((round(difference /float(sell)*100))*2))
         dif = abs(float(buy) - float(sell))
         return str(round((dif/buy)*100,1))
 
@@ -155,24 +156,22 @@ class Views_Main_Window(FixesMainWindow):
             list_with_goods = for_search
         else:
             list_with_goods = self.get_goods(current_category)
-        self.tableWidget.insertRow(len(list_with_goods))
-        self.tableWidget.setRowCount(len(list_with_goods))
-        row = len(list_with_goods)
-        
+        row= len(list_with_goods)
+        self.tableWidget.insertRow(row)
+
+        self.tableWidget.setRowCount(row)
+        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         for good in list_with_goods:
             row -=1
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
             self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
             self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["buy"])))
             self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
-            if good['profit'] != '':
-                self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(good["profit"])))
-            else:
-                self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
+            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
             self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
-
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
-
+            
+            
     def finder(self,window_for_search,word_search=False):
         values = []
         self.display_goods_from_category(self.goods_from_category)
@@ -220,6 +219,7 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), self.tableWidget.currentColumn()).text()))
         self.tableWidget_2.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget_2.item(self.tableWidget_2.currentRow(), self.tableWidget_2.currentColumn()).text()))
         self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
+        self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
