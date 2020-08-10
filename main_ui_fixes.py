@@ -75,10 +75,10 @@ class FixesMainWindow:
 
     def resize_tableWidget(self):
         values = [50, 480, 50, 50, 50, 50, 50, 70]
-        self.tab.showFullScreen()
-        self.tableWidget.showFullScreen()
         for i in range(len(values)):
             self.tableWidget.setColumnWidth(i,values[i])
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
+        pass
     def resize_tableWidget_2(self):
         values = [220,50,60]
         for i in range(len(values)):
@@ -129,7 +129,7 @@ class FixesMainWindow:
     def add_custom_table(self):
         #refactor after code from design-generator
         _translate = QtCore.QCoreApplication.translate
-        self.tableWidget = CustomTableWithGoods(self.tab)
+        self.tableWidget = CustomTableWithGoods(self.tab,self.treeWidget)
         self.tableWidget.setGeometry(QtCore.QRect(140, 70, 801, 521))
         #self.tableWidget.setMaximumSize(QtCore.QSize(801, 16777215))
         self.tableWidget.setObjectName("tableWidget")
@@ -155,9 +155,11 @@ class FixesMainWindow:
         item.setText(_translate("MainWindow", "Кол-во."))
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "ГРН"))
-        __sortingEnabled = self.tableWidget.isSortingEnabled()
+        #__sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
-        self.tableWidget.setSortingEnabled(__sortingEnabled)
+        #self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.tableWidget.verticalHeader().setDefaultSectionSize(9)
         self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.setAutoScroll(False)
+
 
