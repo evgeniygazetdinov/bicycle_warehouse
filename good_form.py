@@ -199,7 +199,6 @@ class GoodsForm(QMainWindow):
         category_id = db.insert('SELECT id from categories where name like "%{}%"'.format(category))
         return category_id[0]
 
-
     def get_values_from_good_windows(self):
         good_values = {}
         good_values['article'] = self.lineEdit_6.text()

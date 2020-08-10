@@ -21,6 +21,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
            db = Bicycle_db()
            if action == add_category_Action:
               text, ok = QtWidgets.QInputDialog.getText(self, "Добавить категорию", "Имя для категории:")
+
               if ok and text != "":
                      rowcount = self.topLevelItemCount()
                      self.addTopLevelItem(QtWidgets.QTreeWidgetItem(rowcount))
@@ -28,6 +29,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                      res = db.insert('INSERT INTO categories (id,name,parent_id) values((SELECT MAX(id)from categories)+1,"{}",-1);'.format(text))
                      print(res)
                      db.close()
+
            if action == remove_category_Action:
                   item = self.currentItem()
                   for SelectedItem in self.selectedItems():
@@ -65,7 +67,6 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
 
 
-
 class TreeWidgetGoods(CustomTreeWidget):
 
        def contextMenuEvent(self,event):
@@ -73,7 +74,7 @@ class TreeWidgetGoods(CustomTreeWidget):
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
-       
+
        def __init__(self, parent = None,values=None,category_widget=None):
            QtWidgets.QTableWidget.__init__(self, parent)
            self.values = values
@@ -113,6 +114,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
               if action == edit_Action:
                      widget = QDialog()
                      ui = GoodsForm(values=self.parse_row(),category_widget=self.category_widget)
+
                      ui.setupUi(widget)
                      widget.exec_()
 
