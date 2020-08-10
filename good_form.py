@@ -165,8 +165,6 @@ class GoodsForm(QMainWindow):
         return id_with_child
 
     
-    def closeEvent(self, event):
-        pass
 
     def get_category_values(self):
         list_dict_with_results = []
@@ -266,9 +264,11 @@ class GoodsForm(QMainWindow):
             category = self.cur_category_handler()
             item = QtWidgets.QTreeWidgetItem(category)
             self.category_title.setText(category)
-            current_index = 1
-            #res = db.edit('Select name_category if from cur_category where id = (SELECT MAX(id) from cur_category)')
-            #print(res)
+            index = self.find_element_index_in_tree(category)
+            if len(index) == 1:
+                self.treeWidget.model().index(index[0])
+            #handle for child or not child element
+
 
 
         else:
@@ -282,18 +282,25 @@ class GoodsForm(QMainWindow):
             category = self.cur_category_handler()
             self.category_title.setText(category)
             db.close()
-
-
-    def close_window(self,Form):
-        print("Program terminating...")
-        Form.close()
-
     
+    def find_element_index_in_tree(self,category):
+        root = self.treeWidget.invisibleRootItem()
+        child_count = root.childCount()
+        for i in range(child_count):
+            item = root.child(i)
+            url = item.text(0) # text at first (0) column
+            if  root.child(i).text(0) == category:
+                return [i]
+            for x in range(item.childCount()):
+                if  root.child(i).child(x).text(0) == category:
+                    return [i,x]
+            
+
 
 
     def add_actions(self,Form):
-        self.pushButton.clicked.connect(lambda : self.close_window(Form))
+        self.pushButton.clicked.connect(lambda : Form.close())
         self.pushButton_2.clicked.connect(self.store_good)
         self.treeWidget.clicked.connect(lambda : self.category_title.setText(self.treeWidget.currentItem().text(0)))
-        # self.treeWidget.clicked.connect())
+
         
