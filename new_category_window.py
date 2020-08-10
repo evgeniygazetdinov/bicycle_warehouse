@@ -88,6 +88,6 @@ class Ui_New_Category_Form(QtWidgets.QMainWindow):
             
             self.pushButton.clicked.connect(lambda:self.new_category_handler(self.treeWidget))
             self.pushButton.clicked.connect(QtWidgets.qApp.quit)
-
+h
 
 
