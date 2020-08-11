@@ -205,7 +205,15 @@ class Views_Main_Window(FixesMainWindow):
                 if str(good[where]) == article:
                     values_for_dispay.append(good)
         self.display_goods_from_category(values_for_dispay)
+
+    def set_current_category(self, category):
+        db = Bicycle_db()
         
+        query = 'CREATE TABLE IF NOT EXISTS cur_category (id INTEGER PRIMARY KEY AUTOINCREMENT, name_category TEXT);'    
+        query_2 = 'insert into cur_category(name_category) values("{}")'.format(category)
+        db.insert(query)
+        db.insert(query_2)
+        db.close()
         
 
     
@@ -218,13 +226,15 @@ class Views_Main_Window(FixesMainWindow):
         #show name good on bottom
         self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), self.tableWidget.currentColumn()).text()))
         self.tableWidget_2.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget_2.item(self.tableWidget_2.currentRow(), self.tableWidget_2.currentColumn()).text()))
-        self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
+        self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
         self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
+        self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
+        self.treeWidget.clicked.connect(lambda :self.set_current_category(self.treeWidget.currentItem().text(0)))
+        
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
-        self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
         
