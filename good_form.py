@@ -12,11 +12,13 @@ class Communicate(QtCore.QObject):
 
 
 class GoodsForm(QMainWindow):
-    def __init__(self,new_good=False,values=False,category_widget=False):
+    def __init__(self,table = False,new_good=False,values=False,category_widget=False):
         super().__init__()
         self.values = values
         self.new_good = new_good
         self.category_widget = category_widget
+        self.table = table
+        self.values_for_new_good_window = {}
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(544, 297)
@@ -196,9 +198,15 @@ class GoodsForm(QMainWindow):
 
     def transtlate_category(self,category):
         db = Bicycle_db()
-        category_id = db.insert('SELECT id from categories where name like "%{}%"'.format(category))
+        if isinstance(category, str):
+            category_id = db.insert('SELECT id from categories where name like "%{}%"'.format(category))
+            return category_id[0]
+        elif isinstance(category, int):
+            category_id = db.insert('SELECT name from categories where id ={}'.format(category))
+            return category_id[0][0]
         
-        return category_id[0]
+
+
 
     def get_values_from_good_windows(self):
         good_values = {}
@@ -208,22 +216,48 @@ class GoodsForm(QMainWindow):
         good_values['sell'] = self.lineEdit_4.text()
         good_values['name'] = self.lineEdit.text()
         good_values['sell_uah'] = self.lineEdit_5.text()
-        good_values['category'] = self.transtlate_category(self.category_title.text())
+        if self.category_title.text() == 'категории':
+            good_values['category']= 0
+        else:
+            good_values['category'] = (self.transtlate_category(self.category_title.text()))[0]
         good_values['qty'] = str(self.spinBox.value()) 
-        print(good_values)
         return good_values
+
+    def insert_into_good_form(self,good_values):
+        self.lineEdit_6.setText(good_values['article'])
+        self.lineEdit_3.setText(good_values['profit'])
+        self.lineEdit_2.setText(good_values['buy'])
+        self.lineEdit_4.setText(good_values['sell'])
+        self.lineEdit_5.setText(good_values['sell_uah'])
+        self.spinBox.setValue(int(good_values['qty']) )
+
+
+
 
     def store_good(self):
         values = self.get_values_from_good_windows()
         db = Bicycle_db()
         schema = db.schema['goods']
         str_schema = ','.join(schema)
-        query = 'insert into goods({}) values('',"{}",{},{},{},{},"{}","{}",{},{})'.format(
+        query = 'insert into "goods"({}) values("","{}",{},{},{},{},{},"{}",{},{})'.format(
             str_schema,values['name'],values['qty'], 
             values['buy'],values['sell'],values['profit'],
             values['category'],"USD",values['sell_uah'],
             values['article'])
         db.insert(query)
+        self.table.update_table()
+        self.update_good_window()
+
+    def edit_good(self):
+        values = self.get_values_from_good_windows()
+        db =Bicycle_db()
+        query = """UPDATE goods SET (name,qty,buy,sell,profit,category,sell_uah,article)=("{}",{},{},{},"{}",{},{},{}) WHERE article like "%{}%";""" .format(values['name'],values['qty'],values['buy'],values['sell'],
+        values['profit'],values['category'],values['sell_uah'],values['article'],values['article'])
+        db.insert(query)
+        self.table.update_table()
+
+
+
 
     def cur_category_handler(self):
         db = Bicycle_db()
@@ -235,6 +269,31 @@ class GoodsForm(QMainWindow):
             cur_category = 'Всі'
         return cur_category
             
+    
+    def update_good_window(self):
+        self.values_for_new_good_window = self.get_values_from_good_windows()
+        self.values_for_new_good_window['article'] = int(self.values_for_new_good_window['article'])
+        self.values_for_new_good_window['article']+=1
+        self.values_for_new_good_window['article'] = str(self.values_for_new_good_window['article'])
+        self.values_for_new_good_window['category'] = self.transtlate_category(self.values_for_new_good_window['category'])
+        self.insert_into_good_form(self.values_for_new_good_window)
+
+    
+    def selectItem(self,widget,itemOrText):
+            oldIndex=widget.selectionModel().currentIndex()
+            try: #an item is given--------------------------------------------
+                    newIndex=widget.model().indexFromItem(itemOrText)
+            except: #a text is given and we are looking for the first match---
+                    listIndexes=widget.model().match(widget.model().index(0, 0),
+                                QtCore.Qt.DisplayRole,
+                                itemOrText,
+                                QtCore.Qt.MatchStartsWith)
+                    newIndex=listIndexes[0]
+            widget.selectionModel().select( #programmatical selection---------
+                    newIndex,
+                    QtGui.QItemSelectionModel.ClearAndSelect)
+
+
 
 
 
@@ -260,13 +319,17 @@ class GoodsForm(QMainWindow):
             self.label_9.setText('')
             self.comboBox.hide()
             self.label_4.hide()
+            self.pushButton_2.clicked.connect(self.edit_good)
+            self.pushButton_2.clicked.connect(lambda : Form.close())
             # move categories
             category = self.cur_category_handler()
             item = QtWidgets.QTreeWidgetItem(category)
             self.category_title.setText(category)
             index = self.find_element_index_in_tree(category)
+
             if len(index) == 1:
-                self.treeWidget.model().index(index[0])
+                pass
+                #self.treeWidget.model().index(index[0])
             #handle for child or not child element
 
 
@@ -281,6 +344,7 @@ class GoodsForm(QMainWindow):
             self.treeWidget.setCurrentItem(QtWidgets.QTreeWidgetItem('Bci'))
             category = self.cur_category_handler()
             self.category_title.setText(category)
+            self.pushButton_2.clicked.connect(self.store_good)
             db.close()
     
     def find_element_index_in_tree(self,category):
@@ -300,7 +364,7 @@ class GoodsForm(QMainWindow):
 
     def add_actions(self,Form):
         self.pushButton.clicked.connect(lambda : Form.close())
-        self.pushButton_2.clicked.connect(self.store_good)
+       
         self.treeWidget.clicked.connect(lambda : self.category_title.setText(self.treeWidget.currentItem().text(0)))
 
         

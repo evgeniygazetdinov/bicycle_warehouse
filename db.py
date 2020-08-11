@@ -23,7 +23,7 @@ class Bicycle_db():
         self.tables_scheme = ['categories','basket','goods','settings']
         self.schema = {'categories':['id',"name","parent_id","export"],
             'basket':['id','price','qty','total_price','article','payment','profit','dated','article_old','name'],
-            'goods':['ariticle_old','name','qty','buy','sell','profit','category','currency','sell_uah','article'],
+            'goods':['article_old','name','qty','buy','sell','profit','category','currency','sell_uah','article'],
             'settings':['Код','name','value','type']}
 
         self.db = self.create_db()
