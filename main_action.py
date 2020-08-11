@@ -142,7 +142,11 @@ class Views_Main_Window(FixesMainWindow):
     
     def calculate_sell_price(self,sell,buy):
         dif = abs(float(buy) - float(sell))
-        return str(round((dif/buy)*100,1))
+        res = round((dif/buy)*100,1)
+        if res == int(res):
+            return str(int(res))
+        else:
+            return str(res)
 
     
     def display_goods_from_category(self,for_search=False):
@@ -165,8 +169,14 @@ class Views_Main_Window(FixesMainWindow):
             row -=1
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
             self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
-            self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["buy"])))
-            self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
+            if good['buy'] == int(good['buy']):
+                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(int(good["buy"]))))
+            else:
+                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str((good["buy"]))))
+            if good['sell'] == int(good['sell']):
+                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(int(good["sell"]))))
+            else:
+                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str((good["sell"]))))
             self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
             self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
@@ -214,7 +224,10 @@ class Views_Main_Window(FixesMainWindow):
         db.insert(query)
         db.insert(query_2)
         db.close()
-        
+    
+    def updateUiCellClick(self):
+        print('cell clicked')
+
 
     
     def add_actions(self):
@@ -230,6 +243,9 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
         self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
         self.treeWidget.clicked.connect(lambda :self.set_current_category(self.treeWidget.currentItem().text(0)))
+        
+        
+       # self.treeWidget.cellClicked.connect(self.updateUiCellClick) 
         
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))

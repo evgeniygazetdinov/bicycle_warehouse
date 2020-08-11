@@ -10,6 +10,11 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, parent = None):
            QtWidgets.QTreeWidget.__init__(self, parent)
+    def mousePressEvent(self, event):
+           super(CustomTreeWidget,self).mousePressEvent(event)
+           print('HERE')
+
+
     def contextMenuEvent(self, event):
            #handle right_click
            menu = QtWidgets.QMenu(self)
@@ -62,7 +67,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                             print('here')
                             QtWidgets.QTreeWidgetItem(self, [text])
                             res = db.insert('INSERT INTO categories (id,name,parent_id) values((SELECT MAX(id)from categories)+1,"{}",-1);'.format(text))
-
+       
 
 
 
@@ -79,8 +84,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            self.values = values
            self.last_added_category = 'Всі'
            self.category_widget = category_widget
-
-
+       
+       def __lt__(self, otherItem):
+              column = self.treeWidget().sortColumn()
+              return self.text(column).toLower() < otherItem.text(column).toLower()
    
        def parse_row(self):
               columns = self.columnCount()

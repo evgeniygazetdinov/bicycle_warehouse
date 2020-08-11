@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets,Qt
 from PySide2.QtWidgets import QWidget, QDialog
 from custom_widgets import CustomTreeWidget,CustomTableWithGoods, CartTable
 
@@ -156,10 +156,11 @@ class FixesMainWindow:
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "ГРН"))
         #__sortingEnabled = self.tableWidget.isSortingEnabled()
-        self.tableWidget.setSortingEnabled(False)
         #self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.tableWidget.verticalHeader().setDefaultSectionSize(9)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setAutoScroll(False)
-
+        #self.tableWidget.setAutoScroll(True)
+        # self.tableWidget.setSortingEnabled(True)
+        # self.tableWidget.sortByColumn(False)
+        self.treeWidget.sortByColumn(0, QtCore.Qt.AscendingOrder)
 
