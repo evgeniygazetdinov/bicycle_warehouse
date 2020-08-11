@@ -36,3 +36,19 @@ search
 change resolution elements
 
 new good window
+
+|release 0.4|:
+
+fix word case for search good same window for add/edit category change height beetween line edits in cart enlarge height cart make tab widget responsible(tabwidget and tree widget in process) add status bar for cart table for any column fix price column in good table(add formula) add basic behavior for add good to card add displaying total cost and total profit
+
+|release 0.5|:
+
+add queries for add/edit/delete 
+
+fix displaying redisplaying table
+
+from add/edit/delete for category/good window
+
+add window for delete good/category
+
+sub category are same now
