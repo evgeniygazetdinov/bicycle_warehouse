@@ -9,7 +9,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from main_action import Views_Main_Window
-
 class Ui_MainWindow(Views_Main_Window):
     def setupUi(self, MainWindow):
         
@@ -726,12 +725,12 @@ class Ui_MainWindow(Views_Main_Window):
         MainWindow.setStatusBar(self.statusBar)
         self.add_actions()
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+
+#     MainWindow = CustomMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())
 
