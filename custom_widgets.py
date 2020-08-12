@@ -10,6 +10,11 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, parent = None):
            QtWidgets.QTreeWidget.__init__(self, parent)
+    def mousePressEvent(self, event):
+           super(CustomTreeWidget,self).mousePressEvent(event)
+           print('HERE')
+
+
     def contextMenuEvent(self, event):
            #handle right_click
            menu = QtWidgets.QMenu(self)
@@ -62,7 +67,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
                             print('here')
                             QtWidgets.QTreeWidgetItem(self, [text])
                             res = db.insert('INSERT INTO categories (id,name,parent_id) values((SELECT MAX(id)from categories)+1,"{}",-1);'.format(text))
-
+       
 
 
 
@@ -70,6 +75,12 @@ class TreeWidgetGoods(CustomTreeWidget):
 
        def contextMenuEvent(self,event):
               pass
+
+class NumericItem(QtWidgets.QTableWidgetItem):
+    def __lt__(self, other):
+        return (self.data(QtCore.Qt.UserRole) <
+                other.data(QtCore.Qt.UserRole))
+
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
@@ -79,13 +90,16 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            self.values = values
            self.last_added_category = 'Всі'
            self.category_widget = category_widget
+           self.sortItems(0, QtCore.Qt.AscendingOrder)
+           self.setSortingEnabled(True)
 
 
-   
+
        def parse_row(self):
               columns = self.columnCount()
               names = []
               values = []
+              
               for i in range(columns):
                   names.append(self.horizontalHeaderItem(i).text())
               for i in range(columns):
@@ -132,7 +146,6 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
 
 
-
        def display_goods_from_category(self,for_search=False):
               list_with_goods = []
               try:
@@ -147,26 +160,44 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      list_with_goods = self.get_goods(current_category)
                      row= len(list_with_goods)
                      self.insertRow(row)
-
                      self.setRowCount(row)
                      self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
               else:
-                     list_with_goods = self.get_goods(current_category)
-                     row= len(list_with_goods)
-                     self.insertRow(row)
-
-                     self.setRowCount(row)
-                     self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+                  list_with_goods = self.get_goods(current_category)
+              row= len(list_with_goods)
+              self.insertRow(row)
+              self.setRowCount(row)
+              #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
               for good in list_with_goods:
                      row -=1
-                     self.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
+                     item = QtWidgets.QTableWidgetItem()
+                     item.setFlags(QtCore.Qt.ItemIsEnabled)
+                     item.setData(QtCore.Qt.DisplayRole,good["article"])
+                     self.setItem(row,0,QtWidgets.QTableWidgetItem(item))
                      self.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
-                     self.setItem(row,2,QtWidgets.QTableWidgetItem(str(good["buy"])))
-                     self.setItem(row,4,QtWidgets.QTableWidgetItem(str(good["sell"])))
-                     self.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
-                     self.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
-                     self.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
-
+              #item = QtWidgets.QTableWidgetItem()
+                     if good['buy'] == int(good['buy']):
+                            item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
+                            self.setItem(row,2,QtWidgets.QTableWidgetItem(item))
+                     else:
+                            item.setData(QtCore.Qt.DisplayRole,good["buy"])
+                            self.setItem(row,2,QtWidgets.QTableWidgetItem(item))
+                     #item = QtWidgets.QTableWidgetItem()    
+                     if good['sell'] == int(good['sell']):
+                            item.setData(QtCore.Qt.DisplayRole,int(good["sell"]))
+                            self.setItem(row,4,QtWidgets.QTableWidgetItem(item)) 
+                     else:
+                            item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
+                            self.setItem(row,4,QtWidgets.QTableWidgetItem(item))
+                     #item = QtWidgets.QTableWidgetItem()
+                     item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
+                     self.setItem(row,3,QtWidgets.QTableWidgetItem(item))
+                     #item = QtWidgets.QTableWidgetItem()
+                     item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
+                     self.setItem(row,5,QtWidgets.QTableWidgetItem(item))
+                     #item = QtWidgets.QTableWidgetItem()
+                     item.setData(QtCore.Qt.DisplayRole,(good["sell_uah"]))
+                     self.setItem(row,6,QtWidgets.QTableWidgetItem(item))
 
        def update_table(self):
               db = Bicycle_db()
@@ -202,10 +233,17 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
                      if reply == QtWidgets.QMessageBox.Yes:
                             values= self.parse_row()
-                            db = Bicycle_db()
-                            db.insert("DELETE FROM goods WHERE article LIKE '%{}%'".format(values['Арт']))
-                            self.update_table()
-                            db.close()
+                            if values['Кол-во.'] == '0':
+                                   # widget = QDialog()
+                                   error_dialog = QtWidgets.QErrorMessage(self)
+                                   error_dialog.showMessage('товар с нулевым количеством удалить нельзя')
+
+                                   # widget.exec_()
+                            else:       
+                                   db = Bicycle_db()
+                                   db.insert("DELETE FROM goods WHERE article LIKE '%{}%'".format(values['Арт']))
+                                   self.update_table()
+                                   db.close()
 
               if action == edit_Action:
                      widget = QDialog()
@@ -214,6 +252,21 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      widget.exec_()
 
 class CartTable(CustomTableWithGoods):
+       def __init__(self, parent = None,profit=None,total=None):
+           QtWidgets.QTableWidget.__init__(self, parent)
+
+           self.sortItems(0, QtCore.Qt.AscendingOrder)
+           self.setSortingEnabled(True)
+           self.profit = profit
+           self.total = total
+
+       def clean_table(self):
+              while self.rowCount() >0:
+                     self.removeRow(0)
+              if self.profit:
+                     self.profit.setText('')
+              if self.total:
+                     self.total.setText('')
 
 
 

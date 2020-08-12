@@ -4,14 +4,9 @@
 
  pyuic5 -x template.ui -o template.py
 
-*from designer to py with runner*
-
- pyuic5 -x template.ui -o template.py
-
 *compile project*
 
 pyinstaller -D -F -n main -c "main.py"
-
 
 *for run*
 
@@ -43,19 +38,17 @@ change resolution elements
 new good window
 
 |release 0.4|:
-fix word case for search good
-same window for add/edit  category
-change height beetween line edits in cart
-enlarge height cart
-make tab widget responsible(tabwidget and tree widget in process)
-add status bar for cart table for any column
-fix price column in good table(add formula)
-add basic behavior for add good to card
-add displaying total cost and total profit
+
+fix word case for search good same window for add/edit category change height beetween line 
+edits in cart enlarge height cart make tab widget responsible(tabwidget and tree widget in process)
+
+add status bar for cart table for any column fix price column in good table(add formula)
+
+add basic behavior for add good to card add displaying total cost and total profit
 
 |release 0.5|:
 
-add queries for add/edit/delete -good/category
+add queries for add/edit/delete 
 
 fix displaying redisplaying table
 
@@ -68,6 +61,16 @@ sub category are same now
 fix close good window
 
 
+|release 0.6|
 
+add basic sorting for columns in main table widget
+fix floating number for int strings
+fix basic sorting number by click
+fix blank cells
+add cant delete good  with == qty 0 add warning window
+add buttons for custom price
+add basic logic for custom price buttons
+add sorting by numbers
+add clean logic for clean button
 
 
