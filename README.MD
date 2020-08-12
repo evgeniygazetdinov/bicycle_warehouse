@@ -64,13 +64,21 @@ fix close good window
 |release 0.6|
 
 add basic sorting for columns in main table widget
+
 fix floating number for int strings
+
 fix basic sorting number by click
+
 fix blank cells
+
 add cant delete good  with == qty 0 add warning window
+
 add buttons for custom price
+
 add basic logic for custom price buttons
+
 add sorting by numbers
+
 add clean logic for clean button
 
 
