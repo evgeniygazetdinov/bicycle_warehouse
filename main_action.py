@@ -31,7 +31,7 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget_2.setItem(row,0,QtWidgets.QTableWidgetItem(str(values['Название'])))
         self.tableWidget_2.setItem(row,1,QtWidgets.QTableWidgetItem(str(values['ГРН'])))
         self.cart_items.append(values)
-        self.counting_price_income_from_cart_items("Продаж",'Закупка',"ГРН")
+        self.counting_price_income_from_cart_items("ГРН",'Закупка',"Продаж")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
         self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
@@ -39,7 +39,7 @@ class Views_Main_Window(FixesMainWindow):
     
     def remove_from_cart(self):
         values = self.tableWidget_2.parse_row()
-        #self.cart_items.pop()
+        print(values)
 
     def calculate_good_income(self,sell,buy):
         income = round(abs((float(sell)-float(buy)))*self.course,1)
@@ -47,14 +47,17 @@ class Views_Main_Window(FixesMainWindow):
         
 
 
-    def counting_price_income_from_cart_items(self,sell_keyword,buy_keyword,grivna_keyword):
+    def counting_price_income_from_cart_items(self,grivna_keyword,sell_keyword=False,buy_keyword=False,sale=False):
         for item in self.cart_items:
             self.total_price+=(int(item[grivna_keyword]))
-        income = self.calculate_good_income(item[sell_keyword],item[buy_keyword])
-
+            
+            if ('Арт' in item):
+                if sell_keyword:
+                    income = self.calculate_good_income(item[sell_keyword],item[buy_keyword])
+        if sale:
+            self.total_price -= int(sale)
         
     def show_insert_window(self):
-        #self.parse_table()
         pass
     
     
@@ -111,7 +114,6 @@ class Views_Main_Window(FixesMainWindow):
     def from_sqlgoods_to_dict(self,goods):
         res = tuple()
         for value in goods:
-            #article_old = value[0]
             name = value[1]
             qty = value[2]
             buy = value[3]
@@ -158,6 +160,14 @@ class Views_Main_Window(FixesMainWindow):
         #warning here
         if isinstance(for_search, list):
             list_with_goods = for_search
+        elif isinstance(for_search,str):
+            current_category=  for_search
+            list_with_goods = self.get_goods(current_category)
+            row= len(list_with_goods)
+            self.tableWidget.insertRow(row)
+
+            self.tableWidget.setRowCount(row)
+            self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         else:
             list_with_goods = self.get_goods(current_category)
         row= len(list_with_goods)
@@ -167,19 +177,34 @@ class Views_Main_Window(FixesMainWindow):
         #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         for good in list_with_goods:
             row -=1
-            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
+            item = QtWidgets.QTableWidgetItem()
+            item.setFlags(QtCore.Qt.ItemIsEnabled)
+            item.setData(QtCore.Qt.DisplayRole,good["article"])
+            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(item))
             self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
+            #item = QtWidgets.QTableWidgetItem()
             if good['buy'] == int(good['buy']):
-                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str(int(good["buy"]))))
+                item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
+                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
             else:
-                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(str((good["buy"]))))
+                item.setData(QtCore.Qt.DisplayRole,good["buy"])
+                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
+            #item = QtWidgets.QTableWidgetItem()    
             if good['sell'] == int(good['sell']):
-                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str(int(good["sell"]))))
+                item.setData(QtCore.Qt.DisplayRole,int(good["sell"]))
+                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item)) 
             else:
-                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(str((good["sell"]))))
-            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(str(self.calculate_sell_price(good['sell'],good['buy'])+'%')))
-            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(str(good['qty'])))
-            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(str(good["sell_uah"])))
+                item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
+                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item))
+            #item = QtWidgets.QTableWidgetItem()
+            item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
+            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(item))
+            #item = QtWidgets.QTableWidgetItem()
+            item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
+            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(item))
+            #item = QtWidgets.QTableWidgetItem()
+            item.setData(QtCore.Qt.DisplayRole,(good["sell_uah"]))
+            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(item))
             
             
     def finder(self,window_for_search,word_search=False):
@@ -225,9 +250,34 @@ class Views_Main_Window(FixesMainWindow):
         db.insert(query_2)
         db.close()
     
-    def updateUiCellClick(self):
-        print('cell clicked')
 
+    def hander_for_handy_buttons(self,line_edit,button):
+        self.total_price = 0
+        price = line_edit.text()
+        specific = button.text()
+        row = self.tableWidget_2.rowCount()
+        item = QtWidgets.QTableWidgetItem()
+        item.setData(QtCore.Qt.DisplayRole,(price))
+        self.tableWidget_2.insertRow(row+1)
+        self.tableWidget_2.setRowCount(row+1)
+        self.tableWidget_2.setItem(row,0,QtWidgets.QTableWidgetItem(str(specific)))
+        self.tableWidget_2.setItem(row,1,QtWidgets.QTableWidgetItem(item)) 
+        
+        if button == self.sale_button:
+            self.counting_price_income_from_cart_items('ГРН',sale=price)
+        else:
+            self.cart_items.append({'Название':specific,'ГРН':price})
+            self.counting_price_income_from_cart_items('ГРН')
+        # self.cart_items.append(values)
+        #self.counting_price_income_from_cart_items("Продаж",'Закупка',"ГРН")
+        self.label_37.setText(str(self.total_price))
+        self.label_38.setText(str(round(self.total_income)))
+        self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
+    def clean_cart(self):
+        self.total_price=0
+        self.cart_items = []
+        self.total_income =0
+        self.tableWidget_2.clean_table()
 
     
     def add_actions(self):
@@ -243,12 +293,18 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
         self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
         self.treeWidget.clicked.connect(lambda :self.set_current_category(self.treeWidget.currentItem().text(0)))
-        
-        
+        # self.tableWidget.c
+        self.materials_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_3,self.materials_button))
+        self.workshop_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_5,self.workshop_button))
+        self.sale_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_6,self.sale_button))
        # self.treeWidget.cellClicked.connect(self.updateUiCellClick) 
-        
+       
+       
+       
+        #clean cart button
+        self.pushButton_4.clicked.connect(self.clean_cart)
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
-        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_3,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
