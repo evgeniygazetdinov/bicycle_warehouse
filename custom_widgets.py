@@ -76,6 +76,12 @@ class TreeWidgetGoods(CustomTreeWidget):
        def contextMenuEvent(self,event):
               pass
 
+class NumericItem(QtWidgets.QTableWidgetItem):
+    def __lt__(self, other):
+        return (self.data(QtCore.Qt.UserRole) <
+                other.data(QtCore.Qt.UserRole))
+
+
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
        
@@ -84,11 +90,11 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            self.values = values
            self.last_added_category = 'Всі'
            self.category_widget = category_widget
-       
-       def __lt__(self, otherItem):
-              column = self.treeWidget().sortColumn()
-              return self.text(column).toLower() < otherItem.text(column).toLower()
-   
+           self.sortItems(0, QtCore.Qt.AscendingOrder)
+           self.setSortingEnabled(True)
+
+
+
        def parse_row(self):
               columns = self.columnCount()
               names = []

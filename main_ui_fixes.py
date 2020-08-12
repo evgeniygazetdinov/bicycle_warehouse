@@ -35,6 +35,7 @@ class FixesMainWindow:
         self.pushButton_5.setGeometry(1140,610,101,31)
         self.pushButton_6.setGeometry(1140,650,101,31)
         self.pushButton_7.setGeometry(1140,690,101,41)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
 
     
     def fixes_on_cart(self):
@@ -162,5 +163,4 @@ class FixesMainWindow:
         #self.tableWidget.setAutoScroll(True)
         # self.tableWidget.setSortingEnabled(True)
         # self.tableWidget.sortByColumn(False)
-        self.treeWidget.sortByColumn(0, QtCore.Qt.AscendingOrder)
 

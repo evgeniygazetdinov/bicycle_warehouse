@@ -9,7 +9,7 @@ from main_ui_fixes import FixesMainWindow
 from decimal import Decimal
 import time
 from random import randint
-
+from custom_widgets import NumericItem
 
 
 class Views_Main_Window(FixesMainWindow): 
@@ -164,7 +164,7 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget.insertRow(row)
 
         self.tableWidget.setRowCount(row)
-        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         for good in list_with_goods:
             row -=1
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(good["article"])))
