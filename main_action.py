@@ -190,15 +190,25 @@ class Views_Main_Window(FixesMainWindow):
         self.total_income =0
         self.tableWidget_2.clean_table()
 
+    # def display_full_info(self):
+    #     string = ''
+    #     s = []
+    #     for i in range(self.tableWidget.columnCount()):
+    #         string+=self.tableWidget.horizontalHeaderItem(i).text()
+    #         string+=": "
+    #         string+=self.tableWidget.item(self.tableWidget.currentRow(), i).text()+' '
+    #     return string
+
     
     def add_actions(self):
         #calling in UI
+        
         self.add_additional_custom_elements()
         #self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         #show name good on bottom
-        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), self.tableWidget.currentColumn()).text()))
+        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), 1).text()))
         self.tableWidget_2.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget_2.item(self.tableWidget_2.currentRow(), self.tableWidget_2.currentColumn()).text()))
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
         self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
@@ -220,4 +230,6 @@ class Views_Main_Window(FixesMainWindow):
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,1))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
+        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+
         

@@ -72,14 +72,25 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
 class TreeWidgetGoods(CustomTreeWidget):
 
-       def contextMenuEvent(self,event):
-              pass
+    def contextMenuEvent(self,event):
+           pass
+
+class ProcentItem(QtWidgets.QTableWidgetItem):
+    def __lt__(self, other):
+       return (self.data(QtCore.Qt.UserRole) >
+                other.data(QtCore.Qt.UserRole))
 
 class NumericItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
         return (self.data(QtCore.Qt.UserRole) <
                 other.data(QtCore.Qt.UserRole))
+       # def __init__(self, text, sortKey):
+       #      QtGui.QTableWidgetItem.__init__(self, text, QtGui.QTableWidgetItem.UserType)
+       #      self.sortKey = sortKey
 
+    #Qt uses a simple < check for sorting items, override this to use the sortKey
+       # def __lt__(self, other):
+       #      return self.sortKey > other.sortKey 
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
@@ -92,6 +103,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            self.sortItems(0, QtCore.Qt.AscendingOrder)
            self.setSortingEnabled(True)
            self.goods_from_table = []
+           self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
 
 
@@ -144,7 +156,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
        def calculate_sell_price(self,sell,buy):
               dif = abs(float(buy) - float(sell))
-              return str(int(round((dif/buy)*100,1)))
+              return (str(int(round((dif/buy)*100,1))))+'%'
 
 
 
@@ -160,9 +172,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
               self.insertRow(row)
               self.setRowCount(row)
               self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+              self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
               for good in list_with_goods:
                      row -=1
-                     item = QtWidgets.QTableWidgetItem()
+                     item = NumericItem()
                      item.setFlags(QtCore.Qt.ItemIsEnabled)
                      item.setData(QtCore.Qt.DisplayRole,good["article"])
                      
@@ -183,10 +196,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      else:
                             item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
                             self.setItem(row,4,QtWidgets.QTableWidgetItem(item))
-                     #item = QtWidgets.QTableWidgetItem()
-                     item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
+                     item = NumericItem()
+                     item.setData(QtCore.Qt.DisplayRole,(self.calculate_sell_price(good['sell'],good['buy'])))      
                      self.setItem(row,3,QtWidgets.QTableWidgetItem(item))
-                     #item = QtWidgets.QTableWidgetItem()
+                     item = NumericItem()
                      item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
                      self.setItem(row,5,QtWidgets.QTableWidgetItem(item))
                      #item = QtWidgets.QTableWidgetItem()

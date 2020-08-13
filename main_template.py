@@ -49,9 +49,6 @@ class Ui_MainWindow(Views_Main_Window):
         self.lineEdit = QtWidgets.QLineEdit(self.tab)
         self.lineEdit.setGeometry(QtCore.QRect(140, 40, 111, 20))
         self.lineEdit.setObjectName("lineEdit")
-        # self.lineEdit_2 = QtWidgets.QLineEdit(self.tab)
-        # self.lineEdit_2.setGeometry(QtCore.QRect(350, 40, 91, 20))
-        # self.lineEdit_2.setObjectName("lineEdit_2")
         self.lineEdit_4 = QtWidgets.QLineEdit(self.tab)
         self.lineEdit_4.setGeometry(QtCore.QRect(190, 40, 101, 20))
         self.lineEdit_4.setObjectName("lineEdit_4")
@@ -560,13 +557,8 @@ class Ui_MainWindow(Views_Main_Window):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "категории"))
-        self.label_4.setText(_translate("MainWindow", "фильтр"))
         self.pushButton_8.setText(_translate("MainWindow", "x"))
-        # self.label_7.setText(_translate("MainWindow", "работа мастерской"))
-        # self.label_9.setText(_translate("MainWindow", "исчезновение"))
-        # self.label_6.setText(_translate("MainWindow", "Корзина"))
-        # self.label_8.setText(_translate("MainWindow", "материалы мастерской"))
+    
         self.pushButton_5.setText(_translate("MainWindow", "готово"))
         self.pushButton_4.setText(_translate("MainWindow", "очистить"))
        
@@ -721,6 +713,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.statusBar = QtWidgets.QStatusBar(self.tab)
         MainWindow.setStatusBar(self.statusBar)
         self.add_actions()
+
 
 # if __name__ == "__main__":
 #     import sys
