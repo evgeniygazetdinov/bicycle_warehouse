@@ -10,6 +10,12 @@ from decimal import Decimal
 import time
 from random import randint
 from custom_widgets import NumericItem
+<<<<<<< HEAD
+from library.sublings import category_ids
+
+
+=======
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
 
 
 class Views_Main_Window(FixesMainWindow): 
@@ -81,8 +87,8 @@ class Views_Main_Window(FixesMainWindow):
    
 
 
-    @staticmethod
-    def get_category_values():
+
+    def get_category_values(self):
         list_dict_with_results = []
         db = Bicycle_db()
         result = db.edit("Select * FROM categories")
@@ -97,7 +103,7 @@ class Views_Main_Window(FixesMainWindow):
         return sorted(list_dict_with_results, key=lambda k: k['parent_id'])
 
     def fill_tree(self):
-        list_with_results = Views_Main_Window.get_category_values()
+        list_with_results = self.get_category_values()
         childs_categories = self.find_child_category(list_with_results)
         for res in list_with_results:
             if res['parent_id'] == -1:
@@ -111,6 +117,8 @@ class Views_Main_Window(FixesMainWindow):
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
 
+<<<<<<< HEAD
+=======
     def from_sqlgoods_to_dict(self,goods):
         res = tuple()
         for value in goods:
@@ -150,12 +158,37 @@ class Views_Main_Window(FixesMainWindow):
         else:
             return str(res)
 
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
     
     def display_goods_from_category(self,for_search=False):
-        list_with_goods = []
+        goods_for_display = []
         try:
-            current_category = self.treeWidget.currentItem().text(0)
+            category = self.treeWidget.currentItem().text(0)
         except:
+<<<<<<< HEAD
+            category = 'Всі'
+        category_number = category_ids[category]
+        for good in self.tableWidget.goods_from_table:
+            if str(category_number) in good['category']:
+                goods_for_display.append(good['article'])
+        for row in range(self.tableWidget.rowCount ()):
+            twItem = self.tableWidget.item(row, 0)
+            if int(twItem.text()) in goods_for_display:
+                self.tableWidget.setRowHidden(row, False)
+            else:
+                self.tableWidget.setRowHidden(row, True)
+  
+    def find_in(self,textinput,column):
+        text  =textinput.text()
+        if column == 1:
+            for row in range(self.tableWidget.rowCount ()):
+                twItem = self.tableWidget.item(row, column)
+                if "{}".format(text.lower()) in str(twItem.text()).lower():
+                    self.tableWidget.setRowHidden(row, False)
+                else:
+                    self.tableWidget.setRowHidden(row, True)
+
+=======
             current_category = None
         #warning here
         if isinstance(for_search, list):
@@ -222,24 +255,17 @@ class Views_Main_Window(FixesMainWindow):
         if word_search:
             #find substring in string
             res = [s for s in values if "{}".format((window_for_search.text()).lower()) in s.lower()]
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
         else:
-            #find by first
-            res = list(filter(text.search, values))
-        return  res
+            for row in range(self.tableWidget.rowCount ()):
+                twItem = self.tableWidget.item(row, column)
+                print(twItem.text())
+                if re.match(text,twItem.text()):
+                    self.tableWidget.setRowHidden(row, False)
+                else:
+                    self.tableWidget.setRowHidden(row, True)
 
 
-    def find_in(self,textinput,where,word_search=False):
-        if word_search:
-            res = self.finder(textinput,True)
-        else:
-            res = self.finder(textinput)
-     
-        values_for_dispay = []
-        for good in self.goods_from_category:
-            for article in res:
-                if str(good[where]) == article:
-                    values_for_dispay.append(good)
-        self.display_goods_from_category(values_for_dispay)
 
     def set_current_category(self, category):
         db = Bicycle_db()
@@ -268,26 +294,46 @@ class Views_Main_Window(FixesMainWindow):
         else:
             self.cart_items.append({'Название':specific,'ГРН':price})
             self.counting_price_income_from_cart_items('ГРН')
+<<<<<<< HEAD
+        self.label_37.setText(str(self.total_price))
+        self.label_38.setText(str(round(self.total_income)))
+        self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
+   
+=======
         # self.cart_items.append(values)
         #self.counting_price_income_from_cart_items("Продаж",'Закупка',"ГРН")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
         self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
     def clean_cart(self):
         self.total_price=0
         self.cart_items = []
         self.total_income =0
         self.tableWidget_2.clean_table()
+<<<<<<< HEAD
+
+    # def display_full_info(self):
+    #     string = ''
+    #     s = []
+    #     for i in range(self.tableWidget.columnCount()):
+    #         string+=self.tableWidget.horizontalHeaderItem(i).text()
+    #         string+=": "
+    #         string+=self.tableWidget.item(self.tableWidget.currentRow(), i).text()+' '
+    #     return string
+=======
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
 
     
     def add_actions(self):
         #calling in UI
+        
         self.add_additional_custom_elements()
         #self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         #show name good on bottom
-        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), self.tableWidget.currentColumn()).text()))
+        self.tableWidget.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget.item(self.tableWidget.currentRow(), 1).text()))
         self.tableWidget_2.clicked.connect(lambda:self.statusBar.showMessage(self.tableWidget_2.item(self.tableWidget_2.currentRow(), self.tableWidget_2.currentColumn()).text()))
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
         self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
@@ -303,10 +349,18 @@ class Views_Main_Window(FixesMainWindow):
        
         #clean cart button
         self.pushButton_4.clicked.connect(self.clean_cart)
+<<<<<<< HEAD
+        self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,1))
+        self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,1))
+=======
         self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_3,'name',word_search=True))
         self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
+
         

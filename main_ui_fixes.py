@@ -12,7 +12,7 @@ class FixesMainWindow:
         #fill_table_by_default
             #if pass true  ==> display all categories 
             #when in treewidget without choose treewidget.current item is none
-        self.display_goods_from_category()
+        self.tableWidget.display_goods()
         self.change_search_widget_section()
         self.fixes_on_cart()
         self.add_custom_cart_table()
@@ -25,7 +25,7 @@ class FixesMainWindow:
         self.label_22.setText('Наличные')
         self.label_22.setFont(QtGui.QFont('Sans Serif', 11)) 
         #set no editable
-        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        # self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget.raise_()
         #change basket section
         self.tableWidget_2.setGeometry(940,140,325,431)
@@ -41,10 +41,10 @@ class FixesMainWindow:
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.materials_button = QtWidgets.QPushButton(self.tab)
         self.materials_button.setGeometry(1000,60,141,21)
-        self.materials_button.setText('материалы мастерской')
+        self.materials_button.setText('материалы')
         self.workshop_button = QtWidgets.QPushButton(self.tab)
         self.workshop_button.setGeometry(QtCore.QRect(1000, 80, 141,21))
-        self.workshop_button.setText('работа мастерской')
+        self.workshop_button.setText('работа')
         self.sale_button = QtWidgets.QPushButton(self.tab)
         self.sale_button.setGeometry(QtCore.QRect(1000, 100, 141,21))
         self.sale_button.setText('скидка')
@@ -65,23 +65,21 @@ class FixesMainWindow:
         #total price and total income labels
         self.label_37 = QtWidgets.QLabel(self.tab)
         self.label_37.setGeometry(1020,610,81,21)
-        #self.label_37.setText(str((self.total_price)))
         self.label_37.show()
         self.label_38 = QtWidgets.QLabel(self.tab)
         self.label_38.setGeometry(1020,650,81,21)
         self.label_38.show()
     
     def change_search_widget_section(self):
-        # m = self.lineEdit.textMargins()
-        # m.setLeft(10)
         self.lineEdit.setFixedWidth(50)
-        self.lineEdit_4.setFixedWidth(200)
-        self.lineEdit_4.setGeometry(QtCore.QRect(190, 40, 101, 20))
-        self.pushButton_8.setGeometry(QtCore.QRect(390, 40, 31, 21))
+        self.lineEdit_4.setGeometry(QtCore.QRect(190, 40, 490, 20))
+        self.pushButton_8.setGeometry(QtCore.QRect(680, 40, 31, 21))
         self.comboBox.hide()
         self.tableWidget.setFixedHeight(600)
 
         self.horizontalLayout.addWidget(self.tabWidget)
+
+
         self.verticalLayout.addLayout(self.horizontalLayout)
 
 
@@ -89,7 +87,7 @@ class FixesMainWindow:
         values = [50, 480, 50, 50, 50, 50, 50, 70]
         for i in range(len(values)):
             self.tableWidget.setColumnWidth(i,values[i])
-        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
+        # self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
         pass
     def resize_tableWidget_2(self):
         values = [220,50,60]
@@ -110,12 +108,13 @@ class FixesMainWindow:
         self.treeWidget.setHeaderHidden(True)
     def add_custom_cart_table(self):
         self.tableWidget_2 = CartTable(self.tab,self.label_37,self.label_38)
-        self.tableWidget_2.setGeometry(QtCore.QRect(960, 170, 321, 391))
+        self.tableWidget_2.setGeometry(QtCore.QRect(960, 170, 321, 650))
+
         self.tableWidget_2.setObjectName("tableWidget_2")
         self.tableWidget_2.setColumnCount(3)
         self.tableWidget_2.verticalHeader().setDefaultSectionSize(9)
         self.tableWidget_2.verticalHeader().setVisible(False)
-        self.tableWidget_2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        # self.tableWidget_2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_2.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -138,8 +137,12 @@ class FixesMainWindow:
         item.setText("цена")
         item = self.tableWidget_2.horizontalHeaderItem(2)
         item.setText( "сумма")
+        # item = self.tableWidget_2.horizontalHeaderItem(3)
+        # item.setText( "кол-во")
         self.tableWidget_2.raise_()
         self.resize_tableWidget_2()
+        self.tableWidget_2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+
         
     def add_custom_table(self):
         #refactor after code from design-generator

@@ -4,6 +4,10 @@
 
  pyuic5 -x template.ui -o template.py
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
 *compile project*
 
 pyinstaller -D -F -n main -c "main.py"
@@ -81,4 +85,9 @@ add sorting by numbers
 
 add clean logic for clean button
 
+|release 0.7|
 
+speed up search(change approach)
+change field for search
+remove filter and category labels
+resize search lineEdit move x button
