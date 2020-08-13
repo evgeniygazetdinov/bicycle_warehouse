@@ -84,4 +84,7 @@ add clean logic for clean button
 
 |release 0.7|
 
-speed up search
+speed up search(change approach)
+change field for search
+remove filter and category labels
+resize search lineEdit move x button
