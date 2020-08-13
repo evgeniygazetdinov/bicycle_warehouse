@@ -91,6 +91,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
            self.category_widget = category_widget
            self.sortItems(0, QtCore.Qt.AscendingOrder)
            self.setSortingEnabled(True)
+           self.goods_from_table = []
 
 
 
@@ -123,18 +124,23 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                                    "currency":currency,"sell_uah":sell_uah,
                                    "article":article}
                      res+=(data,)
-                     #self.goods_from_category = res
+                     self.goods_from_table = res
               return res
 
 
-       def get_goods(self,category_name,default=False):
+       def get_goods(self,category_name=False,display_all=None):
               db = Bicycle_db()
-              if category_name is None:
-                     category_name ='Всі'
-              category_id = db.select('SELECT id from categories  where name like "%{}%"'.format(category_name))
-              goods = db.edit('Select * from goods where category like "%{}%";'.format(category_id[0]))
-              db.close()
-              return self.from_sqlgoods_to_dict(goods)
+              if display_all:
+                     goods = db.edit('Select * from goods')
+                     db.close()
+                     return self.from_sqlgoods_to_dict(goods)
+              else:       
+                     if category_name is None:
+                            category_name ='Всі'
+                     category_id = db.select('SELECT id from categories  where name like "%{}%"'.format(category_name))
+                     goods = db.edit('Select * from goods where category like "%{}%";'.format(category_id[0]))
+                     db.close()
+                     return self.from_sqlgoods_to_dict(goods)
 
        def calculate_sell_price(self,sell,buy):
               dif = abs(float(buy) - float(sell))
@@ -144,32 +150,16 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
 
 
-
-       def display_goods_from_category(self,tree=False,for_search=False):
+       def display_goods(self,tree=False,for_search=False):
               list_with_goods = []
               current_category = None
-              if tree:
-                     current_category = tree
-                     list_with_goods = self.get_goods(current_category)
-                     row= len(list_with_goods)
-                     self.insertRow(row)
-                     self.setRowCount(row)
-                     self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-              elif isinstance(for_search, list):
-                     list_with_goods = for_search
-              elif isinstance(for_search,str):
-                     current_category=  for_search
-                     list_with_goods = self.get_goods(current_category)
-                     row= len(list_with_goods)
-                     self.insertRow(row)
-                     self.setRowCount(row)
-                     self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-              else:
-                  list_with_goods = self.get_goods(current_category)
+              # if tree:
+              current_category = tree
+              list_with_goods = self.get_goods(display_all=True)
               row= len(list_with_goods)
               self.insertRow(row)
               self.setRowCount(row)
-              #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+              self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
               for good in list_with_goods:
                      row -=1
                      item = QtWidgets.QTableWidgetItem()
@@ -206,12 +196,12 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
        def update_table(self):
               db = Bicycle_db()
               cat = 'Всі'
-              try:
-                     cat = (db.insert('select name_category from cur_category where id=(select max(id) from cur_category)'))[0][0]
-                     print('here')
-              except:
-                    pass # self.display_goods_from_category(cat)
-              self.display_goods_from_category(cat)       
+              # try:
+              #        cat = (db.insert('select name_category from cur_category where id=(select max(id) from cur_category)'))[0][0]
+              #        print('here')
+              # except:
+              #        pass
+              self.display_goods()       
 
        def remove_values_from_row(self):
               pass
@@ -237,10 +227,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
                      if reply == QtWidgets.QMessageBox.Yes:
                             values= self.parse_row()
-                            if values['Кол-во.'] == '0':
+                            if values['Кол-во.'] != '0':
                                    # widget = QDialog()
                                    error_dialog = QtWidgets.QErrorMessage(self)
-                                   error_dialog.showMessage('товар с нулевым количеством удалить нельзя')
+                                   error_dialog.showMessage('товар с количеством удалить нельзя')
 
                                    # widget.exec_()
                             else:       

@@ -12,7 +12,7 @@ class FixesMainWindow:
         #fill_table_by_default
             #if pass true  ==> display all categories 
             #when in treewidget without choose treewidget.current item is none
-        self.display_goods_from_category()
+        self.tableWidget.display_goods()
         self.change_search_widget_section()
         self.fixes_on_cart()
         self.add_custom_cart_table()
