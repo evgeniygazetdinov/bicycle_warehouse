@@ -145,10 +145,7 @@ class Views_Main_Window(FixesMainWindow):
     def calculate_sell_price(self,sell,buy):
         dif = abs(float(buy) - float(sell))
         res = round((dif/buy)*100,1)
-        if res == int(res):
-            return str(int(res))
-        else:
-            return str(res)
+        return str(int(res))
 
     
     def display_goods_from_category(self,for_search=False):
@@ -181,7 +178,8 @@ class Views_Main_Window(FixesMainWindow):
             item.setFlags(QtCore.Qt.ItemIsEnabled)
             item.setData(QtCore.Qt.DisplayRole,good["article"])
             self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(item))
-            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
+            item.setData(QtCore.Qt.DisplayRole,good["name"])
+            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(item))
             #item = QtWidgets.QTableWidgetItem()
             if good['buy'] == int(good['buy']):
                 item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
@@ -206,40 +204,27 @@ class Views_Main_Window(FixesMainWindow):
             item.setData(QtCore.Qt.DisplayRole,(good["sell_uah"]))
             self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(item))
             
-            
-    def finder(self,window_for_search,word_search=False):
-        values = []
-        self.display_goods_from_category(self.goods_from_category)
-        row =self.tableWidget.rowCount()
-        if word_search:
-            column_for_search = 1
+  
+    def find_in(self,textinput,column):
+        text  =textinput.text()
+        if column == 1:
+            for row in range(self.tableWidget.rowCount ()):
+                twItem = self.tableWidget.item(row, column)
+                if "{}".format(text.lower()) in str(twItem.text()).lower():
+                    self.tableWidget.setRowHidden(row, False)
+                else:
+                    self.tableWidget.setRowHidden(row, True)
+
         else:
-            column_for_search = 0
-        for i in range(row):
-            item =self.tableWidget.item(i, column_for_search)
-            values.append(item.text())
-        text = re.compile(r"{}".format(window_for_search.text()))
-        if word_search:
-            #find substring in string
-            res = [s for s in values if "{}".format((window_for_search.text()).lower()) in s.lower()]
-        else:
-            #find by first
-            res = list(filter(text.search, values))
-        return  res
+            for row in range(self.tableWidget.rowCount ()):
+                twItem = self.tableWidget.item(row, column)
+                print(twItem.text())
+                if re.match(text,twItem.text()):
+                    self.tableWidget.setRowHidden(row, False)
+                else:
+                    self.tableWidget.setRowHidden(row, True)
 
 
-    def find_in(self,textinput,where,word_search=False):
-        if word_search:
-            res = self.finder(textinput,True)
-        else:
-            res = self.finder(textinput)
-     
-        values_for_dispay = []
-        for good in self.goods_from_category:
-            for article in res:
-                if str(good[where]) == article:
-                    values_for_dispay.append(good)
-        self.display_goods_from_category(values_for_dispay)
 
     def set_current_category(self, category):
         db = Bicycle_db()
@@ -268,8 +253,6 @@ class Views_Main_Window(FixesMainWindow):
         else:
             self.cart_items.append({'Название':specific,'ГРН':price})
             self.counting_price_income_from_cart_items('ГРН')
-        # self.cart_items.append(values)
-        #self.counting_price_income_from_cart_items("Продаж",'Закупка',"ГРН")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
         self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
@@ -303,10 +286,10 @@ class Views_Main_Window(FixesMainWindow):
        
         #clean cart button
         self.pushButton_4.clicked.connect(self.clean_cart)
-        self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,'article'))
-        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_3,'name',word_search=True))
-        self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,'article'))
-        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,'name',word_search=True))
+        self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,1))
+        self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,1))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
         

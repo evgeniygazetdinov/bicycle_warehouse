@@ -1,6 +1,5 @@
 from PySide2 import QtWidgets,QtCore,QtGui
 from PySide2.QtWidgets import QDialog
-from new_category_window import Ui_New_Category_Form
 from good_form import GoodsForm
 from db import Bicycle_db
 
