@@ -138,21 +138,24 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
        def calculate_sell_price(self,sell,buy):
               dif = abs(float(buy) - float(sell))
-              return str(round((dif/buy)*100,1))
+              return str(int(round((dif/buy)*100,1)))
 
 
 
 
 
 
-       def display_goods_from_category(self,for_search=False):
+       def display_goods_from_category(self,tree=False,for_search=False):
               list_with_goods = []
-              try:
-                     current_category = self.currentItem().text(0)
-              except:
-                     current_category = None
-              #warning here
-              if isinstance(for_search, list):
+              current_category = None
+              if tree:
+                     current_category = tree
+                     list_with_goods = self.get_goods(current_category)
+                     row= len(list_with_goods)
+                     self.insertRow(row)
+                     self.setRowCount(row)
+                     self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+              elif isinstance(for_search, list):
                      list_with_goods = for_search
               elif isinstance(for_search,str):
                      current_category=  for_search
@@ -172,8 +175,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      item = QtWidgets.QTableWidgetItem()
                      item.setFlags(QtCore.Qt.ItemIsEnabled)
                      item.setData(QtCore.Qt.DisplayRole,good["article"])
+                     
                      self.setItem(row,0,QtWidgets.QTableWidgetItem(item))
-                     self.setItem(row,1,QtWidgets.QTableWidgetItem(str(good["name"])))
+                     item.setData(QtCore.Qt.DisplayRole,good["name"])
+                     self.setItem(row,1,QtWidgets.QTableWidgetItem(item))
               #item = QtWidgets.QTableWidgetItem()
                      if good['buy'] == int(good['buy']):
                             item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             

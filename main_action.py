@@ -149,60 +149,67 @@ class Views_Main_Window(FixesMainWindow):
 
     
     def display_goods_from_category(self,for_search=False):
-        list_with_goods = []
+        # list_with_goods = []
+        # try:
+        #     current_category = self.treeWidget.currentItem().text(0)
+        # except:
+        #     current_category = None
+        # #warning here
+        # if isinstance(for_search, list):
+        #     list_with_goods = for_search
+        # elif isinstance(for_search,str):
+        #     current_category=  for_search
+        #     list_with_goods = self.get_goods(current_category)
+        #     row= len(list_with_goods)
+        #     self.tableWidget.insertRow(row)
+
+        #     self.tableWidget.setRowCount(row)
+        #     self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        # else:
+        #     list_with_goods = self.get_goods(current_category)
+        # row= len(list_with_goods)
+        # self.tableWidget.insertRow(row)
+
+        # self.tableWidget.setRowCount(row)
+        # #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        # for good in list_with_goods:
+        #     row -=1
+        #     item = QtWidgets.QTableWidgetItem()
+        #     item.setFlags(QtCore.Qt.ItemIsEnabled)
+        #     item.setData(QtCore.Qt.DisplayRole,good["article"])
+        #     self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(item))
+        #     item.setData(QtCore.Qt.DisplayRole,good["name"])
+        #     self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(item))
+        #     #item = QtWidgets.QTableWidgetItem()
+        #     if good['buy'] == int(good['buy']):
+        #         item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
+        #         self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
+        #     else:
+        #         item.setData(QtCore.Qt.DisplayRole,good["buy"])
+        #         self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
+        #     #item = QtWidgets.QTableWidgetItem()    
+        #     if good['sell'] == int(good['sell']):
+        #         item.setData(QtCore.Qt.DisplayRole,int(good["sell"]))
+        #         self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item)) 
+        #     else:
+        #         item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
+        #         self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item))
+        #     #item = QtWidgets.QTableWidgetItem()
+        #     item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
+        #     self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(item))
+        #     #item = QtWidgets.QTableWidgetItem()
+        #     item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
+        #     self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(item))
+        #     #item = QtWidgets.QTableWidgetItem()
+        #     item.setData(QtCore.Qt.DisplayRole,(good["sell_uah"]))
+        #     self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(item))
+        
         try:
-            current_category = self.treeWidget.currentItem().text(0)
+            category = self.treeWidget.currentItem().text(0)
         except:
-            current_category = None
-        #warning here
-        if isinstance(for_search, list):
-            list_with_goods = for_search
-        elif isinstance(for_search,str):
-            current_category=  for_search
-            list_with_goods = self.get_goods(current_category)
-            row= len(list_with_goods)
-            self.tableWidget.insertRow(row)
+            category = None
 
-            self.tableWidget.setRowCount(row)
-            self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        else:
-            list_with_goods = self.get_goods(current_category)
-        row= len(list_with_goods)
-        self.tableWidget.insertRow(row)
-
-        self.tableWidget.setRowCount(row)
-        #self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        for good in list_with_goods:
-            row -=1
-            item = QtWidgets.QTableWidgetItem()
-            item.setFlags(QtCore.Qt.ItemIsEnabled)
-            item.setData(QtCore.Qt.DisplayRole,good["article"])
-            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(item))
-            item.setData(QtCore.Qt.DisplayRole,good["name"])
-            self.tableWidget.setItem(row,1,QtWidgets.QTableWidgetItem(item))
-            #item = QtWidgets.QTableWidgetItem()
-            if good['buy'] == int(good['buy']):
-                item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
-                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
-            else:
-                item.setData(QtCore.Qt.DisplayRole,good["buy"])
-                self.tableWidget.setItem(row,2,QtWidgets.QTableWidgetItem(item))
-            #item = QtWidgets.QTableWidgetItem()    
-            if good['sell'] == int(good['sell']):
-                item.setData(QtCore.Qt.DisplayRole,int(good["sell"]))
-                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item)) 
-            else:
-                item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
-                self.tableWidget.setItem(row,4,QtWidgets.QTableWidgetItem(item))
-            #item = QtWidgets.QTableWidgetItem()
-            item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
-            self.tableWidget.setItem(row,3,QtWidgets.QTableWidgetItem(item))
-            #item = QtWidgets.QTableWidgetItem()
-            item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
-            self.tableWidget.setItem(row,5,QtWidgets.QTableWidgetItem(item))
-            #item = QtWidgets.QTableWidgetItem()
-            item.setData(QtCore.Qt.DisplayRole,(good["sell_uah"]))
-            self.tableWidget.setItem(row,6,QtWidgets.QTableWidgetItem(item))
+        self.tableWidget.display_goods_from_category(category)
             
   
     def find_in(self,textinput,column):
