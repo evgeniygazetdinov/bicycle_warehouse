@@ -90,6 +90,12 @@ class NumericItem(QtWidgets.QTableWidgetItem):
        # def __lt__(self, other):
        #      return self.sortKey > other.sortKey 
 
+class NumericItem(QtWidgets.QTableWidgetItem):
+    def __lt__(self, other):
+        return (self.data(QtCore.Qt.UserRole) <
+                other.data(QtCore.Qt.UserRole))
+
+
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
        
@@ -180,6 +186,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      self.setItem(row,0,QtWidgets.QTableWidgetItem(item))
                      item.setData(QtCore.Qt.DisplayRole,good["name"])
                      self.setItem(row,1,QtWidgets.QTableWidgetItem(item))
+
               #item = QtWidgets.QTableWidgetItem()
                      if good['buy'] == int(good['buy']):
                             item.setData(QtCore.Qt.DisplayRole,int(good["buy"]))             
@@ -198,6 +205,10 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      item.setData(QtCore.Qt.DisplayRole,str(self.calculate_sell_price(good['sell'],good['buy']))+'%')      
                      self.setItem(row,3,QtWidgets.QTableWidgetItem(item))
                      item = NumericItem()
+                     #item = QtWidgets.QTableWidgetItem()
+                     item.setData(QtCore.Qt.DisplayRole,self.calculate_sell_price(good['sell'],good['buy'])+'%')      
+                     self.setItem(row,3,QtWidgets.QTableWidgetItem(item))
+                     #item = QtWidgets.QTableWidgetItem()
                      item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
                      self.setItem(row,5,QtWidgets.QTableWidgetItem(item))
                      #item = QtWidgets.QTableWidgetItem()
@@ -242,6 +253,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                                    # widget = QDialog()
                                    error_dialog = QtWidgets.QErrorMessage(self)
                                    error_dialog.showMessage('товар с количеством удалить нельзя')
+
 
                                    # widget.exec_()
                             else:       

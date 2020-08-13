@@ -109,6 +109,7 @@ class FixesMainWindow:
     def add_custom_cart_table(self):
         self.tableWidget_2 = CartTable(self.tab,self.label_37,self.label_38)
         self.tableWidget_2.setGeometry(QtCore.QRect(960, 170, 321, 650))
+
         self.tableWidget_2.setObjectName("tableWidget_2")
         self.tableWidget_2.setColumnCount(3)
         self.tableWidget_2.verticalHeader().setDefaultSectionSize(9)
@@ -139,11 +140,9 @@ class FixesMainWindow:
         # item = self.tableWidget_2.horizontalHeaderItem(3)
         # item.setText( "кол-во")
         self.tableWidget_2.raise_()
-        # self.tableWidget_2.resizeColumnsToContents()
-        
-    
         self.resize_tableWidget_2()
         self.tableWidget_2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+
         
     def add_custom_table(self):
         #refactor after code from design-generator
