@@ -76,9 +76,7 @@ class FixesMainWindow:
         self.pushButton_8.setGeometry(QtCore.QRect(680, 40, 31, 21))
         self.comboBox.hide()
         self.tableWidget.setFixedHeight(600)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
-        self.horizontalLayout.addWidget(spacerItem)
         self.horizontalLayout.addWidget(self.tabWidget)
 
 

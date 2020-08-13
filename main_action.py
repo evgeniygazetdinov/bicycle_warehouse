@@ -230,6 +230,5 @@ class Views_Main_Window(FixesMainWindow):
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,1))
         self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
         self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
-        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
 
         

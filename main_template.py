@@ -558,10 +558,8 @@ class Ui_MainWindow(Views_Main_Window):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_8.setText(_translate("MainWindow", "x"))
-    
         self.pushButton_5.setText(_translate("MainWindow", "готово"))
         self.pushButton_4.setText(_translate("MainWindow", "очистить"))
-       
         self.label_2.setText(_translate("MainWindow", "сумма"))
         self.pushButton_7.setText(_translate("MainWindow", "терминал"))
         self.pushButton_6.setText(_translate("MainWindow", "карта"))
@@ -713,14 +711,3 @@ class Ui_MainWindow(Views_Main_Window):
         self.statusBar = QtWidgets.QStatusBar(self.tab)
         MainWindow.setStatusBar(self.statusBar)
         self.add_actions()
-
-
-# if __name__ == "__main__":
-#     import sys
-
-#     MainWindow = CustomMainWindow()
-#     ui = Ui_MainWindow()
-#     ui.setupUi(MainWindow)
-#     MainWindow.show()
-#     sys.exit(app.exec_())
-

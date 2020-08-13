@@ -72,12 +72,10 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
 class TreeWidgetGoods(CustomTreeWidget):
 
-    def contextMenuEvent(self,event):
-           pass
-
+    def contextMenuEvent(self,event):pass
 class ProcentItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
-       return (self.data(QtCore.Qt.UserRole) >
+       return (self.data(QtCore.Qt.UserRole) <
                 other.data(QtCore.Qt.UserRole))
 
 class NumericItem(QtWidgets.QTableWidgetItem):
@@ -156,7 +154,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
        def calculate_sell_price(self,sell,buy):
               dif = abs(float(buy) - float(sell))
-              return (str(int(round((dif/buy)*100,1))))+'%'
+              return int(str(int(round((dif/buy)*100,1))))
 
 
 
@@ -196,8 +194,8 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
                      else:
                             item.setData(QtCore.Qt.DisplayRole,(good["sell"]))
                             self.setItem(row,4,QtWidgets.QTableWidgetItem(item))
-                     item = NumericItem()
-                     item.setData(QtCore.Qt.DisplayRole,(self.calculate_sell_price(good['sell'],good['buy'])))      
+                     item = ProcentItem()
+                     item.setData(QtCore.Qt.DisplayRole,str(self.calculate_sell_price(good['sell'],good['buy']))+'%')      
                      self.setItem(row,3,QtWidgets.QTableWidgetItem(item))
                      item = NumericItem()
                      item.setData(QtCore.Qt.DisplayRole,(good["qty"]))
