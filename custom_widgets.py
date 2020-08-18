@@ -130,7 +130,6 @@ class TreeWidgetGoods(CustomTreeWidget):
     def contextMenuEvent(self, event):
         pass
 
-
 class ProcentItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
         return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
@@ -141,10 +140,9 @@ class NumericItem(QtWidgets.QTableWidgetItem):
         return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
 
 
-class NumericItem(QtWidgets.QTableWidgetItem):
-    def __lt__(self, other):
-        return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
-
+    # Qt uses a simple < check for sorting items, override this to use the sortKey
+    # def __lt__(self, other):
+    #      return self.sortKey > other.sortKey
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
     def __init__(self, parent=None, values=None, category_widget=None):
@@ -238,7 +236,6 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             self.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, good["name"])
             self.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
-
             if good["buy"] == int(good["buy"]):
                 item.setData(QtCore.Qt.DisplayRole, int(good["buy"]))
                 self.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
