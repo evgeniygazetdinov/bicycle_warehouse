@@ -9,7 +9,7 @@ from main_ui_fixes import FixesMainWindow
 from decimal import Decimal
 import time
 from random import randint
-from custom_widgets import NumericItem
+from custom_widgets import NumericItem, InputDialog
 from library.sublings import category_ids
 
 
@@ -23,28 +23,31 @@ class Views_Main_Window(FixesMainWindow):
         self.course = 27.69
 
     def parse_row_and_move_to_cart(self):
-        self.total_price = 0
-        row = self.tableWidget_2.rowCount()
         values = self.tableWidget.parse_row()
-        self.tableWidget_2.insertRow(row + 1)
-        self.tableWidget_2.setRowCount(row + 1)
-        self.tableWidget_2.setItem(
-            row, 0, QtWidgets.QTableWidgetItem(str(values["Название"]))
-        )
-        self.tableWidget_2.setItem(
-            row, 1, QtWidgets.QTableWidgetItem(str(values["ГРН"]))
-        )
-        self.cart_items.append(values)
-        self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
-        self.label_37.setText(str(self.total_price))
-        self.label_38.setText(str(round(self.total_income)))
-        self.tableWidget_2.setItem(
-            row, 2, QtWidgets.QTableWidgetItem(str((self.total_price)))
-        )
+        dialog = InputDialog(value=str(values["Название"]), qty=str(values["Кол-во."]))
+        if dialog.exec():
+            qty = int(dialog.getInputs())
+            self.total_price = 0
+            row = self.tableWidget_2.rowCount()
+            values = self.tableWidget.parse_row()
+            self.tableWidget_2.insertRow(row + 1)
+            self.tableWidget_2.setRowCount(row + 1)
+            item = NumericItem()
+            item.setData(QtCore.Qt.DisplayRole, values["Название"])
+            self.tableWidget_2.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
+            item.setData(QtCore.Qt.DisplayRole, (values["ГРН"]))
+            self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
+            self.cart_items.append(values)
+            self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
+            self.label_37.setText(str(self.total_price))
+            self.label_38.setText(str(round(self.total_income)))
+            item.setData(QtCore.Qt.DisplayRole, (self.total_price))
+            self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
+            item.setData(QtCore.Qt.DisplayRole, (qty))
+            self.tableWidget_2.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
 
     def remove_from_cart(self):
         values = self.tableWidget_2.parse_row()
-        print(values)
 
     def calculate_good_income(self, sell, buy):
         income = round(abs((float(sell) - float(buy))) * self.course, 1)
@@ -66,6 +69,15 @@ class Views_Main_Window(FixesMainWindow):
 
     def show_insert_window(self):
         pass
+
+    def get_cart_items(self):
+        self.tableWidget_2.parse_row()
+
+    def cart_qty_handler(self):
+        items = self.get_cart_items()
+        print(items)
+        # get all items in cart
+        # items same plus
 
     def get_values_from_db(self):
         self.set_into_table_goods()
@@ -143,7 +155,6 @@ class Views_Main_Window(FixesMainWindow):
                     self.tableWidget.setRowHidden(row, False)
                 else:
                     self.tableWidget.setRowHidden(row, True)
-
         else:
             for row in range(self.tableWidget.rowCount()):
                 twItem = self.tableWidget.item(row, column)
@@ -214,6 +225,7 @@ class Views_Main_Window(FixesMainWindow):
             )
         )
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tableWidget.clicked.connect(lambda: print(self.tableWidget.currentRow()))
         self.treeWidget.clicked.connect(
             lambda: self.statusBar.showMessage(self.treeWidget.currentItem().text(0))

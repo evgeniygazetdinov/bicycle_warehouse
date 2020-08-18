@@ -1,7 +1,35 @@
 from PySide2 import QtWidgets, QtCore, QtGui
+from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from good_form import GoodsForm
 from db import Bicycle_db
+
+
+class InputDialog(QDialog):
+    def __init__(self, parent=None, value=None, qty=None):
+        super().__init__(parent)
+        self.value = value
+        self.qty = qty
+        #  self.second = QtWidgets.QLineEdit(self)
+        self.setWindowTitle("добавить в корзину")
+        buttonBox = QtWidgets.QDialogButtonBox(
+            QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel, self
+        )
+        layout = QtWidgets.QVBoxLayout(self)
+        text = QtWidgets.QLabel(self.value)
+        layout.addWidget(text)
+        self.box = QtWidgets.QSpinBox(self)
+        self.box.setMaximum(int(self.qty))
+        if int(self.qty) > 0:
+            self.box.setMinimum(1)
+        self.box.setValue(int(qty))
+        layout.addWidget(self.box)
+        layout.addWidget(buttonBox)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+    def getInputs(self):
+        return self.box.value()
 
 
 class CustomTreeWidget(QtWidgets.QTreeWidget):
@@ -102,7 +130,6 @@ class TreeWidgetGoods(CustomTreeWidget):
     def contextMenuEvent(self, event):
         pass
 
-
 class ProcentItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
         return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
@@ -112,19 +139,10 @@ class NumericItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
         return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
 
-    # def __init__(self, text, sortKey):
-    #      QtGui.QTableWidgetItem.__init__(self, text, QtGui.QTableWidgetItem.UserType)
-    #      self.sortKey = sortKey
 
     # Qt uses a simple < check for sorting items, override this to use the sortKey
     # def __lt__(self, other):
     #      return self.sortKey > other.sortKey
-
-
-class NumericItem(QtWidgets.QTableWidgetItem):
-    def __lt__(self, other):
-        return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
-
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
     def __init__(self, parent=None, values=None, category_widget=None):
@@ -209,60 +227,41 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         row = len(list_with_goods)
         self.insertRow(row)
         self.setRowCount(row)
-        self.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         for good in list_with_goods:
             row -= 1
             item = NumericItem()
-            item.setFlags(QtCore.Qt.ItemIsEnabled)
+            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             item.setData(QtCore.Qt.DisplayRole, good["article"])
-
             self.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, good["name"])
             self.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
-
-            # item = QtWidgets.QTableWidgetItem()
             if good["buy"] == int(good["buy"]):
                 item.setData(QtCore.Qt.DisplayRole, int(good["buy"]))
                 self.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
             else:
                 item.setData(QtCore.Qt.DisplayRole, good["buy"])
                 self.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
-            # item = QtWidgets.QTableWidgetItem()
             if good["sell"] == int(good["sell"]):
                 item.setData(QtCore.Qt.DisplayRole, int(good["sell"]))
                 self.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
             else:
                 item.setData(QtCore.Qt.DisplayRole, (good["sell"]))
                 self.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
-            item = ProcentItem()
             item.setData(
                 QtCore.Qt.DisplayRole,
-                str(self.calculate_sell_price(good["sell"], good["buy"])) + "%",
+                self.calculate_sell_price(good["sell"], good["buy"]),
             )
             self.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-            item = NumericItem()
-            # item = QtWidgets.QTableWidgetItem()
-            item.setData(
-                QtCore.Qt.DisplayRole,
-                str(self.calculate_sell_price(good["sell"], good["buy"])) + "%",
-            )
-            self.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-            # item = QtWidgets.QTableWidgetItem()
+
             item.setData(QtCore.Qt.DisplayRole, (good["qty"]))
             self.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
-            # item = QtWidgets.QTableWidgetItem()
             item.setData(QtCore.Qt.DisplayRole, (good["sell_uah"]))
             self.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
 
     def update_table(self):
         db = Bicycle_db()
         cat = "Всі"
-        # try:
-        #        cat = (db.insert('select name_category from cur_category where id=(select max(id) from cur_category)'))[0][0]
-        #        print('here')
-        # except:
-        #        pass
         self.display_goods()
 
     def remove_values_from_row(self):
