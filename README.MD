@@ -4,10 +4,7 @@
 
  pyuic5 -x template.ui -o template.py
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 5c5acf8700ad79dd4db41bb735757051a8c13a3e
 *compile project*
 
 pyinstaller -D -F -n main -c "main.py"

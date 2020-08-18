@@ -9,20 +9,23 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from main_action import Views_Main_Window
+from widgets.tabwidget import CustomTabWidget
+
+
 class Ui_MainWindow(Views_Main_Window):
     def setupUi(self, MainWindow):
-        
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1266, 874)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget = CustomTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(0, 20, 1271, 1261))
         self.tabWidget.setProperty("5", "")
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
-       
+
         self.label = QtWidgets.QLabel(self.tab)
         self.label.setGeometry(QtCore.QRect(0, 10, 121, 21))
         font = QtGui.QFont()
@@ -55,7 +58,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.comboBox = QtWidgets.QComboBox(self.tab)
         self.comboBox.setGeometry(QtCore.QRect(470, 40, 111, 21))
         self.comboBox.setObjectName("comboBox")
-        
+
         self.lineEdit_6 = QtWidgets.QLineEdit(self.tab)
         self.lineEdit_6.setGeometry(QtCore.QRect(970, 120, 141, 16))
         self.lineEdit_6.setObjectName("lineEdit_6")
@@ -91,7 +94,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_4 = QtWidgets.QPushButton(self.tab)
         self.pushButton_4.setGeometry(QtCore.QRect(970, 600, 91, 41))
         self.pushButton_4.setObjectName("pushButton_4")
-       
+
         self.label_2 = QtWidgets.QLabel(self.tab)
         self.label_2.setGeometry(QtCore.QRect(970, 520, 81, 21))
         self.label_2.setMaximumSize(QtCore.QSize(81, 16777215))
@@ -109,7 +112,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.label_5 = QtWidgets.QLabel(self.tab)
         self.label_5.setGeometry(QtCore.QRect(970, 560, 81, 21))
         self.label_5.setObjectName("label_5")
-        #self.treeWidget.raise_()
+        # self.treeWidget.raise_()
         self.label.raise_()
         self.label_4.raise_()
         self.pushButton_8.raise_()
@@ -119,14 +122,14 @@ class Ui_MainWindow(Views_Main_Window):
         self.comboBox.raise_()
         # self.label_7.raise_()
         self.pushButton_4.raise_()
-        
+
         self.lineEdit_6.raise_()
         self.label_5.raise_()
         self.label_6.raise_()
         self.lineEdit_3.raise_()
         self.pushButton_5.raise_()
         self.label_11.raise_()
-        #self.tableWidget.raise_()
+        # self.tableWidget.raise_()
         self.lineEdit_5.raise_()
         self.label_2.raise_()
         self.label_10.raise_()
@@ -196,12 +199,22 @@ class Ui_MainWindow(Views_Main_Window):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_6.setHorizontalHeaderItem(9, item)
         item = QtWidgets.QTableWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsTristate)
+        item.setFlags(
+            QtCore.Qt.ItemIsSelectable
+            | QtCore.Qt.ItemIsUserCheckable
+            | QtCore.Qt.ItemIsTristate
+        )
         self.tableWidget_6.setItem(0, 0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_6.setItem(0, 1, item)
         item = QtWidgets.QTableWidgetItem()
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsDragEnabled|QtCore.Qt.ItemIsDropEnabled|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
+        item.setFlags(
+            QtCore.Qt.ItemIsSelectable
+            | QtCore.Qt.ItemIsDragEnabled
+            | QtCore.Qt.ItemIsDropEnabled
+            | QtCore.Qt.ItemIsUserCheckable
+            | QtCore.Qt.ItemIsEnabled
+        )
         self.tableWidget_6.setItem(0, 2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_6.setItem(0, 3, item)
@@ -495,13 +508,12 @@ class Ui_MainWindow(Views_Main_Window):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(320, 0, 71, 31))
         self.label_3.setObjectName("label_3")
-        
-        
+
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1266, 21))
@@ -564,7 +576,9 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_7.setText(_translate("MainWindow", "терминал"))
         self.pushButton_6.setText(_translate("MainWindow", "карта"))
         self.label_5.setText(_translate("MainWindow", "прибыль"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Товары"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Товары")
+        )
         self.label_16.setText(_translate("MainWindow", "Статистика"))
         self.pushButton_10.setText(_translate("MainWindow", "Показать"))
         item = self.tableWidget_6.verticalHeaderItem(0)
@@ -604,7 +618,9 @@ class Ui_MainWindow(Views_Main_Window):
         item = self.tableWidget_6.item(0, 1)
         item.setText(_translate("MainWindow", "3105"))
         item = self.tableWidget_6.item(0, 2)
-        item.setText(_translate("MainWindow", "Масло RockShow 5WT 10ml, 11 4015.354.010"))
+        item.setText(
+            _translate("MainWindow", "Масло RockShow 5WT 10ml, 11 4015.354.010")
+        )
         item = self.tableWidget_6.item(0, 3)
         item.setText(_translate("MainWindow", "0.2"))
         item = self.tableWidget_6.item(0, 4)
@@ -617,34 +633,112 @@ class Ui_MainWindow(Views_Main_Window):
         item.setText(_translate("MainWindow", "6"))
         self.tableWidget_6.setSortingEnabled(__sortingEnabled)
         self.label_17.setText(_translate("MainWindow", "40"))
-        self.label_18.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">получено средств</span></p></body></html>"))
-        self.label_20.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">прибыль с продаж</span></p></body></html>"))
+        self.label_18.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">получено средств</span></p></body></html>',
+            )
+        )
+        self.label_20.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">прибыль с продаж</span></p></body></html>',
+            )
+        )
         self.label_19.setText(_translate("MainWindow", "40"))
-        self.label_21.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Касса</span></p><p><br/></p></body></html>"))
-        self.label_22.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Готовка</span></p><p><br/></p></body></html>"))
-        self.label_23.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Карта</span></p><p><br/></p></body></html>"))
-        self.label_24.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Счет</span></p><p><br/></p></body></html>"))
-        self.label_25.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">0</span></p><p><br/></p></body></html>"))
-        self.label_26.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">0</span></p><p><br/></p></body></html>"))
-        self.label_27.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">0</span></p><p><br/></p></body></html>"))
-        self.label_28.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Операции</span></p><p><br/></p></body></html>"))
+        self.label_21.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Касса</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_22.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Готовка</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_23.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Карта</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_24.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Счет</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_25.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">0</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_26.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">0</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_27.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">0</span></p><p><br/></p></body></html>',
+            )
+        )
+        self.label_28.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Операции</span></p><p><br/></p></body></html>',
+            )
+        )
         self.pushButton_11.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_12.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_13.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_15.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_16.setText(_translate("MainWindow", "PushButton"))
-        self.label_29.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Сумма</span></p></body></html>"))
-        self.label_30.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">Комментарий</span></p></body></html>"))
+        self.label_29.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Сумма</span></p></body></html>',
+            )
+        )
+        self.label_30.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">Комментарий</span></p></body></html>',
+            )
+        )
         self.pushButton_17.setText(_translate("MainWindow", "Положить "))
         self.pushButton_18.setText(_translate("MainWindow", "Взять"))
-        self.label_31.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">общая прибыль</span></p></body></html>"))
+        self.label_31.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">общая прибыль</span></p></body></html>',
+            )
+        )
         self.label_32.setText(_translate("MainWindow", "40"))
-        self.label_33.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">аванс</span></p></body></html>"))
+        self.label_33.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">аванс</span></p></body></html>',
+            )
+        )
         self.label_34.setText(_translate("MainWindow", "40"))
-        self.label_35.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">затраты</span></p></body></html>"))
+        self.label_35.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">затраты</span></p></body></html>',
+            )
+        )
         self.label_36.setText(_translate("MainWindow", "40"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Касса/статистика"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_2),
+            _translate("MainWindow", "Касса/статистика"),
+        )
         item = self.tableWidget_3.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "параметр"))
         item = self.tableWidget_3.horizontalHeaderItem(1)
@@ -696,8 +790,15 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_3.setText(_translate("MainWindow", "импорт CSV"))
         self.label_14.setText(_translate("MainWindow", "Экспорт/Импорт базы данных"))
         self.label_15.setText(_translate("MainWindow", "Принтер"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Наличие"))
-        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; vertical-align:sub;\">USD - </span></p></body></html>"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Наличие")
+        )
+        self.label_3.setText(
+            _translate(
+                "MainWindow",
+                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">USD - </span></p></body></html>',
+            )
+        )
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menu.setTitle(_translate("MainWindow", "Товары"))
         self.menu_2.setTitle(_translate("MainWindow", "Касса"))

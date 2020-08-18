@@ -1,101 +1,71 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget, QVBoxLayout, QHBoxLayout, QComboBox, QLabel
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
-from lang import getLang
-import sys, os, configparser
+import sys
+from PySide2.QtWidgets import (
+    QMainWindow,
+    QApplication,
+    QPushButton,
+    QWidget,
+    QAction,
+    QTabWidget,
+    QVBoxLayout,
+)
+from PySide2.QtGui import QIcon
+from PySide2.QtCore import Slot
 
-config = configparser.ConfigParser()
-config.read("Settings.ini")
-
-# Config get setting and change setting
-#print(config.get("Main", "language"))
-#config.set("Main", "language", "danish")
-#with open("Settings.ini", "w") as cfg_file:
-    #config.write(cfg_file)
 
 class App(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.title = "PyQt5 tabs - pythonspot.com"
+        self.left = 0
+        self.top = 0
+        self.width = 300
+        self.height = 200
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
-        # Window Settings
-        self.x, self.y, self.w, self.h = 0, 0, 300, 200
+        self.table_widget = MyTableWidget(self)
+        self.setCentralWidget(self.table_widget)
 
-        self.setGeometry(self.x, self.y, self.w, self.h)
-
-        self.window = MainWindow(self)
-        self.setCentralWidget(self.window)
-        self.setWindowTitle("Window title") # Window Title
         self.show()
 
-class MainWindow(QWidget):        
-    def __init__(self, parent):   
-        super(QWidget, self).__init__(parent)
-        layout = QVBoxLayout(self)
 
-        # Run this after settings
-        self.lang = getLang(config.get("Main", "language"))
+class MyTableWidget(QWidget):
+    def __init__(self, parent=None):
+        super(MyTableWidget, self).__init__(parent)
+        self.layout = QVBoxLayout(self)
 
-        # Initialize tabs
-        tab_holder = QTabWidget()   # Create tab holder
-        tab_1 = QWidget()           # Tab one
-        tab_2 = QWidget()           # Tab two
+        # Initialize tab screen
+
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tabs.resize(300, 200)
 
         # Add tabs
-        tab_holder.addTab(tab_1, self.lang["tab_1_title"]) # Add "tab1" to the tabs holder "tabs"
-        tab_holder.addTab(tab_2, self.lang["tab_2_title"]) # Add "tab2" to the tabs holder "tabs" 
+        self.tabs.addTab(self.tab1, "Tab 1")
+        self.tabs.addTab(self.tab2, "Tab 2")
 
         # Create first tab
-        tab_1.layout = QVBoxLayout(self)
-        tab_2.layout = QVBoxLayout(self)
+        self.tab1.layout = QVBoxLayout(self)
+        self.pushButton1 = QPushButton("PyQt5 button")
+        self.tab1.layout.addWidget(self.pushButton1)
+        self.tab1.setLayout(self.tab1.layout)
 
-        # Buttons
-        button_start = QPushButton(self.lang["btn_start"])
-        button_stop = QPushButton(self.lang["btn_stop"])
-        button_test = QPushButton(self.lang["btn_test"])
+        # Add tabs to widget
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
 
-        # Button Extra
-        button_start.setToolTip("This is a tooltip for the button!")    # Message to show when mouse hover
-        button_start.clicked.connect(self.on_click)
-
-        button_stop.clicked.connect(self.on_click)
-
-        button_test.clicked.connect(self.on_click)
-        #button_start.setEnabled(False)
-
-        # comboBox
-        label_language = QLabel("Language")
-        combo_language = QComboBox(self)
-        combo_language.addItem(self.lang["language_danish"])
-        combo_language.addItem(self.lang["language_english"])
-
-        # Move widgets
-        combo_language.move(50, 150)
-        label_language.move(50, 50)
-
-        # Tab Binding
-        self.AddToTab(tab_1, button_start)
-        self.AddToTab(tab_1, button_stop)
-        self.AddToTab(tab_2, label_language)
-        self.AddToTab(tab_2, combo_language)
-
-        # Add tabs to widget        
-        tab_1.setLayout(tab_1.layout)
-        tab_2.setLayout(tab_2.layout)
-        layout.addWidget(tab_holder)
-        self.setLayout(layout)
-
-    @pyqtSlot()
+    @Slot()
     def on_click(self):
-        button = self.sender().text()
-        if button == self.lang["btn_start"]:
-            print("Dank")
-        elif button == self.lang["btn_stop"]:
-            print("Not dank")
+        print("\n")
+        for currentQTableWidgetItem in self.tableWidget.selectedItems():
+            print(
+                currentQTableWidgetItem.row(),
+                currentQTableWidgetItem.column(),
+                currentQTableWidgetItem.text(),
+            )
 
-    def AddToTab(self, tab, obj):
-        tab.layout.addWidget(obj)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())
