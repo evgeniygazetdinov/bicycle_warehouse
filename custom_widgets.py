@@ -324,6 +324,24 @@ class CartTable(CustomTableWithGoods):
         self.setSortingEnabled(True)
         self.profit = profit
         self.total = total
+    
+    
+    def get_values_from_cart(self):
+        names = []
+        values = []
+        in_cart = []
+        if self.rowCount():
+              row = self.rowCount()
+              column = self.columnCount()
+              # 
+              for x in range(self.rowCount()):
+                     for i in range(column):
+                            names.append(self.horizontalHeaderItem(i).text())
+                     for i in range(column):
+                            values.append(self.item(x,i).text())
+
+                     in_cart.append(dict(zip(names, values)))
+              return in_cart
 
     def clean_table(self):
         while self.rowCount() > 0:

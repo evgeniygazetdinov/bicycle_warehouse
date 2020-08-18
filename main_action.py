@@ -11,6 +11,8 @@ import time
 from random import randint
 from custom_widgets import NumericItem, InputDialog
 from library.sublings import category_ids
+from collections import defaultdict
+
 
 
 class Views_Main_Window(FixesMainWindow):
@@ -45,6 +47,7 @@ class Views_Main_Window(FixesMainWindow):
             self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, (qty))
             self.tableWidget_2.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
+            self.cart_qty_handler()
 
     def remove_from_cart(self):
         values = self.tableWidget_2.parse_row()
@@ -71,13 +74,20 @@ class Views_Main_Window(FixesMainWindow):
         pass
 
     def get_cart_items(self):
-        self.tableWidget_2.parse_row()
+        pass
 
     def cart_qty_handler(self):
-        items = self.get_cart_items()
-        print(items)
+        cart_items = self.tableWidget_2.get_values_from_cart()
+        key_for_search = 'кол-во'
+        unique =[]
+        for item in cart_items:
+            if item not in unique:
+                unique.append(item)
+        print(unique)
+            
         # get all items in cart
         # items same plus
+
 
     def get_values_from_db(self):
         self.set_into_table_goods()
