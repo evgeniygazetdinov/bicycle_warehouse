@@ -176,9 +176,9 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         res = []
         rows = self.rowCount()
         for row in range(rows):
-            if self.item(i, 0).text() == name_for_search:
-                value = self.parse_row(row)
-                return value
+            if self.item(row, 0).text() == name_for_search:
+                # value = self.parse_row(row)
+                return row
                 
 
     def from_sqlgoods_to_dict(self, goods):
