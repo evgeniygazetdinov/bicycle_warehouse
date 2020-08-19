@@ -373,7 +373,6 @@ class Ui_MainWindow(Views_Main_Window):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_3.setItem(0, 0, item)
         item = QtWidgets.QTableWidgetItem()
-        # item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableWidget_3.setItem(0, 1, item)
         self.pushButton_9 = QtWidgets.QPushButton(self.tab_3)
         self.pushButton_9.setGeometry(QtCore.QRect(210, 40, 91, 31))

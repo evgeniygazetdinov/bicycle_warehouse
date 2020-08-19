@@ -36,7 +36,9 @@ class FixesMainWindow:
         self.pushButton_5.setGeometry(1140, 610, 101, 31)
         self.pushButton_6.setGeometry(1140, 650, 101, 31)
         self.pushButton_7.setGeometry(1140, 690, 101, 41)
-        self.spacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding) # or Fixed
+        self.spacer = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )  # or Fixed
         self.firstVTabLayout.addItem(self.spacer)
         self.firstVTabLayout.addStretch(1)
 
@@ -88,7 +90,7 @@ class FixesMainWindow:
         pass
 
     def resize_tableWidget_2(self):
-        values = [220, 50, 60]
+        values = [305, 60, 60,60]
         for i in range(len(values)):
             self.tableWidget_2.setColumnWidth(i, values[i])
         self.tableWidget_2.showFullScreen()
@@ -131,9 +133,9 @@ class FixesMainWindow:
         item.setText("название")
         item = self.tableWidget_2.horizontalHeaderItem(1)
         item.setText("цена")
-        item = self.tableWidget_2.horizontalHeaderItem(2)
-        item.setText("сумма")
         item = self.tableWidget_2.horizontalHeaderItem(3)
+        item.setText("сумма")
+        item = self.tableWidget_2.horizontalHeaderItem(2)
         item.setText("кол-во")
         self.tableWidget_2.raise_()
         self.resize_tableWidget_2()

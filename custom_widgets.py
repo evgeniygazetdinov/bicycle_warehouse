@@ -11,7 +11,7 @@ class InputDialog(QDialog):
         self.value = value
         self.qty = qty
         #  self.second = QtWidgets.QLineEdit(self)
-        self.setWindowTitle("добавить в корзину")
+        self.setWindowTitle("изменить кол-во")
         buttonBox = QtWidgets.QDialogButtonBox(
             QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel, self
         )
@@ -22,7 +22,7 @@ class InputDialog(QDialog):
         self.box.setMaximum(int(self.qty))
         if int(self.qty) > 0:
             self.box.setMinimum(1)
-        self.box.setValue(int(qty))
+        self.box.setValue(int(1))
         layout.addWidget(self.box)
         layout.addWidget(buttonBox)
         buttonBox.accepted.connect(self.accept)
@@ -157,16 +157,29 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         self.goods_from_table = []
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
-    def parse_row(self):
+    def parse_row(self,by_row=None):
         columns = self.columnCount()
         names = []
         values = []
 
         for i in range(columns):
             names.append(self.horizontalHeaderItem(i).text())
-        for i in range(columns):
-            values.append(self.item(self.currentRow(), i).text())
+        if  by_row:
+            for i in range(columns):
+                values.append(self.item(by_row, i).text())
+        else:
+            for i in range(columns):
+                values.append(self.item(self.currentRow(), i).text())
         return dict(zip(names, values))
+
+    def find_in_table_by_name(self,name_for_search):
+        res = []
+        rows = self.rowCount()
+        for row in range(rows):
+            if self.item(i, 0).text() == name_for_search:
+                value = self.parse_row(row)
+                return value
+                
 
     def from_sqlgoods_to_dict(self, goods):
         res = tuple()
@@ -324,24 +337,23 @@ class CartTable(CustomTableWithGoods):
         self.setSortingEnabled(True)
         self.profit = profit
         self.total = total
-    
-    
+
     def get_values_from_cart(self):
         names = []
         values = []
         in_cart = []
         if self.rowCount():
-              row = self.rowCount()
-              column = self.columnCount()
-              # 
-              for x in range(self.rowCount()):
-                     for i in range(column):
-                            names.append(self.horizontalHeaderItem(i).text())
-                     for i in range(column):
-                            values.append(self.item(x,i).text())
+            row = self.rowCount()
+            column = self.columnCount()
+            #
+            for x in range(self.rowCount()):
+                for i in range(column):
+                    names.append(self.horizontalHeaderItem(i).text())
+                for i in range(column):
+                    values.append(self.item(x, i).text())
 
-                     in_cart.append(dict(zip(names, values)))
-              return in_cart
+                in_cart.append(dict(zip(names, values)))
+            return in_cart
 
     def clean_table(self):
         while self.rowCount() > 0:
