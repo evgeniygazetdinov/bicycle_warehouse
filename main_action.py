@@ -47,7 +47,7 @@ class Views_Main_Window(FixesMainWindow):
     def parse_row_and_move_to_cart(self):
         values = self.tableWidget.parse_row()
         if int(values['Кол-во.']) > 0:
-                # qty = int(dialog.getInputs())
+                # qty = int(dialog.getInputs()))
             self.total_price = 0
             row = self.tableWidget_2.rowCount()
             values = self.tableWidget.parse_row()
