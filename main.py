@@ -1,7 +1,7 @@
 from main_template import Ui_MainWindow
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
-from custom_widgets import CustomMainWindow
+from widgets.custom_widgets import CustomMainWindow
 
 
 class Main(Ui_MainWindow):

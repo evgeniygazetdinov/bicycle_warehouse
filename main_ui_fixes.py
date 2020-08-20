@@ -1,6 +1,8 @@
 from PySide2 import QtCore, QtGui, QtWidgets, Qt
 from PySide2.QtWidgets import QWidget, QDialog
-from custom_widgets import CustomTreeWidget, CustomTableWithGoods, CartTable
+from widgets.main_table import CustomTableWithGoods
+from widgets.category_tree import CustomTreeWidget
+from widgets.cart_table import CartTable
 from resp3 import Example
 
 
@@ -90,7 +92,7 @@ class FixesMainWindow:
         pass
 
     def resize_tableWidget_2(self):
-        values = [305, 60, 60,60]
+        values = [305, 60, 60, 60]
         for i in range(len(values)):
             self.tableWidget_2.setColumnWidth(i, values[i])
         self.tableWidget_2.showFullScreen()

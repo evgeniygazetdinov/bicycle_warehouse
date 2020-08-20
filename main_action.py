@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
-from good_form import GoodsForm
+from widgets.good_form import GoodsForm
 import sqlite3
 from db import Bicycle_db
 import re
@@ -9,9 +9,11 @@ from main_ui_fixes import FixesMainWindow
 from decimal import Decimal
 import time
 from random import randint
-from custom_widgets import NumericItem, InputDialog
+from widgets.custom_widgets import NumericItem, InputDialog
 from library.sublings import category_ids
 from collections import defaultdict
+from PySide2.QtCore import Qt
+
 
 
 class Views_Main_Window(FixesMainWindow):
@@ -22,82 +24,84 @@ class Views_Main_Window(FixesMainWindow):
         self.total_price = 0
         self.total_income = 0
         self.course = 27.69
-    
+
     def change_product_qty_in_cart(self):
-        #get values
+        # get values
         if self.tableWidget_2.currentColumn() == 2:
             values = self.tableWidget_2.parse_row()
             counter = 0
             for cart_item in self.cart_items:
-                counter+=1
-                if cart_item['Название'] == values['название']:
-                    qty = cart_item['Кол-во.']
-                    if int(cart_item['Кол-во.']) == 1:
-                        QtWidgets.QMessageBox.about(self.tab, 'Error','Товар в единичном количестве')
+                counter += 1
+                if cart_item["Название"] == values["название"]:
+                    qty = cart_item["Кол-во."]
+                    if int(cart_item["Кол-во."]) == 1:
+                        QtWidgets.QMessageBox.about(
+                            self.tab, "Error", "Товар в единичном количестве"
+                        )
                     else:
-                        dialog = InputDialog(value=str(values["название"]), qty=str(qty))
+                        dialog = InputDialog(
+                            value=str(values["название"]), qty=str(qty)
+                        )
                         if dialog.exec():
                             new_qty = dialog.getInputs()
                             item = NumericItem()
                             item.setData(QtCore.Qt.DisplayRole, (new_qty))
-                            self.tableWidget_2.setItem((counter-1),2,QtWidgets.QTableWidgetItem(item))
-                            cart_item['qty_item_in_cart'] = new_qty
-                            item.setData(QtCore.Qt.DisplayRole, (int(values['цена'])*int(new_qty)))
-                            self.tableWidget_2.setItem((counter-1),3,QtWidgets.QTableWidgetItem(item))
+                            self.tableWidget_2.setItem(
+                                (counter - 1), 2, QtWidgets.QTableWidgetItem(item)
+                            )
+                            cart_item["qty_item_in_cart"] = new_qty
+                            item.setData(
+                                QtCore.Qt.DisplayRole,
+                                (int(values["цена"]) * int(new_qty)),
+                            )
+                            self.tableWidget_2.setItem(
+                                (counter - 1), 3, QtWidgets.QTableWidgetItem(item)
+                            )
                             self.update_total_price()
-    
+
     def update_total_price(self):
         self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
 
-    def if_item_in_cart(self,item_name):
-        #check item in cartitem if in return cur qty in cart
+    def if_item_in_cart(self, item_name):
+        # check item in cartitem if in return cur qty in cart
         total_qty = 0
         for item in self.cart_items:
-            if item['Название'] == item_name:
-                total_qty += item['qty_item_in_cart']
-        if not total_qty :
+            if item["Название"] == item_name:
+                total_qty += item["qty_item_in_cart"]
+        if not total_qty:
             return None
         else:
             return total_qty
 
+    def cart_items_rounder(self, values, qty_in_cart):
 
-
-
-
-
-    def cart_items_rounder(self,values,qty_in_cart):
-
-        row = self.tableWidget_2.find_in_table_by_name(values['Название'])
-        total = self.if_item_in_cart(values['Название'])
-        values['qty_item_in_cart'] =total
+        row = self.tableWidget_2.find_in_table_by_name(values["Название"])
+        total = self.if_item_in_cart(values["Название"])
+        values["qty_item_in_cart"] = total
         self.cart_items.append(values)
-        values['qty_item_in_cart'] += 1
-        items_price = int(values['ГРН'])*int(values['qty_item_in_cart'])
+        values["qty_item_in_cart"] += 1
+        items_price = int(values["ГРН"]) * int(values["qty_item_in_cart"])
         item = NumericItem()
         self.update_total_price()
         item.setData(QtCore.Qt.DisplayRole, (items_price))
         self.tableWidget_2.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-        item.setData(QtCore.Qt.DisplayRole, values['qty_item_in_cart'])
+        item.setData(QtCore.Qt.DisplayRole, values["qty_item_in_cart"])
         self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
         print(self.cart_items)
-        
-
-
-
 
     def parse_row_and_move_to_cart(self):
         values = self.tableWidget.parse_row()
-        if int(values['Кол-во.']) > 0:
+        if int(values["Кол-во."]) > 0:
             item_in_cart = self.if_item_in_cart(values["Название"])
             if item_in_cart:
-                if  int(item_in_cart) < int(values['Кол-во.']):
-                    self.cart_items_rounder(values,item_in_cart)
+                if int(item_in_cart) < int(values["Кол-во."]):
+                    self.cart_items_rounder(values, item_in_cart)
                 else:
-                    QtWidgets.QMessageBox.about(self.tab, 'Error','Нет доступного количества')
-
-
+                    QtWidgets.QMessageBox.about(
+                        self.tab, "Error", "Нет доступного количества"
+                    )
 
             else:
                 self.total_price = 0
@@ -107,39 +111,40 @@ class Views_Main_Window(FixesMainWindow):
                 self.tableWidget_2.setRowCount(row + 1)
                 item = NumericItem()
                 item.setFlags(QtCore.Qt.ItemIsEnabled)
-                item.setData(QtCore.Qt.DisplayRole, values["Название"]) 
+                item.setData(QtCore.Qt.DisplayRole, values["Название"])
                 self.tableWidget_2.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
                 item.setData(QtCore.Qt.DisplayRole, (values["ГРН"]))
                 self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
-                values['qty_item_in_cart'] = 1
-                items_price = int(values['ГРН'])*int(values['qty_item_in_cart'])
+                values["qty_item_in_cart"] = 1
+                items_price = int(values["ГРН"]) * int(values["qty_item_in_cart"])
                 self.cart_items.append(values)
                 self.update_total_price()
                 item.setData(QtCore.Qt.DisplayRole, (items_price))
                 self.tableWidget_2.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-                item.setData(QtCore.Qt.DisplayRole, values['qty_item_in_cart'])
+                item.setData(QtCore.Qt.DisplayRole, values["qty_item_in_cart"])
                 self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
         else:
-            QtWidgets.QMessageBox.about(self.tab, 'Error','Нельзя добавить товар с количеством 0')
-    
+            QtWidgets.QMessageBox.about(
+                self.tab, "Error", "Нельзя добавить товар с количеством 0"
+            )
+
     def remove_from_cart(self):
-        item_text= self.tableWidget_2.item(self.tableWidget_2.currentRow(),0).text()
+        item_text = self.tableWidget_2.item(self.tableWidget_2.currentRow(), 0).text()
         for cart_item in range(len(self.cart_items)):
-            if self.cart_items[cart_item]['Название'] == item_text:
-                
+            if self.cart_items[cart_item]["Название"] == item_text:
+
                 self.tableWidget_2.removeRow(self.tableWidget_2.currentRow())
                 removed_item = self.cart_items.pop(cart_item)
                 break
-        
-        if removed_item['Арт']:
-            minus_from_cart = int(removed_item["ГРН"])* int(removed_item['qty_item_in_cart'])
+
+        if removed_item["Арт"]:
+            minus_from_cart = int(removed_item["ГРН"]) * int(
+                removed_item["qty_item_in_cart"]
+            )
             self.update_total_price()
 
-
-
-
-    def calculate_good_income(self, sell, buy,qty):
-        income = (round(abs((float(sell) - float(buy))) * self.course, 1))*qty
+    def calculate_good_income(self, sell, buy, qty):
+        income = (round(abs((float(sell) - float(buy))) * self.course, 1)) * qty
         self.total_income += income
 
     def counting_price_income_from_cart_items(
@@ -148,17 +153,16 @@ class Views_Main_Window(FixesMainWindow):
         self.total_price = 0
         self.total_income = 0
         for item in self.cart_items:
-            total_price = int(item[grivna_keyword]) *  int(item['qty_item_in_cart'])
+            total_price = int(item[grivna_keyword]) * int(item["qty_item_in_cart"])
             self.total_price += total_price
 
             if "Арт" in item:
                 if sell_keyword:
                     income = self.calculate_good_income(
-                        item[sell_keyword], item[buy_keyword],item['qty_item_in_cart']
+                        item[sell_keyword], item[buy_keyword], item["qty_item_in_cart"]
                     )
         if sale:
             self.total_price -= int(sale)
-
 
     def show_insert_window(self):
         pass
@@ -174,7 +178,6 @@ class Views_Main_Window(FixesMainWindow):
             if item not in unique:
                 unique.append(item)
         print(unique)
-
 
     def get_values_from_db(self):
         self.set_into_table_goods()
@@ -227,21 +230,47 @@ class Views_Main_Window(FixesMainWindow):
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
     def display_goods_from_category(self, for_search=False):
+        self.tableWidget.clean_table()
         goods_for_display = []
         try:
             category = self.treeWidget.currentItem().text(0)
         except:
             category = "Всі"
-        category_number = category_ids[category]
-        for good in self.tableWidget.goods_from_table:
-            if str(category_number) in good["category"]:
-                goods_for_display.append(good["article"])
-        for row in range(self.tableWidget.rowCount()):
-            twItem = self.tableWidget.item(row, 0)
-            if int(twItem.text()) in goods_for_display:
-                self.tableWidget.setRowHidden(row, False)
+        list_with_goods = self.tableWidget.get_goods(category)
+        row = len(list_with_goods)
+        self.tableWidget.insertRow(row)
+        self.tableWidget.setRowCount(row)
+        for good in list_with_goods:
+            row-=1
+            item = NumericItem()
+            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            item.setData(QtCore.Qt.DisplayRole, good["article"])
+            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
+            item.setData(QtCore.Qt.DisplayRole, good["name"])
+            self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
+            if good["buy"] == int(good["buy"]):
+                item.setData(QtCore.Qt.DisplayRole, int(good["buy"]))
+                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
             else:
-                self.tableWidget.setRowHidden(row, True)
+                item.setData(QtCore.Qt.DisplayRole, good["buy"])
+                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
+            if good["sell"] == int(good["sell"]):
+                item.setData(QtCore.Qt.DisplayRole, int(good["sell"]))
+                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
+            else:
+                item.setData(QtCore.Qt.DisplayRole, (good["sell"]))
+                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
+            item.setData(
+                QtCore.Qt.DisplayRole,
+                self.tableWidget.calculate_sell_price(good["sell"], good["buy"]),
+            )
+            self.tableWidget.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
+
+            item.setData(QtCore.Qt.DisplayRole, (good["qty"]))
+            self.tableWidget.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
+            item.setData(QtCore.Qt.DisplayRole, (good["sell_uah"]))
+            self.tableWidget.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
+
 
     def find_in(self, textinput, column):
         text = textinput.text()
@@ -305,7 +334,6 @@ class Views_Main_Window(FixesMainWindow):
         # calling in UI
 
         self.add_additional_custom_elements()
-        # self.add_goods_action.triggered.connect(self.show_insert_window)
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
@@ -315,9 +343,7 @@ class Views_Main_Window(FixesMainWindow):
                 self.tableWidget.item(self.tableWidget.currentRow(), 1).text()
             )
         )
-        self.tableWidget_2.clicked.connect(
-            self.change_product_qty_in_cart
-        )
+        self.tableWidget_2.clicked.connect(self.change_product_qty_in_cart)
         self.tableWidget_2.clicked.connect(
             lambda: self.statusBar.showMessage(
                 self.tableWidget_2.item(
