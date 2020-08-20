@@ -1,4 +1,4 @@
-#*WAREHOUSE on qt5
+#*WAREHOUSE on qt5#
 
 *from designer to py with runner*
 
@@ -64,25 +64,25 @@ fix close good window
 
 ##|release 0.6|
 
-add basic sorting for columns in main table widget
+>add basic sorting for columns in main table widget
 
-fix floating number for int strings
+>fix floating number for int strings
 
-fix basic sorting number by click
+>fix basic sorting number by click
 
-fix blank cells
+>fix blank cells
 
-add cant delete good  with == qty 0 add warning window
+>add cant delete good  with == qty 0 add warning window
 
-add buttons for custom price
+>add buttons for custom price
 
-add basic logic for custom price buttons
+>add basic logic for custom price buttons
 
-add sorting by numbers
+>add sorting by numbers
 
-add clean logic for clean button
+>add clean logic for clean button
 
-##|release 0.7|
+##|release 0.7|##
 
 >speed up search(change approach)
 
