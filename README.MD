@@ -92,7 +92,7 @@ fix close good window
 
 >resize search lineEdit move x button
 
-##|release 0.8|
+#|release 0.8|#
 
 >fix search by category add by word in substring
 
