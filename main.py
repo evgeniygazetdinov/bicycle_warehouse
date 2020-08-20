@@ -1,4 +1,4 @@
-from main_template import Ui_MainWindow
+from operations.ui.main_template import Ui_MainWindow
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from widgets.custom_widgets import CustomMainWindow

@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
     QLabel,
     QDialog,
 )
-from db import Bicycle_db
+from library.db import Bicycle_db
 import time
 
 

@@ -2,10 +2,10 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from widgets.good_form import GoodsForm
 import sqlite3
-from db import Bicycle_db
+from library.db import Bicycle_db
 import re
 from collections import OrderedDict
-from main_ui_fixes import FixesMainWindow
+from operations.ui.main_ui_fixes import FixesMainWindow
 from decimal import Decimal
 import time
 from random import randint
@@ -89,7 +89,6 @@ class Views_Main_Window(FixesMainWindow):
         self.tableWidget_2.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
         item.setData(QtCore.Qt.DisplayRole, values["qty_item_in_cart"])
         self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
-        print(self.cart_items)
 
     def parse_row_and_move_to_cart(self):
         values = self.tableWidget.parse_row()
@@ -236,41 +235,7 @@ class Views_Main_Window(FixesMainWindow):
             category = self.treeWidget.currentItem().text(0)
         except:
             category = "Всі"
-        list_with_goods = self.tableWidget.get_goods(category)
-        row = len(list_with_goods)
-        self.tableWidget.insertRow(row)
-        self.tableWidget.setRowCount(row)
-        for good in list_with_goods:
-            row-=1
-            item = NumericItem()
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            item.setData(QtCore.Qt.DisplayRole, good["article"])
-            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
-            item.setData(QtCore.Qt.DisplayRole, good["name"])
-            self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
-            if good["buy"] == int(good["buy"]):
-                item.setData(QtCore.Qt.DisplayRole, int(good["buy"]))
-                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
-            else:
-                item.setData(QtCore.Qt.DisplayRole, good["buy"])
-                self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
-            if good["sell"] == int(good["sell"]):
-                item.setData(QtCore.Qt.DisplayRole, int(good["sell"]))
-                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
-            else:
-                item.setData(QtCore.Qt.DisplayRole, (good["sell"]))
-                self.tableWidget.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
-            item.setData(
-                QtCore.Qt.DisplayRole,
-                self.tableWidget.calculate_sell_price(good["sell"], good["buy"]),
-            )
-            self.tableWidget.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-
-            item.setData(QtCore.Qt.DisplayRole, (good["qty"]))
-            self.tableWidget.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
-            item.setData(QtCore.Qt.DisplayRole, (good["sell_uah"]))
-            self.tableWidget.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
-
+        self.tableWidget.display_goods(category)
 
     def find_in(self, textinput, column):
         text = textinput.text()

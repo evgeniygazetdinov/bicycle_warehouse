@@ -3,7 +3,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from widgets.good_form import GoodsForm
 from widgets.category_tree import CustomTreeWidget
-from db import Bicycle_db
+from library.db import Bicycle_db
 
 
 class InputDialog(QDialog):

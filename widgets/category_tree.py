@@ -2,7 +2,7 @@ from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from widgets.good_form import GoodsForm
-from db import Bicycle_db
+from library.db import Bicycle_db
 
 
 class CustomTreeWidget(QtWidgets.QTreeWidget):

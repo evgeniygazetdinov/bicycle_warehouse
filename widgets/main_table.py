@@ -3,7 +3,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from widgets.good_form import GoodsForm
 from widgets.custom_widgets import NumericItem
-from db import Bicycle_db
+from library.db import Bicycle_db
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
@@ -70,7 +70,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
     def get_goods(self, category_name=False, display_all=None):
         db = Bicycle_db()
-        if display_all:
+        if display_all or category_name == "Всі":
             goods = db.edit("Select * from goods")
             db.close()
             return self.from_sqlgoods_to_dict(goods)
@@ -92,12 +92,12 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         dif = abs(float(buy) - float(sell))
         return int(str(int(round((dif / buy) * 100, 1))))
 
-    def display_goods(self, tree=False, for_search=False):
+    def display_goods(self, category=False, for_search=False):
         list_with_goods = []
-        current_category = None
-        # if tree:
-        current_category = tree
-        list_with_goods = self.get_goods(display_all=True)
+        if category:
+            list_with_goods = self.get_goods(category)
+        else:
+            list_with_goods = self.get_goods(display_all=True)
         row = len(list_with_goods)
         self.insertRow(row)
         self.setRowCount(row)
@@ -137,7 +137,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
     def clean_table(self):
         while self.rowCount() > 0:
             self.removeRow(0)
-            
+
     def update_table(self):
         db = Bicycle_db()
         cat = "Всі"
