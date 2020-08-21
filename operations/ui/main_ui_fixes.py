@@ -1,9 +1,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets, Qt
-from PySide2.QtWidgets import QWidget, QDialog
 from widgets.main_table import CustomTableWithGoods
 from widgets.category_tree import CustomTreeWidget
 from widgets.cart_table import CartTable
-from resp3 import Example
 
 
 class FixesMainWindow:
@@ -12,9 +10,6 @@ class FixesMainWindow:
         self.add_custom_table()
         self.fill_tree()
         self.resize_tableWidget()
-        # fill_table_by_default
-        # if pass true  ==> display all categories
-        # when in treewidget without choose treewidget.current item is none
         self.tableWidget.display_goods()
         self.change_search_widget_section()
         self.fixes_on_cart()

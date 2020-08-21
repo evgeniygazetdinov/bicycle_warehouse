@@ -83,8 +83,6 @@ class CartFinance_methods:
         for item in self.cart_items:
             if item['Название'] == 'скидка':
                 self.total_income-= int(sale)
-                print('ДОХОД СО СКИДКОЙ')
-                print(self.total_income)
             elif item['Название'] == 'работа':
                 work_price = int(item[grivna_keyword]) 
                 self.total_income += work_price
@@ -92,9 +90,6 @@ class CartFinance_methods:
             else:    
                 total_price = int(item[grivna_keyword]) * int(item["qty_item_in_cart"])
                 self.total_price += total_price
-                print('обычный товар')
-                print(self.total_income)
-
                 if "Арт" in item:
                     if sell_keyword:
                         income = self.calculate_good_income(
@@ -144,6 +139,7 @@ class CartFinance_methods:
             #item not in self.cart_items
             else:
                 self.total_price = 0
+                self.tableWidget_2.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
                 row = self.tableWidget_2.rowCount()
                 values = self.tableWidget.parse_row()
                 self.tableWidget_2.insertRow(row + 1)

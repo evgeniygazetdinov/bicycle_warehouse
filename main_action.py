@@ -1,16 +1,8 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtWidgets import QWidget, QDialog
-from widgets.good_form import GoodsForm
-import sqlite3
+from PySide2 import QtWidgets, QtCore
 from library.db import Bicycle_db
-import re
 from operations.ui.main_ui_fixes import FixesMainWindow
-from decimal import Decimal
-import time
-from widgets.custom_widgets import NumericItem, InputDialog
-from library.sublings import category_ids
-from PySide2.QtCore import Qt
 from operations.finances_action import CartFinance_methods
+from widgets.custom_widgets import NumericItem
 
 
 class Views_Main_Window(FixesMainWindow, CartFinance_methods):
@@ -28,24 +20,25 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         for item in self.cart_items:
             if item["Название"] == item_name:
                 self.cart_items.remove(item)
-                self.counting_price_income_from_cart_items("ГРН")
-                self.label_37.setText(str(self.total_price))
-                self.label_38.setText(str(round(self.total_income)))
+                self.update_total_price()
                 break
 
     def remove_from_cart(self):
+        # if item 1: remove from cart
+        # if item many remove from list
+        # if item in cart remove from list
         item_text = self.tableWidget_2.item(self.tableWidget_2.currentRow(), 0).text()
-        for cart_item in range(len(self.cart_items)):
-            if self.cart_items[cart_item]["Название"] == item_text:
+        qty_items_in_cart = self.if_item_in_cart(item_text)
 
-                self.tableWidget_2.removeRow(self.tableWidget_2.currentRow())
-                removed_item = self.cart_items.pop(cart_item)
-                break
-
-        # if removed_item["Арт"]:
-        #     minus_from_cart = int(removed_item["ГРН"]) * int(
-        #         removed_item["qty_item_in_cart"]
-        #     )
+        if qty_items_in_cart == 1:
+            self.remove_item_in_cart_by_name(item_text)
+            self.tableWidget_2.removeRow(self.tableWidget_2.currentRow())
+        if qty_items_in_cart:
+            self.remove_item_in_cart_by_name(item_text)
+            item = NumericItem()
+            row = self.tableWidget_2.find_in_table_by_name(item_text)
+            item.setData(QtCore.Qt.DisplayRole, qty_items_in_cart)
+            self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
         self.update_total_price()
 
     def cart_qty_handler(self):
@@ -115,6 +108,10 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         except:
             category = "Всі"
         self.tableWidget.display_goods(category)
+        if self.lineEdit_4.text() != "":
+            self.find_in(self.lineEdit_4, 1)
+        elif self.lineEdit.text() != "":
+            self.find_in(self.lineEdit, 0)
 
     def find_in(self, textinput, column):
         text = textinput.text()

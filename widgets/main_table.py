@@ -101,6 +101,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         row = len(list_with_goods)
         self.insertRow(row)
         self.setRowCount(row)
+        self.setSortingEnabled(False)
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         for good in list_with_goods:
             row -= 1
@@ -133,6 +134,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             self.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, (good["sell_uah"]))
             self.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
+        self.setSortingEnabled(True)
     
     def clean_table(self):
         while self.rowCount() > 0:

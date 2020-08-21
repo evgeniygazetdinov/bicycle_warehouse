@@ -9,11 +9,11 @@ from library.db import Bicycle_db
 class CartTable(CustomTableWithGoods):
     def __init__(self, parent=None, profit=None, total=None):
         QtWidgets.QTableWidget.__init__(self, parent)
-
         self.sortItems(0, QtCore.Qt.AscendingOrder)
         self.setSortingEnabled(True)
         self.profit = profit
         self.total = total
+        self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
 
     def get_values_from_cart(self):
         names = []
