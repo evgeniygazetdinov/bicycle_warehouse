@@ -19,13 +19,23 @@ from main_ui_fixes import FixesMainWindow
 from decimal import Decimal
 import time
 from random import randint
+<<<<<<< HEAD
 from custom_widgets import NumericItem, InputDialog
+=======
+from custom_widgets import NumericItem
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
 from library.sublings import category_ids
 from collections import defaultdict
 
 
+<<<<<<< HEAD
 class Views_Main_Window(FixesMainWindow):
 >>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
+=======
+
+
+class Views_Main_Window(FixesMainWindow): 
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
     def __init__(self):
         self.current_row = {}
         self.goods_from_category = []
@@ -647,15 +657,22 @@ urn None
                             for element in child["childs"]:
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
+<<<<<<< HEAD
     def display_goods_from_category(self, for_search=False):
 <<<<<<< HEAD
         self.tableWidget.clean_table()
 =======
 >>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
+=======
+
+    
+    def display_goods_from_category(self,for_search=False):
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
         goods_for_display = []
         try:
             category = self.treeWidget.currentItem().text(0)
         except:
+<<<<<<< HEAD
             category = "Всі"
 <<<<<<< HEAD
         self.tableWidget.display_goods(category)
@@ -664,6 +681,9 @@ urn None
         elif self.lineEdit.text() != "":
             self.find_in(self.lineEdit, 0)
 =======
+=======
+            category = 'Всі'
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
         category_number = category_ids[category]
         for good in self.tableWidget.goods_from_table:
             if str(category_number) in good["category"]:
@@ -685,8 +705,14 @@ urn None
                     self.tableWidget.setRowHidden(row, False)
                 else:
                     self.tableWidget.setRowHidden(row, True)
+<<<<<<< HEAD
         else:
             for row in range(self.tableWidget.rowCount()):
+=======
+
+        else:
+            for row in range(self.tableWidget.rowCount ()):
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
                 twItem = self.tableWidget.item(row, column)
                 text_in_window = twItem.text()
                 if "{}".format(str(text).lower()) in str(text_in_window).lower():
@@ -722,6 +748,7 @@ urn None
         if button == self.sale_button:
             self.counting_price_income_from_cart_items("ГРН", sale=price)
         else:
+<<<<<<< HEAD
             self.cart_items.append({"Название": specific, "ГРН": price})
             self.counting_price_income_from_cart_items("ГРН")
         self.label_37.setText(str(self.total_price))
@@ -731,6 +758,14 @@ urn None
         )
 
 >>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
+=======
+            self.cart_items.append({'Название':specific,'ГРН':price})
+            self.counting_price_income_from_cart_items('ГРН')
+        self.label_37.setText(str(self.total_price))
+        self.label_38.setText(str(round(self.total_income)))
+        self.tableWidget_2.setItem(row,2,QtWidgets.QTableWidgetItem(str((self.total_price))))
+   
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
     def clean_cart(self):
         self.total_price = 0
         self.cart_items = []
@@ -748,6 +783,7 @@ urn None
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
+<<<<<<< HEAD
         # show name good on bottom
         self.tableWidget.clicked.connect(
             lambda: self.statusBar.showMessage(
@@ -794,3 +830,26 @@ urn None
         self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4, 1))
         self.pushButton_8.clicked.connect(lambda: self.lineEdit.clear())
         self.pushButton_8.clicked.connect(lambda: self.lineEdit_4.clear())
+=======
+        self.tableWidget.clicked.connect(lambda :print(self.tableWidget.currentRow()))
+        self.treeWidget.clicked.connect(lambda :self.statusBar.showMessage(self.treeWidget.currentItem().text(0)))
+        self.treeWidget.clicked.connect(lambda :self.set_current_category(self.treeWidget.currentItem().text(0)))
+        # self.tableWidget.c
+        self.materials_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_3,self.materials_button))
+        self.workshop_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_5,self.workshop_button))
+        self.sale_button.clicked.connect(lambda : self.hander_for_handy_buttons(self.lineEdit_6,self.sale_button))
+       # self.treeWidget.cellClicked.connect(self.updateUiCellClick) 
+       
+       
+       
+        #clean cart button
+        self.pushButton_4.clicked.connect(self.clean_cart)
+        self.lineEdit.textChanged.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.textChanged.connect(lambda: self.find_in(self.lineEdit_4,1))
+        self.lineEdit.inputRejected.connect(lambda:self.find_in(self.lineEdit,0))
+        self.lineEdit_4.inputRejected.connect(lambda: self.find_in(self.lineEdit_4,1))
+        self.pushButton_8.clicked.connect(lambda : self.lineEdit.clear() )
+        self.pushButton_8.clicked.connect(lambda:self.lineEdit_4.clear() )
+
+        
+>>>>>>> 191eb7a3e5cca42409226c1fbe6924c54bb97052
