@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+from PySide2 import QtWidgets, QtCore
+from library.db import Bicycle_db
+from operations.ui.main_ui_fixes import FixesMainWindow
+from operations.finances_action import CartFinance_methods
+from widgets.custom_widgets import NumericItem
+
+
+class Views_Main_Window(FixesMainWindow, CartFinance_methods):
+=======
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QWidget, QDialog
 from good_form import GoodsForm
@@ -15,6 +25,7 @@ from collections import defaultdict
 
 
 class Views_Main_Window(FixesMainWindow):
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
     def __init__(self):
         self.current_row = {}
         self.goods_from_category = []
@@ -22,6 +33,35 @@ class Views_Main_Window(FixesMainWindow):
         self.total_price = 0
         self.total_income = 0
         self.course = 27.69
+<<<<<<< HEAD
+
+    def remove_item_in_cart_by_name(self, item_name):
+        # check item in cartitem if in return cur qty in cart
+        total_qty = 0
+        for item in self.cart_items:
+            if item["Название"] == item_name:
+                self.cart_items.remove(item)
+                self.update_total_price()
+                break
+
+    def remove_from_cart(self):
+        # if item 1: remove from cart
+        # if item many remove from list
+        # if item in cart remove from list
+        item_text = self.tableWidget_2.item(self.tableWidget_2.currentRow(), 0).text()
+        qty_items_in_cart = self.if_item_in_cart(item_text)
+
+        if qty_items_in_cart == 1:
+            self.remove_item_in_cart_by_name(item_text)
+            self.tableWidget_2.removeRow(self.tableWidget_2.currentRow())
+        if qty_items_in_cart:
+            self.remove_item_in_cart_by_name(item_text)
+            item = NumericItem()
+            row = self.tableWidget_2.find_in_table_by_name(item_text)
+            item.setData(QtCore.Qt.DisplayRole, qty_items_in_cart)
+            self.tableWidget_2.setItem(row, 2, QtWidgets.QTableWidgetItem(item))
+        self.update_total_price()
+=======
 
     def change_product_qty_in_cart(self):
         # get values
@@ -546,6 +586,7 @@ urn None
 
     def get_cart_items(self):
         pass
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
 
     def cart_qty_handler(self):
         cart_items = self.tableWidget_2.get_values_from_cart()
@@ -607,11 +648,22 @@ urn None
                                 QtWidgets.QTreeWidgetItem(item, [element])
 
     def display_goods_from_category(self, for_search=False):
+<<<<<<< HEAD
+        self.tableWidget.clean_table()
+=======
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
         goods_for_display = []
         try:
             category = self.treeWidget.currentItem().text(0)
         except:
             category = "Всі"
+<<<<<<< HEAD
+        self.tableWidget.display_goods(category)
+        if self.lineEdit_4.text() != "":
+            self.find_in(self.lineEdit_4, 1)
+        elif self.lineEdit.text() != "":
+            self.find_in(self.lineEdit, 0)
+=======
         category_number = category_ids[category]
         for good in self.tableWidget.goods_from_table:
             if str(category_number) in good["category"]:
@@ -622,6 +674,7 @@ urn None
                 self.tableWidget.setRowHidden(row, False)
             else:
                 self.tableWidget.setRowHidden(row, True)
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
 
     def find_in(self, textinput, column):
         text = textinput.text()
@@ -652,6 +705,8 @@ urn None
         db.insert(query_2)
         db.close()
 
+<<<<<<< HEAD
+=======
     def hander_for_handy_buttons(self, line_edit, button):
         self.total_price = 0
         price = line_edit.text()
@@ -675,6 +730,7 @@ urn None
             row, 2, QtWidgets.QTableWidgetItem(str((self.total_price)))
         )
 
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
     def clean_cart(self):
         self.total_price = 0
         self.cart_items = []
@@ -685,7 +741,10 @@ urn None
         # calling in UI
 
         self.add_additional_custom_elements()
+<<<<<<< HEAD
+=======
         # self.add_goods_action.triggered.connect(self.show_insert_window)
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
@@ -703,7 +762,11 @@ urn None
                 ).text()
             )
         )
+<<<<<<< HEAD
+        # self.tableWidget.clicked.connect(lambda: print(self.tableWidget.currentRow()))
+=======
         self.tableWidget.clicked.connect(lambda: print(self.tableWidget.currentRow()))
+>>>>>>> c3d4b704476aebddf3c5842be44864b8cc11248e
         self.treeWidget.clicked.connect(
             lambda: self.statusBar.showMessage(self.treeWidget.currentItem().text(0))
         )
