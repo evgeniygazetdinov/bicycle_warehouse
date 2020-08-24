@@ -2,7 +2,7 @@ from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from widgets.good_form import GoodsForm
-from widgets.custom_widgets import NumericItem
+from widgets.custom_widgets import NumericItem,ProcentItem
 from library.db import Bicycle_db
 
 
@@ -124,17 +124,20 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             else:
                 item.setData(QtCore.Qt.DisplayRole, (good["sell"]))
                 self.setItem(row, 4, QtWidgets.QTableWidgetItem(item))
+            item = ProcentItem()
             item.setData(
-                QtCore.Qt.DisplayRole,
-                self.calculate_sell_price(good["sell"], good["buy"]),
+                QtCore.Qt.EditRole,
+                str(self.calculate_sell_price(good["sell"], good["buy"]))+'%',
             )
             self.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
-
+            item = NumericItem()
             item.setData(QtCore.Qt.DisplayRole, (good["qty"]))
             self.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, (good["sell_uah"]))
             self.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
         self.setSortingEnabled(True)
+        self.horizontalHeader().sortIndicatorOrder()
+        self.sortItems(3, Qt.AscendingOrder)
     
     def clean_table(self):
         while self.rowCount() > 0:
@@ -192,3 +195,4 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             )
             ui.setupUi(widget)
             widget.exec_()
+

@@ -64,8 +64,11 @@ class CartFinance_methods:
                             break
 
 
-    def update_total_price(self):
-        self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
+    def update_total_price(self,sale=False):
+        if sale:
+            self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж",sale=sale)
+        else:
+            self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
 
@@ -81,20 +84,21 @@ class CartFinance_methods:
         self.total_price = 0
         self.total_income = 0
         for item in self.cart_items:
-            if item['Название'] == 'скидка':
-                self.total_income-= int(sale)
-            elif item['Название'] == 'работа':
+       
+            if item['Название'] == 'работа':
                 work_price = int(item[grivna_keyword]) 
                 self.total_income += work_price
                 self.total_price += work_price
+            elif item['Название'] == 'скидка':
+                self.total_income-= int(item['ГРН'])
             else:    
                 total_price = int(item[grivna_keyword]) * int(item["qty_item_in_cart"])
                 self.total_price += total_price
                 if "Арт" in item:
-                    if sell_keyword:
-                        income = self.calculate_good_income(
-                            item[sell_keyword], item[buy_keyword], item["qty_item_in_cart"]
-                        )
+                    # if sell_keyword:
+                    income = self.calculate_good_income(
+                        item[sell_keyword], item[buy_keyword], item["qty_item_in_cart"]
+                    )
 
             
 
@@ -167,6 +171,10 @@ class CartFinance_methods:
         self.total_price = 0
         self.total_income = 0
         price = line_edit.text()
+        try: 
+            int(price)
+        except:
+            raise QtWidgets.QMessageBox.about(self.tab, "Error", "это не число".format(button.text()))
         if price != '':
             item_in_cart = self.if_item_in_cart(button.text())
             specific = button.text()
@@ -193,15 +201,10 @@ class CartFinance_methods:
                 self.tableWidget_2.setItem(row, 0, QtWidgets.QTableWidgetItem(str(specific)))
                 self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
 
-                if button == self.sale_button:
-                    self.cart_items.append({"Название": specific, "ГРН": price,'qty_item_in_cart':1})
-                    self.counting_price_income_from_cart_items("ГРН", sale=price)
-
-                else:
-                    self.cart_items.append({"Название": specific, "ГРН": price,'qty_item_in_cart':1})
-                    self.counting_price_income_from_cart_items("ГРН")
-                self.label_37.setText(str(self.total_price))
-                self.label_38.setText(str(round(self.total_income)))
+                self.cart_items.append({"Название": specific, "ГРН": price,'qty_item_in_cart':1})
+                self.update_total_price()
+                # self.label_37.setText(str(self.total_price))
+                # self.label_38.setText(str(round(self.total_income)))
                 total_qty = 1
                 self.tableWidget_2.setItem(
                     row, 2, QtWidgets.QTableWidgetItem(str((total_qty)))
