@@ -214,6 +214,7 @@ class CartFinance_methods:
                     row, 3, QtWidgets.QTableWidgetItem(str((price* total_qty)))
                 )
             line_edit.setText('')
+
         else:
             QtWidgets.QMessageBox.about(
         self.tab, "Error", "нет значения поле в {}".format(button.text())

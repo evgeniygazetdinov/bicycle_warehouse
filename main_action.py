@@ -119,7 +119,6 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
                 and "{}".format(text.lower()) in str(find_by_name.text()).lower()
             ):
                 self.tableWidget.setRowHidden(row, False)
-
             else:
                 self.tableWidget.setRowHidden(row, True)
 
