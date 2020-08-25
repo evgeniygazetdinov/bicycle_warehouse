@@ -91,6 +91,7 @@ class CartFinance_methods:
                 self.total_price += work_price
             elif item['Название'] == 'скидка':
                 self.total_income-= int(item['ГРН'])
+                self.total_price-= int(item['ГРН'])
             else:    
                 total_price = int(item[grivna_keyword]) * int(item["qty_item_in_cart"])
                 self.total_price += total_price
@@ -212,6 +213,7 @@ class CartFinance_methods:
                 self.tableWidget_2.setItem(
                     row, 3, QtWidgets.QTableWidgetItem(str((price* total_qty)))
                 )
+            line_edit.setText('')
         else:
             QtWidgets.QMessageBox.about(
         self.tab, "Error", "нет значения поле в {}".format(button.text())

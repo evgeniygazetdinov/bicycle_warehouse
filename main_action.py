@@ -114,9 +114,12 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
                 self.tableWidget.setRowHidden(row, False)
             if "{}".format(text.lower()) in str(find_by_name.text()).lower():
                 self.tableWidget.setRowHidden(row, False)
-            if "{}".format(text_2.lower()) in str(find_by_article.text()).lower() and "{}".format(text.lower()) in str(find_by_name.text()).lower():
-                 self.tableWidget.setRowHidden(row, False)
-            
+            if (
+                "{}".format(text_2.lower()) in str(find_by_article.text()).lower()
+                and "{}".format(text.lower()) in str(find_by_name.text()).lower()
+            ):
+                self.tableWidget.setRowHidden(row, False)
+
             else:
                 self.tableWidget.setRowHidden(row, True)
 
