@@ -1,3 +1,4 @@
+
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import QDialog
 from widgets.category_tree import CustomTreeWidget

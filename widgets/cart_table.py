@@ -1,5 +1,7 @@
+
 from PySide2 import QtWidgets, QtCore
 from widgets.main_table import CustomTableWithGoods
+
 
 
 class CartTable(CustomTableWithGoods):
