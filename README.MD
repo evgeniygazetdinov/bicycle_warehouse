@@ -1,7 +1,8 @@
-###WAREHOUSE on qt5
+
+####WAREHOUSE on qt5
+
 
 *from designer to py with runner*
-
  pyuic5 -x template.ui -o template.py
 *compile project*
 

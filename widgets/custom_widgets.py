@@ -1,8 +1,6 @@
-from PySide2 import QtWidgets, QtCore, QtGui
-from PySide2.QtCore import Qt
 
+from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import QDialog
-from widgets.good_form import GoodsForm
 from widgets.category_tree import CustomTreeWidget
 from library.db import Bicycle_db
 

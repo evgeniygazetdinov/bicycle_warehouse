@@ -107,6 +107,32 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
             self.find_in()
 
     def find_in(self):
+        text_from_input_article = (self.lineEdit.text()).lower()
+        text_from_input_good = (self.lineEdit_4.text()).lower()
+
+        for row in range(self.tableWidget.rowCount()):
+            column_with_name = str(self.tableWidget.item(row, 1).text()).lower()
+            column_with_article = str(self.tableWidget.item(row, 0).text()).lower()
+            qty = self.tableWidget.item(row, 5).text()
+            print(self.tableWidget.isRowHidden(row))
+            print(row)
+            if "{}".format(text_from_input_article) in column_with_article:
+               
+                   self.tableWidget.setRowHidden(row, False)
+            if "{}".format(text_from_input_good) in column_with_name:
+                
+                    self.tableWidget.setRowHidden(row, False)
+            if (
+                "{}".format(text_from_input_article) in column_with_article 
+                and "{}".format(text_from_input_good) in column_with_name
+            ):
+    
+                    self.tableWidget.setRowHidden(row, False)
+            else:
+                self.tableWidget.setRowHidden(row, True)
+        
+""""
+    def find_in(self):
         
         text = self.lineEdit_4.text()
         text_2 = self.lineEdit.text()
@@ -160,6 +186,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
                         self.tableWidget.setRowHidden(row, True)
 
 
+"""
 
     def set_current_category(self, category):
         db = Bicycle_db()
@@ -174,6 +201,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
 
 
 
+
     def qty_comboBox_handler(self):
         def  qty_handler(condition):
             if condition == 'not_in_stock':
@@ -184,7 +212,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
                     else:
                         self.tableWidget.setRowHidden(row, True)
             if condition == 'all':
-                 for row in range(self.tableWidget.rowCount()):
+                 for row in range(self.tableWidget.rowCount():
                     self.tableWidget.setRowHidden(row, False)
             if condition == 'available':
                 for row in range(self.tableWidget.rowCount()):
@@ -197,9 +225,10 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         if index == 0:
            qty_handler('all')
         elif index == 1 :
-           qty_handler('available')
+           qty_handler('0')
         elif index == 2:
-           qty_handler('not_in_stock')
+           qty_handler('available')
+
 
     def clean_cart(self):
         self.total_price = 0
