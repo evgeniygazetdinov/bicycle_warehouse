@@ -14,6 +14,7 @@ class FixesMainWindow:
         self.change_search_widget_section()
         self.fixes_on_cart()
         self.add_custom_cart_table()
+        self.add_combobox_with_qty()
         self.ui_fixes()
 
     def ui_fixes(self):
@@ -143,6 +144,15 @@ class FixesMainWindow:
         self.firstHTabLayout = QtWidgets.QHBoxLayout(self.tab)
         self.firstVTabLayout.addLayout(self.firstHTabLayout)
         self.tab.setLayout = self.firstVTabLayout
+
+    def add_combobox_with_qty(self):
+        self.comboBox = QtWidgets.QComboBox(self.tab)
+        self.comboBox.addItem('все')
+        self.comboBox.addItem('в наличии')
+        self.comboBox.addItem('отсутствуют')
+        self.comboBox.setGeometry(QtCore.QRect(710, 40, 100, 20))
+        self.comboBox.show()
+
 
     def add_custom_table(self):
         # refactor after code from design-generator
