@@ -1,4 +1,4 @@
-####WAREHOUSE on qt5
+###WAREHOUSE on qt5
 
 *from designer to py with runner*
 
@@ -80,7 +80,7 @@ fix close good window
 
 >add clean logic for clean button
 
-####|release 0.7|##
+###release 0.7|
 
 >speed up search(change approach)
 
@@ -90,7 +90,7 @@ fix close good window
 
 >resize search lineEdit move x button
 
-####|release 0.8|
+###release 0.8|
 
 >fix search by category add by word in substring
 

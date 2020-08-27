@@ -132,13 +132,13 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
             else:
                 #if qty available
                 if self.comboBox.currentIndex()  == 1:
-                    if "{}".format(text_2.lower()) in str(find_by_article.text()).lower() and int(find_by_qty) >0 :
+                    if "{}".format(text_2.lower()) in str(find_by_article.text()).lower() and int(find_by_qty) != 0 :
                         self.tableWidget.setRowHidden(row, False)
-                    if "{}".format(text.lower()) in str(find_by_name.text()).lower() and int(find_by_qty) >0:
+                    if "{}".format(text.lower()) in str(find_by_name.text()).lower() and int(find_by_qty) != 0:
                         self.tableWidget.setRowHidden(row, False)
                     if (
                         "{}".format(text_2.lower()) in str(find_by_article.text()).lower()
-                        and "{}".format(text.lower()) in str(find_by_name.text()).lower() and int(find_by_qty) >0
+                        and "{}".format(text.lower()) in str(find_by_name.text()).lower() and int(find_by_qty) != 0
                     ):
                         self.tableWidget.setRowHidden(row, False)
 
