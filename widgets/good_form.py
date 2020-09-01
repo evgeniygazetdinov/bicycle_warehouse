@@ -241,20 +241,13 @@ class GoodsForm(QMainWindow):
         return good_values
 
     def insert_into_good_form(self, good_values):
-        f = self.texteditor1.font()
-        f.setPointSize(20)
-      
         self.lineEdit_6.setText(good_values["article"])
         self.lineEdit_3.setText(good_values["profit"])
         self.lineEdit_2.setText(good_values["buy"])
         self.lineEdit_4.setText(good_values["sell"])
         self.lineEdit_5.setText(good_values["sell_uah"])
         self.spinBox.setValue(int(good_values["qty"]))
-        self.lineEdit_6.setFont(f)
-        self.lineEdit_3.setFont(f)
-        self.lineEdit_2.setFont(f)
-        self.lineEdit_4.setFont(f)
-        self.lineEdit_5.setFont(f)
+
        
         
 
@@ -343,6 +336,9 @@ class GoodsForm(QMainWindow):
 
         self.fill_tree()
         self.treeWidget.setHeaderHidden(True)
+        self.lineEdit_3.setEnabled(False)
+        self.lineEdit_5.setEnabled(False)
+        self.lineEdit_6.setEnabled(False)
         if self.values:
             # when change_item
             self.lineEdit_4.setText(self.values["Продаж"])
@@ -353,9 +349,7 @@ class GoodsForm(QMainWindow):
             self.lineEdit_5.setText(self.values["ГРН"])
             self.lineEdit.setText(self.values["Название"])
             self.spinBox.setValue(int(self.values["Кол-во."]))
-            self.lineEdit_3.setEnabled(False)
-            self.lineEdit_5.setEnabled(False)
-            self.lineEdit_6.setEnabled(False)
+            
             self.label_9.setText("")
             self.comboBox.hide()
             self.label_4.hide()
@@ -408,34 +402,83 @@ class GoodsForm(QMainWindow):
 
     def recalculate_procent(self,sell,buy):
         dif = abs(float(buy) - float(sell))
-        return int(str(int(round((dif / buy) * 100, 1))))
+        if buy < sell:
+            return int(str(int(round((dif / buy) * 100, 1))))
+        else:
+             return  - (int(str(int(round((dif / buy) * 100, 1)))))
+    
 
 
     def recalculate_price(self):
-        buy_price = self.lineEdit_2.text()
-        try:
-            int(buy_price)
-        except:
-            if str(buy_price).endswith('.'):
-                buy_price  = (str(buy_price).split('.'))[0]
+        buy_price_window = self.lineEdit_2.text()
+        sell_price_window  = self.lineEdit_4.text()
+
+
+        def get_only_digits_from_text_window(window_value):
+            try:
+                int(window_value)
+            except:
+                if str(window_value).endswith('.'):
+                    window_value  = (str(window_value).split('.'))[0]
+                elif float(window_value):
+                    window_value = float(window_value)
+                else:
+                    window_value = [int(s) for s in window_value.split() if s.isdigit()][0] 
+            return window_value
+       
+       
+        def update_digits(self,sell_price,buy_price):
+            if isinstance(sell_price, float) or isinstance(buy_price, float):
+                sell_price_uah = float(sell_price) * self.course
+                profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
             else:
-                buy_price = [int(s) for s in buy_price.split() if s.isdigit()]  
-        sell_price = int(buy_price) * self.course
-        procent = self.recalculate_procent(int(sell_price),int(buy_price))
-        self.lineEdit_5.setText('')
-        self.lineEdit_5.setText(str(sell_price))
-        self.lineEdit_3.setText('')
-        if procent:
-            self.lineEdit_3.setText(str(procent)+'%')
+                sell_price_uah = int(sell_price) * self.course
+                profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
+            self.lineEdit_3.setText('')
+            self.lineEdit_3.setText(str(profit_procent)+'%')
+            self.lineEdit_5.setText('')
+            if sell_price_uah == int(sell_price_uah):
+                self.lineEdit_5.setText(str(int(sell_price_uah)))
+            else:
+                self.lineEdit_5.setText(str(sell_price_uah))
         
-    def new_item_calculate(self):
-        pass
+        
+        if buy_price_window != '' and buy_price_window != '0':
+            buy_price = get_only_digits_from_text_window(buy_price_window)
+            if sell_price_window != '' and sell_price_window != '0': 
+                sell_price = get_only_digits_from_text_window(sell_price_window) 
+                update_digits(self,sell_price,buy_price)
+        elif sell_price_window != '' and sell_price_window != '0':
+            sell_price = get_only_digits_from_text_window(sell_price_window) 
+            sell_price_uah = int(sell_price) * self.course
+            self.lineEdit_5.setText('')
+            self.lineEdit_5.setText(str(sell_price_uah))
+            if buy_price_window != '' and buy_price_window != '0':
+                buy_price = get_only_digits_from_text_window(buy_price_window)
+                update_digits(self,sell_price,buy_price)
+
+
+    def make_all_products_bigger(self):
+        def make_font_bigger(lineEdit):
+            f = lineEdit.font()
+            f.setPointSize(11)
+            f.setBold(True) # sets the size to 27
+            lineEdit.setFont(f)
+
+        windows = [self.lineEdit_2, self.lineEdit_3, self.lineEdit_4, self.lineEdit_5, self.comboBox]
+        for window in windows:
+            make_font_bigger(window)
+
 
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
         self.lineEdit_2.inputRejected.connect(self.recalculate_price)
         self.lineEdit_2.textChanged.connect(self.recalculate_price)
+        self.lineEdit_4.inputRejected.connect(self.recalculate_price)
+        self.lineEdit_4.textChanged.connect(self.recalculate_price)
+        
         self.treeWidget.clicked.connect(
             lambda: self.category_title.setText(self.treeWidget.currentItem().text(0))
         )
         self.course = self.get_current_course()
+        self.make_all_products_bigger()
