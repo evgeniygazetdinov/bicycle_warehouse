@@ -8,9 +8,10 @@ from library.db import Bicycle_db
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
-    def __init__(self, parent=None, values=None, category_widget=None):
+    def __init__(self, parent=None, values=None, category_widget=None, course = None):
         QtWidgets.QTableWidget.__init__(self, parent)
         self.values = values
+        self.course = course
         self.last_added_category = "Всі"
         self.category_widget = category_widget
         self.sortItems(0, QtCore.Qt.AscendingOrder)

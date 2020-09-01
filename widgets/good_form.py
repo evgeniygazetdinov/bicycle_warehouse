@@ -20,9 +20,9 @@ class Communicate(QtCore.QObject):
 
 class GoodsForm(QMainWindow):
     def __init__(
-        self, table=False, new_good=False, values=False, category_widget=False
-    ):
+        self, table=False, new_good=False, values=False, category_widget=False, course=False):
         super().__init__()
+        
         self.values = values
         self.new_good = new_good
         self.category_widget = category_widget
@@ -108,7 +108,7 @@ class GoodsForm(QMainWindow):
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.USD_value = QtWidgets.QLabel(Form)
-        self.USD_value.setGeometry(QtCore.QRect(200, 10, 41, 16))
+        self.USD_value.setGeometry(QtCore.QRect(200, 10, 65, 16))
         font = QtGui.QFont()
         font.setFamily("Cantarell")
         font.setPointSize(12)
@@ -126,7 +126,7 @@ class GoodsForm(QMainWindow):
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.lineEdit_6 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_6.setGeometry(QtCore.QRect(380, 20, 81, 21))
+        self.lineEdit_6.setGeometry(QtCore.QRect(380, 20, 81, 25))
         self.lineEdit_6.setObjectName("lineEdit_6")
         self.category_title = QtWidgets.QLabel(Form)
         self.category_title.setGeometry(QtCore.QRect(180, 50, 171, 16))
@@ -160,7 +160,6 @@ class GoodsForm(QMainWindow):
         self.pushButton.setText(_translate("Form", "Отмена"))
         self.pushButton_2.setText(_translate("Form", "Подтвердить"))
         self.label_8.setText(_translate("Form", "Категория"))
-        self.label_9.setText(_translate("Form", "USD-"))
         self.USD_value.setText(_translate("Form", "30"))
         self.label_10.setText(_translate("Form", "Артикул"))
         self.category_title.setText(_translate("Form", "Категория"))
@@ -242,12 +241,22 @@ class GoodsForm(QMainWindow):
         return good_values
 
     def insert_into_good_form(self, good_values):
+        f = self.texteditor1.font()
+        f.setPointSize(20)
+      
         self.lineEdit_6.setText(good_values["article"])
         self.lineEdit_3.setText(good_values["profit"])
         self.lineEdit_2.setText(good_values["buy"])
         self.lineEdit_4.setText(good_values["sell"])
         self.lineEdit_5.setText(good_values["sell_uah"])
         self.spinBox.setValue(int(good_values["qty"]))
+        self.lineEdit_6.setFont(f)
+        self.lineEdit_3.setFont(f)
+        self.lineEdit_2.setFont(f)
+        self.lineEdit_4.setFont(f)
+        self.lineEdit_5.setFont(f)
+       
+        
 
     def store_good(self):
         values = self.get_values_from_good_windows()
@@ -388,9 +397,44 @@ class GoodsForm(QMainWindow):
                 if root.child(i).child(x).text(0) == category:
                     return [i, x]
 
+
+    def get_current_course(self):
+        db = Bicycle_db()
+        query = db.insert("SELECT value FROM settings WHERE name = 'Курс'")
+        db.close()
+        course = int(query[0][0])
+        self.USD_value.setText(f'USD-{str(course)}')
+        return int(query[0][0])
+
+    def recalculate_procent(self,sell,buy):
+        dif = abs(float(buy) - float(sell))
+        return int(str(int(round((dif / buy) * 100, 1))))
+
+
+    def recalculate_price(self):
+        buy_price = self.lineEdit_2.text()
+        try:
+            int(buy_price)
+        except:
+            if str(buy_price).endswith('.'):
+                buy_price  = (str(buy_price).split('.'))[0]
+            else:
+                buy_price = [int(s) for s in buy_price.split() if s.isdigit()]  
+        sell_price = int(buy_price) * self.course
+        procent = self.recalculate_procent(int(sell_price),int(buy_price))
+        self.lineEdit_5.setText('')
+        self.lineEdit_5.setText(str(sell_price))
+        self.lineEdit_3.setText('')
+        if procent:
+            self.lineEdit_3.setText(str(procent)+'%')
+        
+
+
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
-
+        self.lineEdit_2.inputRejected.connect(self.recalculate_price)
+        self.lineEdit_2.textChanged.connect(self.recalculate_price)
         self.treeWidget.clicked.connect(
             lambda: self.category_title.setText(self.treeWidget.currentItem().text(0))
         )
+        self.course = self.get_current_course()
