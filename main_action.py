@@ -13,6 +13,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         self.total_price = 0
         self.total_income = 0
         self.course = 27.69
+        self.in_stock_rows = {"all": [], "not_in_stock": [], "available": []}
 
     def remove_item_in_cart_by_name(self, item_name):
         # check item in cartitem if in return cur qty in cart
@@ -99,25 +100,37 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         except:
             category = "Всі"
         self.tableWidget.display_goods(category)
+        self.qty_comboBox_handler()
         if self.lineEdit_4.text() != "":
             self.find_in()
         elif self.lineEdit.text() != "":
             self.find_in()
 
+    def search_with_qty(self):
+        self.find_in()
+
     def find_in(self):
-        text = self.lineEdit_4.text()
-        text_2 = self.lineEdit.text()
+
+        text_from_input_article = (self.lineEdit.text()).lower()
+        text_from_input_good = (self.lineEdit_4.text()).lower()
+
         for row in range(self.tableWidget.rowCount()):
-            find_by_name = self.tableWidget.item(row, 1)
-            find_by_article = self.tableWidget.item(row, 0)
-            if "{}".format(text_2.lower()) in str(find_by_article.text()).lower():
+            column_with_name = str(self.tableWidget.item(row, 1).text()).lower()
+            column_with_article = str(self.tableWidget.item(row, 0).text()).lower()
+            column_with_qty = self.tableWidget.item(row, 5).text()
+            print(row)
+            # if self.comboBox.currentIndex() ==0:
+            if "{}".format(text_from_input_article) in column_with_article:
+
                 self.tableWidget.setRowHidden(row, False)
-            if "{}".format(text.lower()) in str(find_by_name.text()).lower():
+            if "{}".format(text_from_input_good) in column_with_name:
+
                 self.tableWidget.setRowHidden(row, False)
             if (
-                "{}".format(text_2.lower()) in str(find_by_article.text()).lower()
-                and "{}".format(text.lower()) in str(find_by_name.text()).lower()
+                "{}".format(text_from_input_article) in column_with_article
+                and "{}".format(text_from_input_good) in column_with_name
             ):
+
                 self.tableWidget.setRowHidden(row, False)
             else:
                 self.tableWidget.setRowHidden(row, True)
@@ -132,6 +145,45 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
         db.insert(query)
         db.insert(query_2)
         db.close()
+
+    def qty_comboBox_handler(self):
+        def qty_handler(condition):
+            if condition == "not_in_stock":
+                for row in range(self.tableWidget.rowCount()):
+                    qty_good = self.tableWidget.item(row, 5).text()
+                    if int(qty_good) == 0:
+                        # if row is not hidden
+                        self.tableWidget.setRowHidden(row, False)
+                    else:
+                        if not self.tableWidget.isRowHidden(row):
+                            self.tableWidget.setRowHidden(row, True)
+            if condition == "all":
+                for row in range(self.tableWidget.rowCount()):
+                    qty_good = self.tableWidget.item(row, 5).text()
+                    if int(qty_good) >= 0:
+
+                        self.tableWidget.setRowHidden(row, False)
+                    else:
+                        if self.tableWidget.isRowHidden(row):
+                            self.tableWidget.setRowHidden(row, True)
+            if condition == "available":
+                for row in range(self.tableWidget.rowCount()):
+                    qty_good = self.tableWidget.item(row, 5).text()
+                    if int(qty_good) > 0:
+                        if self.tableWidget.isRowHidden(row):
+                            self.tableWidget.setRowHidden(row, False)
+                    else:
+                        if not self.tableWidget.isRowHidden(row):
+                            self.tableWidget.setRowHidden(row, True)
+
+        index = self.comboBox.currentIndex()
+
+        if index == 0:
+            qty_handler("all")
+        elif index == 1:
+            qty_handler("available")
+        elif index == 2:
+            qty_handler("not_in_stock")
 
     def clean_cart(self):
         self.total_price = 0
@@ -182,9 +234,10 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods):
 
         # clean cart button
         self.pushButton_4.clicked.connect(self.clean_cart)
-        self.lineEdit.textChanged.connect(self.find_in)
-        self.lineEdit_4.textChanged.connect(self.find_in)
-        self.lineEdit.inputRejected.connect(self.find_in)
-        self.lineEdit_4.inputRejected.connect(self.find_in)
+        self.lineEdit.textChanged.connect(self.search_with_qty)
+        self.lineEdit_4.textChanged.connect(self.search_with_qty)
+        self.lineEdit.inputRejected.connect(self.search_with_qty)
+        self.lineEdit_4.inputRejected.connect(self.search_with_qty)
         self.pushButton_8.clicked.connect(lambda: self.lineEdit.clear())
         self.pushButton_8.clicked.connect(lambda: self.lineEdit_4.clear())
+        self.comboBox.currentIndexChanged.connect(self.qty_comboBox_handler)
