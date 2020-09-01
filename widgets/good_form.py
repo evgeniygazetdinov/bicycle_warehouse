@@ -428,7 +428,8 @@ class GoodsForm(QMainWindow):
         if procent:
             self.lineEdit_3.setText(str(procent)+'%')
         
-
+    def new_item_calculate(self):
+        pass
 
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
