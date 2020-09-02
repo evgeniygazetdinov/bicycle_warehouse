@@ -11,6 +11,7 @@ from PySide2.QtWidgets import (
 )
 from library.db import Bicycle_db
 import time
+import math
 
 
 class Communicate(QtCore.QObject):
@@ -248,21 +249,21 @@ class GoodsForm(QMainWindow):
         self.lineEdit_5.setText(good_values["sell_uah"])
         self.spinBox.setValue(int(good_values["qty"]))
 
-       
         
 
     def store_good(self):
+
         values = self.get_values_from_good_windows()
         db = Bicycle_db()
         schema = db.schema["goods"]
         str_schema = ",".join(schema)
-        query = 'insert into "goods"({}) values("","{}",{},{},{},{},{},"{}",{},{})'.format(
+        query = 'insert into "goods"({}) values("","{}",{},{},{},{},{},"{}","{}",{})'.format(
             str_schema,
             values["name"],
             values["qty"],
             values["buy"],
             values["sell"],
-            values["profit"],
+            str(values["profit"]).split('%')[0],
             values["category"],
             "USD",
             values["sell_uah"],
@@ -405,7 +406,7 @@ class GoodsForm(QMainWindow):
         if buy < sell:
             return int(str(int(round((dif / buy) * 100, 1))))
         else:
-             return  - (int(str(int(round((dif / buy) * 100, 1)))))
+            return  - (int(str(int(round((dif / buy) * 100, 1)))))
     
 
 
@@ -420,8 +421,11 @@ class GoodsForm(QMainWindow):
             except:
                 if str(window_value).endswith('.'):
                     window_value  = (str(window_value).split('.'))[0]
+                elif ',' in window_value:
+                    print('remove ,')
                 elif float(window_value):
                     window_value = float(window_value)
+                
                 else:
                     window_value = [int(s) for s in window_value.split() if s.isdigit()][0] 
             return window_value
@@ -429,11 +433,12 @@ class GoodsForm(QMainWindow):
        
         def update_digits(self,sell_price,buy_price):
             if isinstance(sell_price, float) or isinstance(buy_price, float):
-                sell_price_uah = float(sell_price) * self.course
-                profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
+                sell_price_uah = math.ceil(float(sell_price) * self.course )
+                if sell_price_uah == int(sell_price_uah):
+                    sell_price = int(sell_price_uah)
             else:
                 sell_price_uah = int(sell_price) * self.course
-                profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
+            profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
             self.lineEdit_3.setText('')
             self.lineEdit_3.setText(str(profit_procent)+'%')
             self.lineEdit_5.setText('')
@@ -462,7 +467,7 @@ class GoodsForm(QMainWindow):
         def make_font_bigger(lineEdit):
             f = lineEdit.font()
             f.setPointSize(11)
-            f.setBold(True) # sets the size to 27
+            f.setBold(True)
             lineEdit.setFont(f)
 
         windows = [self.lineEdit_2, self.lineEdit_3, self.lineEdit_4, self.lineEdit_5, self.comboBox]
@@ -472,11 +477,13 @@ class GoodsForm(QMainWindow):
 
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
+        self.pushButton_2.clicked.connect(lambda: Form.close())
+        
         self.lineEdit_2.inputRejected.connect(self.recalculate_price)
         self.lineEdit_2.textChanged.connect(self.recalculate_price)
         self.lineEdit_4.inputRejected.connect(self.recalculate_price)
         self.lineEdit_4.textChanged.connect(self.recalculate_price)
-        
+
         self.treeWidget.clicked.connect(
             lambda: self.category_title.setText(self.treeWidget.currentItem().text(0))
         )

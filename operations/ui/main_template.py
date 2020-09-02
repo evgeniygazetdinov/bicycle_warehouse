@@ -511,23 +511,6 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_10.setText(_translate("MainWindow", "Показать"))
        
         
-        # item = self.tableWidget_6.item(0, 1)
-        # item.setText(_translate("MainWindow", "3105"))
-        # item = self.tableWidget_6.item(0, 2)
-        # item.setText(
-        #     _translate("MainWindow", "Масло RockShow 5WT 10ml, 11 4015.354.010")
-        # )
-        # item = self.tableWidget_6.item(0, 3)
-        # item.setText(_translate("MainWindow", "0.2"))
-        # item = self.tableWidget_6.item(0, 4)
-        # item.setText(_translate("MainWindow", "0%"))
-        # item = self.tableWidget_6.item(0, 5)
-        # item.setText(_translate("MainWindow", "0.2"))
-        # item = self.tableWidget_6.item(0, 6)
-        # item.setText(_translate("MainWindow", "322"))
-        # item = self.tableWidget_6.item(0, 7)
-        # item.setText(_translate("MainWindow", "6"))
-        # self.tableWidget_6.setSortingEnabled(__sortingEnabled)
         self.label_17.setText(_translate("MainWindow", "40"))
         self.label_18.setText(
             _translate(
