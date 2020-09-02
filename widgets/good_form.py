@@ -249,8 +249,7 @@ class GoodsForm(QMainWindow):
         self.lineEdit_5.setText(good_values["sell_uah"])
         self.spinBox.setValue(int(good_values["qty"]))
 
-        
-
+ 
     def store_good(self):
 
         values = self.get_values_from_good_windows()
@@ -420,12 +419,11 @@ class GoodsForm(QMainWindow):
                 int(window_value)
             except:
                 if str(window_value).endswith('.'):
-                    window_value  = (str(window_value).split('.'))[0]
+                    window_value  = (str(window_value).split('.'))[0
                 elif ',' in window_value:
                     print('remove ,')
                 elif float(window_value):
                     window_value = float(window_value)
-                
                 else:
                     window_value = [int(s) for s in window_value.split() if s.isdigit()][0] 
             return window_value
@@ -478,12 +476,10 @@ class GoodsForm(QMainWindow):
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
         self.pushButton_2.clicked.connect(lambda: Form.close())
-        
         self.lineEdit_2.inputRejected.connect(self.recalculate_price)
         self.lineEdit_2.textChanged.connect(self.recalculate_price)
         self.lineEdit_4.inputRejected.connect(self.recalculate_price)
         self.lineEdit_4.textChanged.connect(self.recalculate_price)
-
         self.treeWidget.clicked.connect(
             lambda: self.category_title.setText(self.treeWidget.currentItem().text(0))
         )
