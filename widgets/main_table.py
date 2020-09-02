@@ -147,8 +147,14 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
 
     def update_table(self):
         db = Bicycle_db()
-        cat = "Всі"
-        self.display_goods()
+        try:
+            cur_category = (db.insert('select name_category from cur_category where id=(SELECT MAX(id) from cur_category)'))[0][0]
+        except:
+            cur_category = None
+        if cur_category:
+            self.display_goods(category=cur_category)
+        else:
+            self.display_goods(category="Всі")
 
     def remove_values_from_row(self):
         pass
