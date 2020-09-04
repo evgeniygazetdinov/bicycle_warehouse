@@ -403,7 +403,11 @@ class GoodsForm(QMainWindow):
     def recalculate_procent(self,sell,buy):
         dif = abs(float(buy) - float(sell))
         if buy < sell:
-            return int(str(int(round((dif / buy) * 100, 1))))
+            if isinstance(sell, float) or isinstance(buy, float):
+                res = int(round((dif / buy) * 100, 1))
+            else:
+                res = int(str(int(round((dif / buy) * 100, 1))))
+            return res
         else:
             return  - (int(str(int(round((dif / buy) * 100, 1)))))
     
@@ -412,7 +416,11 @@ class GoodsForm(QMainWindow):
     def recalculate_price(self):
         buy_price_window = self.lineEdit_2.text()
         sell_price_window  = self.lineEdit_4.text()
-
+        self.onlyInt = QtGui.QRegExpValidator(QtCore.QRegExp("^[0-9]{1,8}([.][0-9]{1,4})?$"))
+        self.lineEdit_3.setValidator(self.onlyInt)
+        self.lineEdit_5.setValidator(self.onlyInt)
+        self.lineEdit_2.setValidator(self.onlyInt)
+        self.lineEdit_4.setValidator(self.onlyInt)
 
         def get_only_digits_from_text_window(window_value):
             try:
@@ -426,12 +434,14 @@ class GoodsForm(QMainWindow):
                     window_value = float(window_value)
                 else:
                     window_value = [int(s) for s in window_value.split() if s.isdigit()][0] 
+            print(window_value) 
             return window_value
-       
        
         def update_digits(self,sell_price,buy_price):
             if isinstance(sell_price, float) or isinstance(buy_price, float):
                 sell_price_uah = math.ceil(float(sell_price) * self.course )
+                profit_procent = self.recalculate_procent(float(sell_price),float(buy_price))
+
                 if sell_price_uah == int(sell_price_uah):
                     sell_price = int(sell_price_uah)
             else:
