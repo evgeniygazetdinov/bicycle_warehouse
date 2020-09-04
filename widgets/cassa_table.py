@@ -5,17 +5,18 @@ import datetime
 
 
 class CustomCashierTable(CustomTableWithGoods):
-    def __init__(self, parent=None, date_from = None, date_to = None):
+    def __init__(self, parent=None):
         QtWidgets.QTableWidget.__init__(self, parent)
         # self.display_items()
-        self.date_from = date_from
-        self.date_to = date_to
         # date_from.setDate(QDate(datetime.now()-timedelta(days=7)))
         # date_to.setDate(QDate(datetime.now()-timedelta(days=7)))
-    
+
+
+
+
     def display_items(self, date_from, date_by):
         def get_casher_elements():
-            query = f'SELECT * from basket where dated beetween {date_from} and {date_by}'
+            query = f'SELECT * from basket where dated between {date_from} and {date_by}'
             db = Bicycle_db()
             res = (db.insert(query))
             return res

@@ -191,14 +191,13 @@ class FixesMainWindow:
 
 
     def init_cassa_table(self):
-        self.tableWidget_6 = CustomCashierTable(self.tab_2, self.dateTimeEdit, self.dateTimeEdit_2)
+        self.tableWidget_6 = CustomCashierTable(self.tab_2)
         self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 731))
         self.tableWidget_6.setObjectName("tableWidget_6")
         self.tableWidget_6 = QtWidgets.QTableWidget(self.tab_2)
         self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 731))
         self.tableWidget_6.setObjectName("tableWidget_6")
         self.tableWidget_6.setColumnCount(9)
-        # self.tableWidget_6.setRowCount(10)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_6.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -288,3 +287,4 @@ class FixesMainWindow:
         values = [50, 500, 100, 50, 80, 50, 50, 80, 50 ]
         for i in range(len(values)):
             self.tableWidget_6.setColumnWidth(i, values[i])
+          
