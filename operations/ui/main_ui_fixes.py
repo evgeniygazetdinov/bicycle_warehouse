@@ -281,10 +281,9 @@ class FixesMainWindow:
         item.setText( "Оплата")
         __sortingEnabled = self.tableWidget_6.isSortingEnabled()
         self.tableWidget_6.setSortingEnabled(False)
-        __sortingEnabled = self.tableWidget_6.isSortingEnabled()
+        __sortingEnabled = self.tableWidget_6.isSortingEnabled(
         self.tableWidget_6.setSortingEnabled(False)
         self.tableWidget_6.verticalHeader().setVisible(False)
         values = [50, 500, 100, 50, 80, 50, 50, 80, 50 ]
         for i in range(len(values)):
             self.tableWidget_6.setColumnWidth(i, values[i])
-          
