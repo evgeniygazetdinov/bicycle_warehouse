@@ -37,6 +37,7 @@ class CartTable(CustomTableWithGoods):
             self.profit.setText("")
         if self.total:
             self.total.setText("")
+    
 
     def contextMenuEvent(self, event):
         pass

@@ -2,7 +2,7 @@ from PySide2 import QtWidgets, QtCore
 from library.db import Bicycle_db
 from operations.ui.main_ui_fixes import FixesMainWindow
 from operations.finances_action import CartFinance_methods
-from operations.basket_actions import BasketActions
+from operations.cascher_actions import BasketActions
 from widgets.custom_widgets import NumericItem
 
 
@@ -194,8 +194,8 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
 
     def add_actions(self):
         # calling in UI
-        self.basket_actions()
         self.add_additional_custom_elements()
+        self.basket_actions()
         self.treeWidget.clicked.connect(self.display_goods_from_category)
         self.tableWidget.doubleClicked.connect(self.parse_row_and_move_to_cart)
         self.tableWidget_2.doubleClicked.connect(self.remove_from_cart)
