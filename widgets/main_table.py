@@ -1,14 +1,13 @@
-
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog
 from widgets.good_form import GoodsForm
-from widgets.custom_widgets import NumericItem,ProcentItem
+from widgets.custom_widgets import NumericItem, ProcentItem
 from library.db import Bicycle_db
 
 
 class CustomTableWithGoods(QtWidgets.QTableWidget):
-    def __init__(self, parent=None, values=None, category_widget=None, course = None):
+    def __init__(self, parent=None, values=None, category_widget=None, course=None):
         QtWidgets.QTableWidget.__init__(self, parent)
         self.values = values
         self.course = course
@@ -129,7 +128,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             item = ProcentItem()
             item.setData(
                 QtCore.Qt.EditRole,
-                str(self.calculate_sell_price(good["sell"], good["buy"]))+'%',
+                str(self.calculate_sell_price(good["sell"], good["buy"])) + "%",
             )
             self.setItem(row, 3, QtWidgets.QTableWidgetItem(item))
             item = NumericItem()
@@ -140,7 +139,7 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
         self.setSortingEnabled(True)
         self.horizontalHeader().sortIndicatorOrder()
         self.sortItems(3, Qt.AscendingOrder)
-    
+
     def clean_table(self):
         while self.rowCount() > 0:
             self.removeRow(0)
@@ -148,7 +147,11 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
     def update_table(self):
         db = Bicycle_db()
         try:
-            cur_category = (db.insert('select name_category from cur_category where id=(SELECT MAX(id) from cur_category)'))[0][0]
+            cur_category = (
+                db.insert(
+                    "select name_category from cur_category where id=(SELECT MAX(id) from cur_category)"
+                )
+            )[0][0]
         except:
             cur_category = None
         if cur_category:
@@ -203,4 +206,3 @@ class CustomTableWithGoods(QtWidgets.QTableWidget):
             )
             ui.setupUi(widget)
             widget.exec_()
-

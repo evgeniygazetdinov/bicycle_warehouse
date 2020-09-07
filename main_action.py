@@ -242,4 +242,3 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
         self.pushButton_8.clicked.connect(lambda: self.lineEdit.clear())
         self.pushButton_8.clicked.connect(lambda: self.lineEdit_4.clear())
         self.comboBox.currentIndexChanged.connect(self.qty_comboBox_handler)
-   
