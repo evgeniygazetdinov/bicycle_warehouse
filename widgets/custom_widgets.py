@@ -1,4 +1,3 @@
-
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import QDialog
 from widgets.category_tree import CustomTreeWidget
@@ -41,21 +40,19 @@ class ProcentItem(QtWidgets.QTableWidgetItem):
     def __init__(self):
         super().__init__()
 
-    def __gt__(self,other):
-        print('fsdf')
+    def __gt__(self, other):
+        print("fsdf")
 
     def __lt__(self, other):
-       print('here')
-       text_inside = int(str(self.text()).split('%')[-1])
-       other_text_inside = int((str(self.other_text_inside()).split('%'))[-1])
-       return text_inside < other_text_inside
-
+        print("here")
+        text_inside = int(str(self.text()).split("%")[-1])
+        other_text_inside = int((str(self.other_text_inside()).split("%"))[-1])
+        return text_inside < other_text_inside
 
 
 class NumericItem(QtWidgets.QTableWidgetItem):
     def __lt__(self, other):
         return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
-
 
 
 class CustomMainWindow(QtWidgets.QMainWindow):

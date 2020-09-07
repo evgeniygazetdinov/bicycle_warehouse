@@ -21,9 +21,15 @@ class Communicate(QtCore.QObject):
 
 class GoodsForm(QMainWindow):
     def __init__(
-        self, table=False, new_good=False, values=False, category_widget=False, course=False):
+        self,
+        table=False,
+        new_good=False,
+        values=False,
+        category_widget=False,
+        course=False,
+    ):
         super().__init__()
-        
+
         self.values = values
         self.new_good = new_good
         self.category_widget = category_widget
@@ -249,7 +255,6 @@ class GoodsForm(QMainWindow):
         self.lineEdit_5.setText(good_values["sell_uah"])
         self.spinBox.setValue(int(good_values["qty"]))
 
- 
     def store_good(self):
 
         values = self.get_values_from_good_windows()
@@ -262,7 +267,7 @@ class GoodsForm(QMainWindow):
             values["qty"],
             values["buy"],
             values["sell"],
-            str(values["profit"]).split('%')[0],
+            str(values["profit"]).split("%")[0],
             values["category"],
             "USD",
             values["sell_uah"],
@@ -349,7 +354,7 @@ class GoodsForm(QMainWindow):
             self.lineEdit_5.setText(self.values["ГРН"])
             self.lineEdit.setText(self.values["Название"])
             self.spinBox.setValue(int(self.values["Кол-во."]))
-            
+
             self.label_9.setText("")
             self.comboBox.hide()
             self.label_4.hide()
@@ -391,16 +396,15 @@ class GoodsForm(QMainWindow):
                 if root.child(i).child(x).text(0) == category:
                     return [i, x]
 
-
     def get_current_course(self):
         db = Bicycle_db()
         query = db.insert("SELECT value FROM settings WHERE name = 'Курс'")
         db.close()
         course = int(query[0][0])
-        self.USD_value.setText(f'USD-{str(course)}')
+        self.USD_value.setText(f"USD-{str(course)}")
         return int(query[0][0])
 
-    def recalculate_procent(self,sell,buy):
+    def recalculate_procent(self, sell, buy):
         dif = abs(float(buy) - float(sell))
         if buy < sell:
             if isinstance(sell, float) or isinstance(buy, float):
@@ -409,14 +413,14 @@ class GoodsForm(QMainWindow):
                 res = int(str(int(round((dif / buy) * 100, 1))))
             return res
         else:
-            return  - (int(str(int(round((dif / buy) * 100, 1)))))
-    
-
+            return -(int(str(int(round((dif / buy) * 100, 1)))))
 
     def recalculate_price(self):
         buy_price_window = self.lineEdit_2.text()
-        sell_price_window  = self.lineEdit_4.text()
-        self.onlyInt = QtGui.QRegExpValidator(QtCore.QRegExp("^[0-9]{1,8}([.][0-9]{1,4})?$"))
+        sell_price_window = self.lineEdit_4.text()
+        self.onlyInt = QtGui.QRegExpValidator(
+            QtCore.QRegExp("^[0-9]{1,8}([.][0-9]{1,4})?$")
+        )
         self.lineEdit_3.setValidator(self.onlyInt)
         self.lineEdit_5.setValidator(self.onlyInt)
         self.lineEdit_2.setValidator(self.onlyInt)
@@ -426,50 +430,52 @@ class GoodsForm(QMainWindow):
             try:
                 int(window_value)
             except:
-                if str(window_value).endswith('.'):
-                    window_value  = (str(window_value).split('.'))[0
-                elif ',' in window_value:
-                    print('remove ,')
+                if str(window_value).endswith("."):
+                    window_value = (str(window_value).split("."))[0]
+                elif "," in window_value:
+                    print("remove ,")
                 elif float(window_value):
                     window_value = float(window_value)
                 else:
-                    window_value = [int(s) for s in window_value.split() if s.isdigit()][0] 
-            print(window_value) 
+                    window_value = [
+                        int(s) for s in window_value.split() if s.isdigit()
+                    ][0]
+            print(window_value)
             return window_value
-       
-        def update_digits(self,sell_price,buy_price):
+
+        def update_digits(self, sell_price, buy_price):
             if isinstance(sell_price, float) or isinstance(buy_price, float):
-                sell_price_uah = math.ceil(float(sell_price) * self.course )
-                profit_procent = self.recalculate_procent(float(sell_price),float(buy_price))
+                sell_price_uah = math.ceil(float(sell_price) * self.course)
+                profit_procent = self.recalculate_procent(
+                    float(sell_price), float(buy_price)
+                )
 
                 if sell_price_uah == int(sell_price_uah):
                     sell_price = int(sell_price_uah)
             else:
                 sell_price_uah = int(sell_price) * self.course
-            profit_procent = self.recalculate_procent(int(sell_price),int(buy_price))
-            self.lineEdit_3.setText('')
-            self.lineEdit_3.setText(str(profit_procent)+'%')
-            self.lineEdit_5.setText('')
+            profit_procent = self.recalculate_procent(int(sell_price), int(buy_price))
+            self.lineEdit_3.setText("")
+            self.lineEdit_3.setText(str(profit_procent) + "%")
+            self.lineEdit_5.setText("")
             if sell_price_uah == int(sell_price_uah):
                 self.lineEdit_5.setText(str(int(sell_price_uah)))
             else:
                 self.lineEdit_5.setText(str(sell_price_uah))
-        
-        
-        if buy_price_window != '' and buy_price_window != '0':
-            buy_price = get_only_digits_from_text_window(buy_price_window)
-            if sell_price_window != '' and sell_price_window != '0': 
-                sell_price = get_only_digits_from_text_window(sell_price_window) 
-                update_digits(self,sell_price,buy_price)
-        elif sell_price_window != '' and sell_price_window != '0':
-            sell_price = get_only_digits_from_text_window(sell_price_window) 
-            sell_price_uah = int(sell_price) * self.course
-            self.lineEdit_5.setText('')
-            self.lineEdit_5.setText(str(sell_price_uah))
-            if buy_price_window != '' and buy_price_window != '0':
-                buy_price = get_only_digits_from_text_window(buy_price_window)
-                update_digits(self,sell_price,buy_price)
 
+        if buy_price_window != "" and buy_price_window != "0":
+            buy_price = get_only_digits_from_text_window(buy_price_window)
+            if sell_price_window != "" and sell_price_window != "0":
+                sell_price = get_only_digits_from_text_window(sell_price_window)
+                update_digits(self, sell_price, buy_price)
+        elif sell_price_window != "" and sell_price_window != "0":
+            sell_price = get_only_digits_from_text_window(sell_price_window)
+            sell_price_uah = int(sell_price) * self.course
+            self.lineEdit_5.setText("")
+            self.lineEdit_5.setText(str(sell_price_uah))
+            if buy_price_window != "" and buy_price_window != "0":
+                buy_price = get_only_digits_from_text_window(buy_price_window)
+                update_digits(self, sell_price, buy_price)
 
     def make_all_products_bigger(self):
         def make_font_bigger(lineEdit):
@@ -478,10 +484,15 @@ class GoodsForm(QMainWindow):
             f.setBold(True)
             lineEdit.setFont(f)
 
-        windows = [self.lineEdit_2, self.lineEdit_3, self.lineEdit_4, self.lineEdit_5, self.comboBox]
+        windows = [
+            self.lineEdit_2,
+            self.lineEdit_3,
+            self.lineEdit_4,
+            self.lineEdit_5,
+            self.comboBox,
+        ]
         for window in windows:
             make_font_bigger(window)
-
 
     def add_actions(self, Form):
         self.pushButton.clicked.connect(lambda: Form.close())
