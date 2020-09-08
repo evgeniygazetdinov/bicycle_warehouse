@@ -102,3 +102,25 @@ class CustomCashierTable(QtWidgets.QTableWidget):
     def clean_table(self):
         while self.rowCount() > 0:
             self.removeRow(0)
+
+    def find_values_in_table(self, find_by_value, need_column):
+        def row_parser(self, row):
+            columns = self.columnCount()
+            names = []
+            values = []
+
+            for i in range(columns):
+                names.append(self.horizontalHeaderItem(i).text())
+            else:
+                for i in range(columns):
+                    values.append(self.item(row, i).text())
+            return dict(zip(names, values))
+
+        res = []
+        columns = self.columnCount()
+        rows = self.rowCount()
+        for row in range(rows):
+            row_value = self.item(row,need_column).text()
+            if find_by_value == row_value:
+                res.append(row_parser(self,row))
+        return res
