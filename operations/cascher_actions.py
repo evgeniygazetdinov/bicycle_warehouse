@@ -27,9 +27,6 @@ class BasketActions:
         self.dateTimeEdit.setDisplayFormat("dd/MM hh:mm")
         self.dateTimeEdit_2.setDisplayFormat("dd/MM hh:mm")
         self.get_basket_items_by_date()
-    
-   
-
 
     def get_basket_items_by_date(self):
         def calculate_by(dict_with_values,value_for_calculate):
@@ -79,7 +76,6 @@ class BasketActions:
         self.label_34.setText(str(total_work))
         self.label_36.setText(str(total_expense))
     
-
     def basket_actions(self):
         self.setDefaultTime()
         self.pushButton_10.clicked.connect(self.get_basket_items_by_date)
