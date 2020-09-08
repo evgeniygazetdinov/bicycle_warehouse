@@ -5,6 +5,14 @@ import time
 
 
 class BasketActions:
+    def __init__(self):
+        self.total = 0
+        self.total_profit = 0
+        self.total_magazine = 0
+        self.total_work = 0
+        self.total_expenses = 0
+        self.total_advances = 0
+
     def get_date_time_from_widget(self, now_year, widget):
         dt = widget.dateTime()
         dt_string = dt.toString(widget.displayFormat())
@@ -27,5 +35,11 @@ class BasketActions:
         to_date_string = self.get_date_time_from_widget(now.year, self.dateTimeEdit_2)
 
     def basket_actions(self):
-        self.setDefaultTime()
-        self.pushButton_10.clicked.connect(lambda: print("3e"))
+        # self.setDefaultTime()
+        # self.calcutate_table_values()
+        # self.pushButton_10.clicked.connect(lambda: print("3e"))
+        pass
+
+    def calcutate_table_values(self):
+        #return list with values from argument
+        
