@@ -160,32 +160,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_10.setGeometry(QtCore.QRect(210, 40, 131, 61))
         self.pushButton_10.setObjectName("pushButton_10")
    
-        self.label_17 = QtWidgets.QLabel(self.tab_2)
-        self.label_17.setGeometry(QtCore.QRect(370, 60, 121, 21))
-        font = QtGui.QFont()
-        font.setFamily("Noto Sans Mono CJK JP")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_17.setFont(font)
-        self.label_17.setLineWidth(4)
-        self.label_17.setObjectName("label_17")
-        self.label_18 = QtWidgets.QLabel(self.tab_2)
-        self.label_18.setGeometry(QtCore.QRect(350, 10, 151, 41))
-        self.label_18.setObjectName("label_18")
-        self.label_20 = QtWidgets.QLabel(self.tab_2)
-        self.label_20.setGeometry(QtCore.QRect(510, 10, 151, 41))
-        self.label_20.setObjectName("label_20")
-        self.label_19 = QtWidgets.QLabel(self.tab_2)
-        self.label_19.setGeometry(QtCore.QRect(510, 60, 121, 21))
-        font = QtGui.QFont()
-        font.setFamily("Noto Sans Mono CJK JP")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_19.setFont(font)
-        self.label_19.setLineWidth(4)
-        self.label_19.setObjectName("label_19")
+       
         self.label_21 = QtWidgets.QLabel(self.tab_2)
         self.label_21.setGeometry(QtCore.QRect(1040, -10, 151, 41))
         self.label_21.setObjectName("label_21")
@@ -246,45 +221,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_18 = QtWidgets.QPushButton(self.tab_2)
         self.pushButton_18.setGeometry(QtCore.QRect(1140, 450, 101, 51))
         self.pushButton_18.setObjectName("pushButton_18")
-        self.label_31 = QtWidgets.QLabel(self.tab_2)
-        self.label_31.setGeometry(QtCore.QRect(670, 10, 151, 41))
-        self.label_31.setObjectName("label_31")
-        self.label_32 = QtWidgets.QLabel(self.tab_2)
-        self.label_32.setGeometry(QtCore.QRect(670, 60, 121, 21))
-        font = QtGui.QFont()
-        font.setFamily("Noto Sans Mono CJK JP")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_32.setFont(font)
-        self.label_32.setLineWidth(4)
-        self.label_32.setObjectName("label_32")
-        self.label_33 = QtWidgets.QLabel(self.tab_2)
-        self.label_33.setGeometry(QtCore.QRect(810, 10, 151, 41))
-        self.label_33.setObjectName("label_33")
-        self.label_34 = QtWidgets.QLabel(self.tab_2)
-        self.label_34.setGeometry(QtCore.QRect(810, 60, 121, 21))
-        font = QtGui.QFont()
-        font.setFamily("Noto Sans Mono CJK JP")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_34.setFont(font)
-        self.label_34.setLineWidth(4)
-        self.label_34.setObjectName("label_34")
-        self.label_35 = QtWidgets.QLabel(self.tab_2)
-        self.label_35.setGeometry(QtCore.QRect(880, 10, 151, 41))
-        self.label_35.setObjectName("label_35")
-        self.label_36 = QtWidgets.QLabel(self.tab_2)
-        self.label_36.setGeometry(QtCore.QRect(880, 60, 121, 21))
-        font = QtGui.QFont()
-        font.setFamily("Noto Sans Mono CJK JP")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_36.setFont(font)
-        self.label_36.setLineWidth(4)
-        self.label_36.setObjectName("label_36")
+       
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
@@ -511,20 +448,7 @@ class Ui_MainWindow(Views_Main_Window):
         self.pushButton_10.setText(_translate("MainWindow", "Показать"))
        
         
-        self.label_17.setText(_translate("MainWindow", "40"))
-        self.label_18.setText(
-            _translate(
-                "MainWindow",
-                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">получено средств</span></p></body></html>',
-            )
-        )
-        self.label_20.setText(
-            _translate(
-                "MainWindow",
-                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">прибыль с продаж</span></p></body></html>',
-            )
-        )
-        self.label_19.setText(_translate("MainWindow", "40"))
+      
         self.label_21.setText(
             _translate(
                 "MainWindow",
@@ -593,27 +517,7 @@ class Ui_MainWindow(Views_Main_Window):
         )
         self.pushButton_17.setText(_translate("MainWindow", "Положить "))
         self.pushButton_18.setText(_translate("MainWindow", "Взять"))
-        self.label_31.setText(
-            _translate(
-                "MainWindow",
-                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">общая прибыль</span></p></body></html>',
-            )
-        )
-        self.label_32.setText(_translate("MainWindow", "40"))
-        self.label_33.setText(
-            _translate(
-                "MainWindow",
-                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">аванс</span></p></body></html>',
-            )
-        )
-        self.label_34.setText(_translate("MainWindow", "40"))
-        self.label_35.setText(
-            _translate(
-                "MainWindow",
-                '<html><head/><body><p><span style=" font-size:20pt; vertical-align:sub;">затраты</span></p></body></html>',
-            )
-        )
-        self.label_36.setText(_translate("MainWindow", "40"))
+        
         self.tabWidget.setTabText(
             self.tabWidget.indexOf(self.tab_2),
             _translate("MainWindow", "Касса/статистика"),
