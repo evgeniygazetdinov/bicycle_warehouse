@@ -17,4 +17,3 @@ from PySide2 import QtGui
 
 class CustomTabWidget(QtWidgets.QTabWidget):
     pass
-

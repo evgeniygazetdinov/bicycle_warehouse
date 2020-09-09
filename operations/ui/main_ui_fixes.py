@@ -86,7 +86,6 @@ class FixesMainWindow:
         values = [50, 480, 50, 50, 50, 50, 50, 70]
         for i in range(len(values)):
             self.tableWidget.setColumnWidth(i, values[i])
-        # self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
         pass
 
     def resize_tableWidget_2(self):
@@ -276,11 +275,8 @@ class FixesMainWindow:
         item.setText( "НКТ")
         item = self.tableWidget_6.horizontalHeaderItem(8)
         # item.setText( "НКТ")
-        __sortingEnabled = self.tableWidget_6.isSortingEnabled()
-        self.tableWidget_6.setSortingEnabled(False)
-        __sortingEnabled = self.tableWidget_6.isSortingEnabled()
-        self.tableWidget_6.setSortingEnabled(False)
         self.tableWidget_6.verticalHeader().setVisible(False)
-        values = [150, 50, 500, 50, 50, 50, 50, 50, 50 ]
+        values = [150, 50, 500, 50, 50, 80, 50, 50 ]
+
         for i in range(len(values)):
             self.tableWidget_6.setColumnWidth(i, values[i])
