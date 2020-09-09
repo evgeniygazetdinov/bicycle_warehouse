@@ -27,8 +27,6 @@ class BasketActions:
         self.dateTimeEdit.setDisplayFormat("dd/MM hh:mm")
         self.dateTimeEdit_2.setDisplayFormat("dd/MM hh:mm")
         self.get_basket_items_by_date()
-    
-   
 
 
     def get_basket_items_by_date(self):
@@ -73,13 +71,12 @@ class BasketActions:
         total_work = all_sum_works
         total_expense = all_sum_expense
         total_prepaid = all_sum_prepaid
-        # self.label_17.setText(str(total_sum))
-        # self.label_19.setText(str(total_profit))
-        # self.label_32.setText(str(total_magazine))
-        # self.label_34.setText(str(total_work))
-        # self.label_36.setText(str(total_expense))
+        self.label_17.setText(str(total_sum))
+        self.label_19.setText(str(total_profit))
+        self.label_32.setText(str(total_magazine))
+        self.label_34.setText(str(total_work))
+        self.label_36.setText(str(total_expense))
     
-
     def basket_actions(self):
         self.setDefaultTime()
         self.pushButton_10.clicked.connect(self.get_basket_items_by_date)
