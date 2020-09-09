@@ -28,7 +28,6 @@ class BasketActions:
         self.dateTimeEdit_2.setDisplayFormat("dd/MM hh:mm")
         self.get_basket_items_by_date()
 
-
     def get_basket_items_by_date(self):
         def calculate_by(dict_with_values,value_for_calculate):
             total = 0
