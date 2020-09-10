@@ -290,54 +290,51 @@ class FixesMainWindow:
             label.setLineWidth(4)
 
         self.label_17 = QtWidgets.QLabel(self.tab_2)
-        self.label_17.setGeometry(QtCore.QRect(370, 60, 121, 21))
-        self.label_17.setLineWidth(4)
+        self.label_17.setGeometry(QtCore.QRect(350, 68, 151, 21))
+        self.label_17.setText('0')
         self.label_18 = QtWidgets.QLabel(self.tab_2)
-        self.label_18.setGeometry(QtCore.QRect(350, 10, 151, 41))
-        self.label_18.setObjectName("label_18")
+        self.label_18.setGeometry(QtCore.QRect(350, 17, 151, 41))
+        self.label_18.setText('получено')
         self.label_20 = QtWidgets.QLabel(self.tab_2)
-        self.label_20.setGeometry(QtCore.QRect(510, 10, 151, 41))
-        self.label_20.setObjectName("label_20")
+        self.label_20.setGeometry(QtCore.QRect(460, 17, 151, 41))
+        self.label_20.setText("прибыль")
         self.label_19 = QtWidgets.QLabel(self.tab_2)
-        self.label_19.setGeometry(QtCore.QRect(510, 60, 151, 21))
-        self.label_39 = QtWidgets.QLabel(self.tab_2)
-        self.label_39.setGeometry(QtCore.QRect(925, 10, 151, 21))
-        self.label_19.setLineWidth(4)
-        self.label_19.setObjectName("label_19")
+        self.label_19.setGeometry(QtCore.QRect(460, 68, 151, 21))
+        self.label_19.setText("0")
         self.label_31 = QtWidgets.QLabel(self.tab_2)
-        self.label_31.setGeometry(QtCore.QRect(670, 10, 151, 41))
-        self.label_31.setObjectName("label_31")
+        self.label_31.setGeometry(QtCore.QRect(560, 17, 151, 41))
+        self.label_31.setText('магазин')
         self.label_32 = QtWidgets.QLabel(self.tab_2)
-        self.label_32.setGeometry(QtCore.QRect(670, 60, 121, 21))
-        self.label_32.setObjectName("label_32")
+        self.label_32.setGeometry(QtCore.QRect(560, 60, 151, 41))
+        self.label_32.setText("0")
         self.label_33 = QtWidgets.QLabel(self.tab_2)
-        self.label_33.setGeometry(QtCore.QRect(810, 10, 151, 41))
-        self.label_33.setObjectName("label_33")
+        self.label_33.setGeometry(QtCore.QRect(810, 17, 151, 41))
+        self.label_33.setText('расходы')
         self.label_34 = QtWidgets.QLabel(self.tab_2)
-        self.label_34.setGeometry(QtCore.QRect(810, 60, 121, 21))
-        self.label_34.setObjectName("label_34")
+        self.label_34.setGeometry(QtCore.QRect(810, 60, 151, 41))
+        self.label_34.setText("0")
         self.label_35 = QtWidgets.QLabel(self.tab_2)
-        self.label_35.setGeometry(QtCore.QRect(880, 10, 151, 41))
-        self.label_35.setObjectName("label_35")
+        self.label_35.setGeometry(QtCore.QRect(690, 17, 151, 41))
+        self.label_35.setText("работа")
         self.label_36 = QtWidgets.QLabel(self.tab_2)
-        self.label_36.setGeometry(QtCore.QRect(880, 60, 121, 21))
-        self.label_17.setText('1')
-        self.label_18.setText(
-                'получено средств'
-        )
-        self.label_20.setText(
-                "прибыль",
-        )
-        self.label_19.setText( "40")
-        self.label_31.setText(
-                'общая прибыль'
-        )
-        self.label_32.setText( "40")
-        self.label_33.setText(
-                'аванс'
-        )
-        self.label_34.setText( "40")
-        self.label_35.setText(
-                "затраты"
-        )
-        self.label_36.setText( "40")
+        self.label_36.setGeometry(QtCore.QRect(690, 60, 151, 41))
+        self.label_36.setText("0")
+        self.label_39 = QtWidgets.QLabel(self.tab_2)
+        self.label_39.setGeometry(QtCore.QRect(925, 17, 151, 41))
+        self.label_39.setText('авансы')
+        self.label_40 = QtWidgets.QLabel(self.tab_2)
+        self.label_40.setGeometry(QtCore.QRect(925, 60, 151, 41))
+        self.label_40.setText('0')
+        labels = [self.label_17,self.label_18,self.label_19,
+                    self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
+        for label in labels:
+            set_font_for_labels(label)
+        
+        
+        
+        
+        
+        
+        
+        
+        
