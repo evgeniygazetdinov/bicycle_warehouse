@@ -10,7 +10,6 @@ from PySide2.QtCore import Qt
 
 
 class CartFinance_methods:
-    
     def change_product_qty_in_cart(self):
         # get values
         if self.tableWidget_2.currentColumn() == 2:
@@ -19,11 +18,11 @@ class CartFinance_methods:
             for cart_item in self.cart_items:
                 counter += 1
                 if cart_item["Название"] == values["название"]:
-                    #it' handy buttons
+                    # it' handy buttons
                     if "Арт" not in cart_item:
                         qty = 1
                         break
-                        
+
                     elif int(cart_item["Кол-во."]) == 1:
                         QtWidgets.QMessageBox.about(
                             self.tab, "Error", "Товар в единичном количестве"
@@ -36,18 +35,20 @@ class CartFinance_methods:
                         if dialog.exec():
                             new_qty = dialog.getInputs()
                             item = NumericItem()
-                            #if need more append 
-                            qty_now = self.if_item_in_cart(cart_item['Название'])
+                            # if need more append
+                            qty_now = self.if_item_in_cart(cart_item["Название"])
                             if qty_now < new_qty:
                                 how_many_item_need_add = new_qty - qty_now
                                 for one_add in range(how_many_item_need_add):
                                     self.cart_items.append(cart_item)
                             elif qty_now > new_qty:
-                                how_many_item_need_delete = qty_now -new_qty
+                                how_many_item_need_delete = qty_now - new_qty
                                 for one_delete in range(how_many_item_need_delete):
-                                    self.remove_item_in_cart_by_name(cart_item["Название"])
-                                
-                            #else pop
+                                    self.remove_item_in_cart_by_name(
+                                        cart_item["Название"]
+                                    )
+
+                            # else pop
                             item.setData(QtCore.Qt.DisplayRole, (new_qty))
                             self.tableWidget_2.setItem(
                                 (counter - 1), 2, QtWidgets.QTableWidgetItem(item)
@@ -63,20 +64,19 @@ class CartFinance_methods:
                             self.update_total_price()
                             break
 
-
-    def update_total_price(self,sale=False):
+    def update_total_price(self, sale=False):
         if sale:
-            self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж",sale=sale)
+            self.counting_price_income_from_cart_items(
+                "ГРН", "Закупка", "Продаж", sale=sale
+            )
         else:
             self.counting_price_income_from_cart_items("ГРН", "Закупка", "Продаж")
         self.label_37.setText(str(self.total_price))
         self.label_38.setText(str(round(self.total_income)))
 
-
     def calculate_good_income(self, sell, buy, qty):
         income = (round(abs((float(sell) - float(buy))) * self.course, 1)) * qty
         self.total_income += income
-
 
     def counting_price_income_from_cart_items(
         self, grivna_keyword, sell_keyword=False, buy_keyword=False, sale=False
@@ -84,15 +84,15 @@ class CartFinance_methods:
         self.total_price = 0
         self.total_income = 0
         for item in self.cart_items:
-       
-            if item['Название'] == 'работа':
-                work_price = int(item[grivna_keyword]) 
+
+            if item["Название"] == "работа":
+                work_price = int(item[grivna_keyword])
                 self.total_income += work_price
                 self.total_price += work_price
-            elif item['Название'] == 'скидка':
-                self.total_income-= int(item['ГРН'])
-                self.total_price-= int(item['ГРН'])
-            else:    
+            elif item["Название"] == "скидка":
+                self.total_income -= int(item["ГРН"])
+                self.total_price -= int(item["ГРН"])
+            else:
                 total_price = int(item[grivna_keyword]) * int(item["qty_item_in_cart"])
                 self.total_price += total_price
                 if "Арт" in item:
@@ -101,14 +101,11 @@ class CartFinance_methods:
                         item[sell_keyword], item[buy_keyword], item["qty_item_in_cart"]
                     )
 
-            
-
-
     def cart_items_rounder(self, values, qty_in_cart):
         values["qty_item_in_cart"] = 1
         self.cart_items.append(values)
         row = self.tableWidget_2.find_in_table_by_name(values["Название"])
-        total = self.if_item_in_cart(values["Название"])            
+        total = self.if_item_in_cart(values["Название"])
         items_price = int(values["ГРН"]) * int(total)
         item = NumericItem()
         self.update_total_price()
@@ -131,20 +128,22 @@ class CartFinance_methods:
     def parse_row_and_move_to_cart(self):
         values = self.tableWidget.parse_row()
         if int(values["Кол-во."]) > 0:
-            #return qty values in cart
+            # return qty values in cart
             item_in_cart = self.if_item_in_cart(values["Название"])
             if item_in_cart:
-                #if qty not bigger availiable
+                # if qty not bigger availiable
                 if int(item_in_cart) < int(values["Кол-во."]):
                     self.cart_items_rounder(values, item_in_cart)
                 else:
                     QtWidgets.QMessageBox.about(
                         self.tab, "Error", "Нет доступного количества"
                     )
-            #item not in self.cart_items
+            # item not in self.cart_items
             else:
                 self.total_price = 0
-                self.tableWidget_2.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+                self.tableWidget_2.setSelectionBehavior(
+                    QtWidgets.QAbstractItemView.SelectRows
+                )
                 row = self.tableWidget_2.rowCount()
                 values = self.tableWidget.parse_row()
                 self.tableWidget_2.insertRow(row + 1)
@@ -172,11 +171,13 @@ class CartFinance_methods:
         self.total_price = 0
         self.total_income = 0
         price = line_edit.text()
-        try: 
+        try:
             int(price)
         except:
-            raise QtWidgets.QMessageBox.about(self.tab, "Error", "это не число".format(button.text()))
-        if price != '':
+            raise QtWidgets.QMessageBox.about(
+                self.tab, "Error", "это не число".format(button.text())
+            )
+        if price != "":
             item_in_cart = self.if_item_in_cart(button.text())
             specific = button.text()
             if item_in_cart:
@@ -184,7 +185,7 @@ class CartFinance_methods:
                 items_price = int(price)
                 item = NumericItem()
                 self.remove_item_in_cart_by_name(specific)
-                values = {"Название": specific, "ГРН": price,'qty_item_in_cart':1}
+                values = {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
                 self.cart_items.append(values)
                 self.update_total_price()
                 item.setData(QtCore.Qt.DisplayRole, (items_price))
@@ -199,10 +200,14 @@ class CartFinance_methods:
                 item.setData(QtCore.Qt.DisplayRole, (price))
                 self.tableWidget_2.insertRow(row + 1)
                 self.tableWidget_2.setRowCount(row + 1)
-                self.tableWidget_2.setItem(row, 0, QtWidgets.QTableWidgetItem(str(specific)))
+                self.tableWidget_2.setItem(
+                    row, 0, QtWidgets.QTableWidgetItem(str(specific))
+                )
                 self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
 
-                self.cart_items.append({"Название": specific, "ГРН": price,'qty_item_in_cart':1})
+                self.cart_items.append(
+                    {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
+                )
                 self.update_total_price()
                 # self.label_37.setText(str(self.total_price))
                 # self.label_38.setText(str(round(self.total_income)))
@@ -211,10 +216,10 @@ class CartFinance_methods:
                     row, 2, QtWidgets.QTableWidgetItem(str((total_qty)))
                 )
                 self.tableWidget_2.setItem(
-                    row, 3, QtWidgets.QTableWidgetItem(str((price* total_qty)))
+                    row, 3, QtWidgets.QTableWidgetItem(str((price * total_qty)))
                 )
-            line_edit.setText('')
+            line_edit.setText("")
         else:
             QtWidgets.QMessageBox.about(
-        self.tab, "Error", "нет значения поле в {}".format(button.text())
-    )
+                self.tab, "Error", "нет значения поле в {}".format(button.text())
+            )

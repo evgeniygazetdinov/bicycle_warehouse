@@ -18,11 +18,9 @@ class FixesMainWindow:
         self.add_combobox_with_qty()
         self.ui_fixes()
         self.init_cassa_table()
+        self.create_labels_above_cassa_table()
 
     def ui_fixes(self):
-        # item = self.tableWidget_6.horizontalHeaderItem(8)
-        # item.setText("Доход")
-        # self.tabWidget.setTabText(2, "Настройки")
         self.label_22.setText("Наличные")
         self.label_22.setFont(QtGui.QFont("Sans Serif", 11))
         # set no editable
@@ -86,7 +84,6 @@ class FixesMainWindow:
         values = [50, 480, 50, 50, 50, 50, 50, 70]
         for i in range(len(values)):
             self.tableWidget.setColumnWidth(i, values[i])
-        # self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
         pass
 
     def resize_tableWidget_2(self):
@@ -276,11 +273,61 @@ class FixesMainWindow:
         item.setText( "НКТ")
         item = self.tableWidget_6.horizontalHeaderItem(8)
         # item.setText( "НКТ")
-        __sortingEnabled = self.tableWidget_6.isSortingEnabled()
-        self.tableWidget_6.setSortingEnabled(False)
-        __sortingEnabled = self.tableWidget_6.isSortingEnabled()
-        self.tableWidget_6.setSortingEnabled(False)
         self.tableWidget_6.verticalHeader().setVisible(False)
-        values = [150, 50, 500, 50, 50, 50, 50, 50, 50 ]
+        values = [150, 50, 500, 50, 50, 80, 50, 50 ]
+
         for i in range(len(values)):
             self.tableWidget_6.setColumnWidth(i, values[i])
+
+    def create_labels_above_cassa_table(self):
+        def set_font_for_labels(label):
+            font = QtGui.QFont()
+            font.setFamily("Noto Sans Mono CJK JP")
+            font.setPointSize(14)
+            font.setBold(True)
+            font.setWeight(75)
+            label.setFont(font)
+            label.setLineWidth(4)
+
+        self.label_17 = QtWidgets.QLabel(self.tab_2)
+        self.label_17.setGeometry(QtCore.QRect(350, 68, 151, 21))
+        self.label_17.setText('0')
+        self.label_18 = QtWidgets.QLabel(self.tab_2)
+        self.label_18.setGeometry(QtCore.QRect(350, 17, 151, 41))
+        self.label_18.setText('получено')
+        self.label_20 = QtWidgets.QLabel(self.tab_2)
+        self.label_20.setGeometry(QtCore.QRect(460, 17, 151, 41))
+        self.label_20.setText("прибыль")
+        self.label_19 = QtWidgets.QLabel(self.tab_2)
+        self.label_19.setGeometry(QtCore.QRect(460, 68, 151, 21))
+        self.label_19.setText("0")
+        self.label_31 = QtWidgets.QLabel(self.tab_2)
+        self.label_31.setGeometry(QtCore.QRect(560, 17, 151, 41))
+        self.label_31.setText('магазин')
+        self.label_32 = QtWidgets.QLabel(self.tab_2)
+        self.label_32.setGeometry(QtCore.QRect(560, 60, 151, 41))
+        self.label_32.setText("0")
+        self.label_33 = QtWidgets.QLabel(self.tab_2)
+        self.label_33.setGeometry(QtCore.QRect(810, 17, 151, 41))
+        self.label_33.setText('расходы')
+        self.label_34 = QtWidgets.QLabel(self.tab_2)
+        self.label_34.setGeometry(QtCore.QRect(810, 60, 151, 41))
+        self.label_34.setText("0")
+        self.label_35 = QtWidgets.QLabel(self.tab_2)
+        self.label_35.setGeometry(QtCore.QRect(690, 17, 151, 41))
+        self.label_35.setText("работа")
+        self.label_36 = QtWidgets.QLabel(self.tab_2)
+        self.label_36.setGeometry(QtCore.QRect(690, 60, 151, 41))
+        self.label_36.setText("0")
+        self.label_39 = QtWidgets.QLabel(self.tab_2)
+        self.label_39.setGeometry(QtCore.QRect(925, 17, 151, 41))
+        self.label_39.setText('авансы')
+        self.label_40 = QtWidgets.QLabel(self.tab_2)
+        self.label_40.setGeometry(QtCore.QRect(925, 60, 151, 41))
+        self.label_40.setText('0')
+        labels = [self.label_17,self.label_18,self.label_19,
+                    self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
+        for label in labels:
+            set_font_for_labels(label)
+        
+      
