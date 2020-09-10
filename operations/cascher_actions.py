@@ -69,19 +69,19 @@ class BasketActions:
         self.label_40.setText(str(total_prepaid))
 
 
-
-
     def get_basket_items_by_date(self):
+        def calculate_by(dict_with_values,value_for_calculate):
+            total = 0
+            for item in dict_with_values:
+                total+= int(item[value_for_calculate])
+            return total
+
         self.tableWidget_6.clean_table()
         now = datetime.datetime.now()
         from_date_string = self.get_date_time_from_widget(now.year, self.dateTimeEdit)
         to_date_string = self.get_date_time_from_widget(now.year, self.dateTimeEdit_2)
         self.tableWidget_6.display_items(from_date_string, to_date_string)
         self.update_labels()
-
-
-
-       
     
     def basket_actions(self):
         self.setDefaultTime()
