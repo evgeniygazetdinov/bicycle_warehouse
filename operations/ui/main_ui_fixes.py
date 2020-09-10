@@ -330,11 +330,4 @@ class FixesMainWindow:
         for label in labels:
             set_font_for_labels(label)
         
-        
-        
-        
-        
-        
-        
-        
-        
+      
