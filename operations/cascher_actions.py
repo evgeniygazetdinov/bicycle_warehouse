@@ -78,8 +78,12 @@ class BasketActions:
         to_date_string = self.get_date_time_from_widget(now.year, self.dateTimeEdit_2)
         self.tableWidget_6.display_items(from_date_string, to_date_string)
         self.update_labels()
+
+
+
        
     
     def basket_actions(self):
         self.setDefaultTime()
+
         self.pushButton_10.clicked.connect(self.get_basket_items_by_date)
