@@ -12,7 +12,7 @@ class BasketActions:
 
         day_mon = string[0]
         day = (day_mon.split("/"))[0]
-        mon = (day_mon.split("/"))[-1]
+        mon = (day_mon.split("/"))[1]
         day_mon = mon + "/" + day
         hour_min = string[-1]
         res = day_mon + "/" + str(now_year)[-2:] + " " + hour_min + ":00"
@@ -24,15 +24,21 @@ class BasketActions:
         to_date = QtCore.QDateTime.currentDateTime()
         self.dateTimeEdit.setDateTime(from_date)
         self.dateTimeEdit_2.setDateTime(to_date)
-        self.dateTimeEdit.setDisplayFormat("dd/MM hh:mm")
-        self.dateTimeEdit_2.setDisplayFormat("dd/MM hh:mm")
+        self.dateTimeEdit.setDisplayFormat("dd/MM/yy hh:mm")
+        self.dateTimeEdit_2.setDisplayFormat("dd/MM/yy hh:mm")
         self.get_basket_items_by_date()
 
     def update_labels(self):
         def calculate_by(dict_with_values,value_for_calculate):
             total = 0
             for item in dict_with_values:
-                total+= int(item[value_for_calculate])
+                try:
+                    to_plus = int(item[value_for_calculate])
+                except:
+                    to_plus = float(item[value_for_calculate])  
+                
+                total+= to_plus
+                
             return total
 
         all_usiall_buy = self.tableWidget_6.find_values_in_table("ПР",6)
@@ -85,5 +91,4 @@ class BasketActions:
     
     def basket_actions(self):
         self.setDefaultTime()
-
         self.pushButton_10.clicked.connect(self.get_basket_items_by_date)
