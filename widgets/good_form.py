@@ -449,7 +449,6 @@ class GoodsForm(QMainWindow):
                 profit_procent = self.recalculate_procent(
                     float(sell_price), float(buy_price)
                 )
-
                 if sell_price_uah == int(sell_price_uah):
                     sell_price = int(sell_price_uah)
             else:
