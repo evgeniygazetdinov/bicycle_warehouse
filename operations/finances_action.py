@@ -223,3 +223,4 @@ class CartFinance_methods:
             QtWidgets.QMessageBox.about(
                 self.tab, "Error", "нет значения поле в {}".format(button.text())
             )
+            
