@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from widgets.cart_table import CartTable
 from widgets.custom_widgets import NumericItem, ProcentItem
 from PySide2 import QtWidgets, Qt, QtCore
@@ -79,7 +80,6 @@ class CustomCashierTable(QtWidgets.QTableWidget):
         for good in list_with_goods:
             row -= 1
             item = NumericItem()
-            # item.setFlags(Qt.ItemIsEditable)
             item.setData(QtCore.Qt.DisplayRole, good["dated"])
             self.setItem(row, 0, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, good["article"])
@@ -93,6 +93,7 @@ class CustomCashierTable(QtWidgets.QTableWidget):
             item.setData(QtCore.Qt.EditRole, good["profit"])
             self.setItem(row, 5, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, (find_type_by_name(good["name"])))
+
             self.setItem(row, 6, QtWidgets.QTableWidgetItem(item))
             item.setData(QtCore.Qt.DisplayRole, (good["payment"]))
             self.setItem(row, 7, QtWidgets.QTableWidgetItem(item))
@@ -122,3 +123,5 @@ class CustomCashierTable(QtWidgets.QTableWidget):
             if find_by_value == row_value:
                 res.append(row_parser(self,row))
         return res
+      
+      

@@ -284,3 +284,4 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
         self.pushButton_5.clicked.connect(lambda : self.make_buy(self.pushButton_5,self.cart_items,self.tableWidget_2))
         self.pushButton_6.clicked.connect(lambda : self.make_buy(self.pushButton_6,self.cart_items,self.tableWidget_2))
         self.pushButton_7.clicked.connect(lambda : self.make_buy(self.pushButton_7,self.cart_items,self.tableWidget_2))
+
