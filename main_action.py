@@ -174,6 +174,75 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
             
 
 
+    def make_buy(self, button, cart_array, cart_table):
+        button_value = button.text()
+        if button_value == "карта":
+            button_value = "Картка"
+        if button_value == "Наличные":
+            button_value = "Готівка"
+        if button_value == "терминал":
+            button_value = "Термінал"
+        print(button_value)
+        if len(cart_array) > 0:
+            """values from second cart table"""
+            cart_values_from_table = cart_table.get_values_from_cart()
+            db = Bicycle_db()
+            schema = ",".join(db.schema["basket"])
+            date = datetime.datetime.now()
+            dated = date.strftime("%m/%d/%y %H:%M:00")
+            values = []
+            for cart_item in range(len(cart_values_from_table)):
+                for cart_array_item in cart_array:
+                    if "Aрт" in cart_values_from_table[cart_item]:
+                        if (
+                            cart_values_from_table[cart_item]["название"]
+                            == cart_array_item["Название"]
+                        ):
+                            values.append(
+                                '((SELECT MAX(id)from basket)+1,{},{},{},{},"{}",{},"{}","","{}")'.format(
+                                    cart_values_from_table[cart_item]["цена"],
+                                    cart_values_from_table[cart_item]["кол-во"],
+                                    cart_values_from_table[cart_item]["сумма"],
+                                    cart_array[cart_item]["Арт"],
+                                    button_value,
+                                    cart_array_item["Продаж"],
+                                    dated,
+                                    cart_array_item["Название"],
+                                )
+                            )
+                            break
+                    else:
+                        values.append(
+                            '((SELECT MAX(id)from basket)+1,{},{},{},"","{}",{},"{}","","{}")'.format(
+                                cart_values_from_table[cart_item]["цена"],
+                                cart_values_from_table[cart_item]["кол-во"],
+                                cart_values_from_table[cart_item]["сумма"],
+                                button_value,
+                                cart_values_from_table[cart_item]["цена"],
+                                dated,
+                                cart_values_from_table[cart_item]["название"],
+                            )
+                        )
+                        break
+
+            main_query = "INSERT INTO basket ({}) VALUES".format(schema)
+            for value in range(len(values)):
+                main_query += values[value]
+                if value + 1 != len(values):
+                    main_query += ","
+
+            db.insert(main_query)
+            self.setDefaultTime()
+            self.get_basket_items_by_date()
+            self.tableWidget_2.clean_table()
+            # TODO add operation for delete get values from cart array and delete each from goods table
+            self.cart_items = []
+            # update main_table
+
+        else:
+            error_dialog = QtWidgets.QErrorMessage(self.tab)
+            error_dialog.showMessage("Нет товаров в корзине")
+
     def set_current_category(self, category):
         db = Bicycle_db()
 
@@ -275,13 +344,25 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
         self.pushButton_4.clicked.connect(self.clean_cart)
         self.lineEdit.textChanged.connect(self.search_with_qty)
         self.lineEdit_4.textChanged.connect(self.search_with_qty)
-        
+
         self.lineEdit.inputRejected.connect(self.search_with_qty)
         self.lineEdit_4.inputRejected.connect(self.search_with_qty)
         self.pushButton_8.clicked.connect(lambda: self.lineEdit.clear())
         self.pushButton_8.clicked.connect(lambda: self.lineEdit_4.clear())
         self.comboBox.currentIndexChanged.connect(self.qty_comboBox_handler)
-        self.pushButton_5.clicked.connect(lambda : self.make_buy(self.pushButton_5,self.cart_items,self.tableWidget_2))
-        self.pushButton_6.clicked.connect(lambda : self.make_buy(self.pushButton_6,self.cart_items,self.tableWidget_2))
-        self.pushButton_7.clicked.connect(lambda : self.make_buy(self.pushButton_7,self.cart_items,self.tableWidget_2))
-
+        self.pushButton_5.clicked.connect(
+            lambda: self.make_buy(
+                self.pushButton_5, self.cart_items, self.tableWidget_2
+            )
+        )
+        self.pushButton_6.clicked.connect(
+            lambda: self.make_buy(
+                self.pushButton_6, self.cart_items, self.tableWidget_2
+            )
+        )
+        self.pushButton_7.clicked.connect(
+            lambda: self.make_buy(
+                self.pushButton_7, self.cart_items, self.tableWidget_2
+            )
+        )
+                                                                                                
