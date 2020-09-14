@@ -136,6 +136,43 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                 self.tableWidget.setRowHidden(row, False)
             else:
                 self.tableWidget.setRowHidden(row, True)
+    def make_buy(self,button,cart_array,cart_table):
+        button_value = button.text()
+        if button_value == 'карта':
+            button_value = 'Картка'
+        if button_value == 'наличные':
+            button_value = 'Готівка'
+        if button_value == 'терминал':
+            button_value = 'Термінал'
+        print(button_value)
+        if len(cart_array) > 0:
+            """values from second cart table"""
+            cart_values_from_table = cart_table.get_values_from_cart()
+            db = Bicycle_db()
+            schema = db.schema['basket']
+            date = datetime.datetime.now()
+            dated = date.strftime('%M/%d/%Y %H:%m:00')
+            values = []
+            for cart_item in range(len(cart_values_from_table)):
+                if cart_values_from_table[cart_item] in cart_array:
+                    values.append('VALUES((SELECT MAX(id)from basket)+1,{},{},{},{},{},{},{},{},"","{}"'.format(cart_values_from_table[cart_item]['цена'],
+                            cart_values_from_table[cart_item]['кол-во'], cart_values_from_table[cart_item']['сумма'], cart_array[cart_item]['Арт'], 
+                            button_value, cart_array[cart_item]['Продаж'],dated, cart_array[cart_item]['Название']))
+                else:
+                    values.append('VALUES((SELECT MAX(id)from basket)+1,{},{},{},"",{},{},{},{},"",{}'.format(cart_values_from_table['цена'],
+                            cart_values_from_table['кол-во'], cart_values_from_table['сумма'], button_value, cart_values_from_table['цена'],
+                            dated,  cart_values_from_table['Название']))
+            main_query = 'INSERT INTO basket ({})'.format(schema)
+            for value in values:
+                main_query += value
+            db.insert(main_query)
+            
+
+        else:
+            error_dialog = QtWidgets.QErrorMessage(self.tab)
+            error_dialog.showMessage("Нет товаров в корзине")
+            
+
 
     def make_buy(self, button, cart_array, cart_table):
         button_value = button.text()
@@ -328,3 +365,4 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                 self.pushButton_7, self.cart_items, self.tableWidget_2
             )
         )
+                                                                                                

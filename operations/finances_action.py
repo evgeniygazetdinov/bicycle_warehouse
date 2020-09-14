@@ -224,4 +224,3 @@ class CartFinance_methods:
                 self.tab, "Error", "нет значения поле в {}".format(button.text())
             )
 
-
