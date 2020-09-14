@@ -52,7 +52,7 @@ class BasketActions:
         profit_usiall_buy = calculate_by(all_usiall_buy, 'Прибыль')
         profit_works = calculate_by(all_works, 'Прибыль')
         profit_sales = calculate_by(all_sales, 'Прибыль')
-
+ 
 
         sum_usiall_buy = calculate_by(all_usiall_buy,"Сумма" )
         sum_works = calculate_by(all_works,"Сумма" )
@@ -61,18 +61,42 @@ class BasketActions:
         sum_prepaid = calculate_by(all_prepaid,"Сумма" )
 
 
-        total_profit = (profit_usiall_buy + profit_works) + profit_sales
-        total_sum = (sum_usiall_buy + sum_works) + sum_sales
-        total_magazine = (sum_usiall_buy + sum_sales)
+        total_profit = abs(abs(profit_usiall_buy + profit_works) - profit_sales)
+        total_sum = abs(abs(sum_usiall_buy + sum_works) - sum_sales)
+        total_magazine = abs(sum_usiall_buy - sum_sales)
         total_work = sum_works
         total_expense = sum_expense
         total_prepaid = sum_prepaid
         self.label_17.setText(str(total_sum))
         self.label_19.setText(str(total_profit))
         self.label_32.setText(str(total_magazine))
-        self.label_34.setText(str(total_work))
-        self.label_36.setText(str(total_expense))
+        self.label_34.setText(str(total_expense))
+        self.label_36.setText(str(total_work))
         self.label_40.setText(str(total_prepaid))
+
+    def sum_payments(self):
+        def calculate_by(dict_with_values,value_for_calculate):
+            total = 0
+            for item in dict_with_values:
+                try:
+                    to_plus = int(item[value_for_calculate])
+                except:
+                    to_plus = float(item[value_for_calculate])  
+                
+                total+= to_plus
+                
+            return total
+        all_card = self.tableWidget_6.find_values_in_table("Картка",7)
+        all_cash = self.tableWidget_6.find_values_in_table("Готівка",7)
+        all_terminal = self.tableWidget_6.find_values_in_table("Термінал",7)
+
+        all_card = calculate_by(all_card,"Сумма" )
+        all_cash = calculate_by(all_cash,"Сумма" )
+        all_terminal =  calculate_by(all_terminal,"Сумма" )
+
+        self.label_25.setText(str(all_card))
+        self.label_26.setText(str(all_cash))
+        self.label_27.setText(str(all_terminal))
 
 
     def get_basket_items_by_date(self):
@@ -88,6 +112,7 @@ class BasketActions:
         to_date_string = self.get_date_time_from_widget(now.year, self.dateTimeEdit_2)
         self.tableWidget_6.display_items(from_date_string, to_date_string)
         self.update_labels()
+        self.sum_payments()
     
     def basket_actions(self):
         self.setDefaultTime()

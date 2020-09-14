@@ -199,6 +199,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
             self.get_basket_items_by_date()
             self.tableWidget_2.clean_table()
             # TODO add operation for delete get values from cart array and delete each from goods table
+            self.cart_items = []
             # update main_table
 
         else:

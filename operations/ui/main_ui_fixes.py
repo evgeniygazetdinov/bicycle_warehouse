@@ -189,7 +189,7 @@ class FixesMainWindow:
 
     def init_cassa_table(self):
         self.tableWidget_6 = CustomCashierTable(self.tab_2)
-        self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 731))
+        self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 600))
         self.tableWidget_6.setObjectName("tableWidget_6")
         self.tableWidget_6.setColumnCount(8)
         item = QtWidgets.QTableWidgetItem()

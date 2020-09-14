@@ -22,15 +22,17 @@ class CustomCashierTable(QtWidgets.QTableWidget):
         def find_type_by_name(name):
             if re.match(r"Аванс", name, re.IGNORECASE):
                 return "AB"
-            if name == "Знижка":
+            if name == "Знижка" or name == 'скидка':
                 return "CK"
             if (
                 name == "Матеріали майстерні"
+                or name == 'материалы'
                 or re.match(r"Собівартість", name, re.IGNORECASE)
                 or re.match(r"Витрати", name, re.IGNORECASE)
             ):
                 return "PC"
-            if name == "Робота майстерні":
+            if name == "Робота майстерні" \
+                or name == 'работа':
                 return "PБ"
             else:
                 return "ПР"
