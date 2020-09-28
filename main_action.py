@@ -62,6 +62,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
     def get_category_values(self):
         list_dict_with_results = []
         db = Bicycle_db()
+        
         result = db.edit("Select * FROM categories")
         count = len(result)
         for item in result:
@@ -156,7 +157,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
             for cart_item in range(len(cart_values_from_table)):
                 if cart_values_from_table[cart_item] in cart_array:
                     values.append('VALUES((SELECT MAX(id)from basket)+1,{},{},{},{},{},{},{},{},"","{}"'.format(cart_values_from_table[cart_item]['цена'],
-                            cart_values_from_table[cart_item]['кол-во'], cart_values_from_table[cart_item']['сумма'], cart_array[cart_item]['Арт'], 
+                            cart_values_from_table[cart_item]['кол-во'], cart_values_from_table[cart_item]['сумма'], cart_array[cart_item]['Арт'], 
                             button_value, cart_array[cart_item]['Продаж'],dated, cart_array[cart_item]['Название']))
                 else:
                     values.append('VALUES((SELECT MAX(id)from basket)+1,{},{},{},"",{},{},{},{},"",{}'.format(cart_values_from_table['цена'],
