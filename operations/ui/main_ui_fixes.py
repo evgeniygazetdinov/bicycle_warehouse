@@ -189,7 +189,7 @@ class FixesMainWindow:
 
     def init_cassa_table(self):
         self.tableWidget_6 = CustomCashierTable(self.tab_2)
-        self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 731))
+        self.tableWidget_6.setGeometry(QtCore.QRect(10, 110, 1011, 600))
         self.tableWidget_6.setObjectName("tableWidget_6")
         self.tableWidget_6.setColumnCount(8)
         item = QtWidgets.QTableWidgetItem()
@@ -329,3 +329,4 @@ class FixesMainWindow:
                     self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
         for label in labels:
             set_font_for_labels(label)
+
