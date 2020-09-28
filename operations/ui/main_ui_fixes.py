@@ -94,7 +94,7 @@ class FixesMainWindow:
 
     def add_top_element_in_tree_widget(self, item_name):
         current_index = self.treeWidget.current_item()
-        self.treeWidget.insertTopLevelItems(index, item_name)
+        self.treeWidget.insertTopLevelItems(current_index, item_name)
 
     def add_custom_tree(self):
         self.treeWidget = CustomTreeWidget(self.tab)

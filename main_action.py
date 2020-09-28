@@ -137,6 +137,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                 self.tableWidget.setRowHidden(row, False)
             else:
                 self.tableWidget.setRowHidden(row, True)
+
     def make_buy(self,button,cart_array,cart_table):
         button_value = button.text()
         if button_value == 'карта':
@@ -219,7 +220,7 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                                 cart_values_from_table[cart_item]["кол-во"],
                                 cart_values_from_table[cart_item]["сумма"],
                                 button_value,
-                                cart_values_from_table[cart_item]["цена"],
+                                cart_array_item["Продаж"],
                                 dated,
                                 cart_values_from_table[cart_item]["название"],
                             )

@@ -168,6 +168,7 @@ class CartFinance_methods:
             )
 
     def hander_for_handy_buttons(self, line_edit, button):
+        #handler for add material/sale/work into cashdesk
         self.total_price = 0
         self.total_income = 0
         price = line_edit.text()
@@ -180,13 +181,24 @@ class CartFinance_methods:
         if price != "":
             item_in_cart = self.if_item_in_cart(button.text())
             specific = button.text()
+            custom_template =  {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
+            if specific == 'материалы':
+                custom_template['Продаж'] = 0
+                custom_template["Наценка"] = 0
+            if specific == 'работа':
+                custom_template['Продаж'] = price
+                custom_template["Наценка"] = 0
+            if specific == 'скидка':
+                custom_template['Продаж'] = 0
+                custom_template["profit"] = 0
             if item_in_cart:
                 row = self.tableWidget_2.find_in_table_by_name(specific)
                 items_price = int(price)
                 item = NumericItem()
                 self.remove_item_in_cart_by_name(specific)
-                values = {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
-                self.cart_items.append(values)
+
+
+                self.cart_items.append(custom_template)
                 self.update_total_price()
                 item.setData(QtCore.Qt.DisplayRole, (items_price))
                 self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
@@ -206,7 +218,7 @@ class CartFinance_methods:
                 self.tableWidget_2.setItem(row, 1, QtWidgets.QTableWidgetItem(item))
 
                 self.cart_items.append(
-                    {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
+                   custom_template
                 )
                 self.update_total_price()
                 # self.label_37.setText(str(self.total_price))
