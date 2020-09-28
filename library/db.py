@@ -3,7 +3,6 @@ from PySide2.QtCore import *
 import sys
 import os
 import sqlite3
-import pandas_access as mdb
 import csv
 import csv_to_sqlite
 
@@ -12,12 +11,21 @@ class Bicycle_db:
     def __init__(self):
         self.name = "bicycle_db.sqlite"
         self.base_path = os.getcwd() + "/" + self.name
-        # if not os.path.exists(self.base_path):
-        self.create_category_query = "CREATE TABLE [categories] ( [id] integer, [name] text, [parent_id] integer, [export] integer );"
-        self.create_basket_query = "CREATE TABLE [basket] ( [id] integer, [price] text, [qty] integer, [total_price] integer, [article] text, [payment] text, [profit] integer, [dated] text, [article_old] text, [name] text );"
-        self.create_goods_query = "CREATE TABLE [goods] ( [article_old] text, [name] text, [qty] integer, [buy] real, [sell] real, [profit] text, [category] text, [currency] text, [sell_uah] integer, [article] integer )"
-        self.create_settings = "CREATE TABLE [settings] ( [Код] integer, [name] text, [value] text, [type] text );"
-        self.create_cur_category = "CREATE TABLE [cur_category] ( [name] text );"
+        self.query_creation = [
+            """CREATE TABLE [categories] ( [id] integer,
+                [name] text, [parent_id] integer, [export] integer );""",
+            """CREATE TABLE [basket] ( [id] integer, [price] text, 
+                [qty] integer, [total_price] integer, [article] text,
+                [payment] text, [profit] integer, [dated] text, 
+                [article_old] text, [name] text );""",
+            """CREATE TABLE [goods] ( [article_old] text,
+                [name] text, [qty] integer, [buy] real,
+                [sell] real, [profit] text, [category] text,
+                [currency] text, [sell_uah] integer, 
+                [article] integer )""",
+            """CREATE TABLE [settings] ( [Код] integer, 
+                [name] text, [value] text, [type] text );""",
+            """CREATE TABLE [cur_category] ( [name] text );""" ]
         self.tables_scheme = ["categories", "basket", "goods", "settings"]
         self.schema = {
             "categories": ["id", "name", "parent_id", "export"],
@@ -48,16 +56,14 @@ class Bicycle_db:
             "settings": ["Код", "name", "value", "type"],
         }
 
-        self.db = self.create_db()
-        self.connection = sqlite3.connect("bicycle_db.sqlite")
-        self.cursor = self.connection.cursor()
         if not os.path.exists(self.base_path):
-            if not self.db.open():
-                query = QSqlQuery()
-                query.exec_(self.create_category_query)
-                query.exec_(self.create_basket_query)
-                query.exec_(self.create_goods_query)
-                query.exec_(self.create_settings)
+            self.db = self.create_db()
+            self.connection = sqlite3.connect(self.name)
+            for query in self.query_creation:
+                self.edit(query)
+        else:
+            self.connection = sqlite3.connect(self.name)
+            self.cursor = self.connection.cursor()
 
     def create_db(self):
         db = QSqlDatabase.addDatabase("QSQLITE")
@@ -71,7 +77,7 @@ class Bicycle_db:
         return res
 
     def edit(self, query):
-        db = self.connection
+        db =  self.connection
         cursor = db.cursor()
         cursor.execute(query)
         return cursor.fetchall()

@@ -375,7 +375,8 @@ class GoodsForm(QMainWindow):
             self.lineEdit_6.setEnabled(False)
             ids_for_new_good = "SELECT MAX(article)from goods"
             db = Bicycle_db()
-            good_id = (db.insert(ids_for_new_good))[0][0] + 1
+            query = db.insert(ids_for_new_good)[0][0] 
+            good_id += 1
             self.lineEdit_6.setText(str(good_id))
             self.spinBox.setValue(1)
             self.treeWidget.setCurrentItem(QtWidgets.QTreeWidgetItem("Bci"))
@@ -400,9 +401,12 @@ class GoodsForm(QMainWindow):
         db = Bicycle_db()
         query = db.insert("SELECT value FROM settings WHERE name = 'Курс'")
         db.close()
-        course = int(query[0][0])
+        if len((query)) != 0 :
+            course = int(query[0][0])
+        else:
+            course = 20.3
         self.USD_value.setText(f"USD-{str(course)}")
-        return int(query[0][0])
+        return course
 
     def recalculate_procent(self, sell, buy):
         dif = abs(float(buy) - float(sell))
