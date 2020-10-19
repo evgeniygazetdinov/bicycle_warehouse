@@ -99,7 +99,7 @@ class FixesMainWindow:
 
     def add_top_element_in_tree_widget(self, item_name):
         current_index = self.treeWidget.current_item()
-        self.treeWidget.insertTopLevelItems(index, item_name)
+        self.treeWidget.insertTopLevelItems(current_index, item_name)
 
     def add_custom_tree(self):
         self.treeWidget = CustomTreeWidget(self.tab)
@@ -334,6 +334,7 @@ class FixesMainWindow:
                     self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
         for label in labels:
             set_font_for_labels(label)
+<<<<<<< HEAD
     
     def button_color_changer(self, button):
         button_name = button.text()
@@ -358,3 +359,6 @@ class FixesMainWindow:
         self.pushButton_15.setText('товар')
 
     
+=======
+
+>>>>>>> 21a7bf480aad5894dc44a88a46c431a3a4b321c9

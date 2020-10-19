@@ -11,7 +11,7 @@ meza==0.42.5
 numpy==1.19.1
 pandas==1.1.0
 pkg-resources==0.0.0
-pygogo==0.13.2
+pygogo
 PyInstaller==3.6
 PySide2==5.15.0
 python-dateutil==2.8.1
