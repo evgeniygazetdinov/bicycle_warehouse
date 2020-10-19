@@ -114,6 +114,18 @@ class BasketActions:
         self.update_labels()
         self.sum_payments()
     
+    def values_from_comment_and_summa_windows(self):
+        summa = self.textEdit.text()
+        comment = self.textEdit_2.text()
+        return  summa,comment
+
+
+    def get_money(self):
+        pass
+
+    def put_money(self):
+        pass
+    
     def basket_actions(self):
         self.setDefaultTime()
         self.pushButton_10.clicked.connect(self.get_basket_items_by_date)

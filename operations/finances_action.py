@@ -185,7 +185,15 @@ class CartFinance_methods:
                 items_price = int(price)
                 item = NumericItem()
                 self.remove_item_in_cart_by_name(specific)
-                values = {"Название": specific, "ГРН": price, "qty_item_in_cart": 1}
+                if specific == 'материалы':
+                    values = {"Название": specific, "ГРН": price, "Продаж":price,
+                    "qty_item_in_cart": 1}
+                elif specific == 'скидка':
+                    values = {"Название": specific, "ГРН": price, "Продаж":price,
+                    "qty_item_in_cart": 1}
+                elif specific == 'работа':
+                    values = {"Название": specific, "ГРН": price, "Продаж":price,
+                    "qty_item_in_cart": 1}
                 self.cart_items.append(values)
                 self.update_total_price()
                 item.setData(QtCore.Qt.DisplayRole, (items_price))
