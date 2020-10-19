@@ -334,7 +334,6 @@ class FixesMainWindow:
                     self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
         for label in labels:
             set_font_for_labels(label)
-<<<<<<< HEAD
     
     def button_color_changer(self, button):
         button_name = button.text()
@@ -358,7 +357,4 @@ class FixesMainWindow:
         self.pushButton_14.setText('расходы')
         self.pushButton_15.setText('товар')
 
-    
-=======
 
->>>>>>> 21a7bf480aad5894dc44a88a46c431a3a4b321c9
