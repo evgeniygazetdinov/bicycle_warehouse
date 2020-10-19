@@ -1,7 +1,6 @@
 env/
 etc/
 __pycache__/
-*.ui
 *.pyc
 *.sqlite
 *.csv
