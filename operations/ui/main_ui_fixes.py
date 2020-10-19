@@ -6,6 +6,9 @@ from widgets.cassa_table import CustomCashierTable
 
 
 class FixesMainWindow:
+
+
+
     def add_additional_custom_elements(self):
         self.add_custom_tree()
         self.add_custom_table()
@@ -19,6 +22,8 @@ class FixesMainWindow:
         self.ui_fixes()
         self.init_cassa_table()
         self.create_labels_above_cassa_table()
+        self.rename_commentary_buttons()
+
 
     def ui_fixes(self):
         self.label_22.setText("Наличные")
@@ -94,7 +99,7 @@ class FixesMainWindow:
 
     def add_top_element_in_tree_widget(self, item_name):
         current_index = self.treeWidget.current_item()
-        self.treeWidget.insertTopLevelItems(index, item_name)
+        self.treeWidget.insertTopLevelItems(current_index, item_name)
 
     def add_custom_tree(self):
         self.treeWidget = CustomTreeWidget(self.tab)
@@ -329,4 +334,27 @@ class FixesMainWindow:
                     self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
         for label in labels:
             set_font_for_labels(label)
+    
+    def button_color_changer(self, button):
+        button_name = button.text()
+        red_state = ['наличка', 'терминал', 'карта']
+        blue_state = ['аванс', 'расходы', 'товар']
+        if button_name in red_state:
+            condition = self.buttons_condition[button_name]
+            if condition != 0:
+                #make button red
+                pass
+            else:
+                #change_default
+                pass
+        elif
+    
+    def rename_commentary_buttons(self):
+        self.pushButton_11.setText('наличка')
+        self.pushButton_12.setText('карта')
+        self.pushButton_13.setText('терминал')
+        self.pushButton_16.setText('аванс')
+        self.pushButton_14.setText('расходы')
+        self.pushButton_15.setText('товар')
+
 
