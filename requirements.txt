@@ -8,7 +8,7 @@ dbfread==2.0.4
 idna==2.10
 ijson==2.6.1
 meza==0.42.5
-numpy==1.19.1
+numpy==1.21.0
 pandas==1.1.0
 pkg-resources==0.0.0
 pygogo
