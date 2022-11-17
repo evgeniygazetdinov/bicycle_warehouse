@@ -347,7 +347,6 @@ class FixesMainWindow:
             else:
                 #change_default
                 pass
-        elif
     
     def rename_commentary_buttons(self):
         self.pushButton_11.setText('наличка')
