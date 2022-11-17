@@ -16,7 +16,5 @@ if __name__ == "__main__":
     MainWindow = CustomMainWindow()
     ui = Main()
     ui.setupUi(MainWindow)
-    # screenShape = QtWidgets.QDesktopWidget().screenGeometry()
-    # MainWindow.resize(screenShape.width(), screenShape.height())
     MainWindow.show()
     sys.exit(app.exec_())

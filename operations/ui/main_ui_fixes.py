@@ -334,7 +334,7 @@ class FixesMainWindow:
                     self.label_20,self.label_32,self.label_31, self.label_33,self.label_34,self.label_35,self.label_36,self.label_39,self.label_40]
         for label in labels:
             set_font_for_labels(label)
-    
+
     def button_color_changer(self, button):
         button_name = button.text()
         red_state = ['наличка', 'терминал', 'карта']
@@ -355,5 +355,3 @@ class FixesMainWindow:
         self.pushButton_16.setText('аванс')
         self.pushButton_14.setText('расходы')
         self.pushButton_15.setText('товар')
-
-

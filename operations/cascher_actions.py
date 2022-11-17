@@ -1,7 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from library.db import Bicycle_db
 import datetime
-import time
 
 
 class BasketActions:
@@ -113,7 +111,7 @@ class BasketActions:
         self.tableWidget_6.display_items(from_date_string, to_date_string)
         self.update_labels()
         self.sum_payments()
-    
+
     def values_from_comment_and_summa_windows(self):
         summa = self.textEdit.text()
         comment = self.textEdit_2.text()
@@ -125,7 +123,7 @@ class BasketActions:
 
     def put_money(self):
         pass
-    
+
     def basket_actions(self):
         self.setDefaultTime()
 
