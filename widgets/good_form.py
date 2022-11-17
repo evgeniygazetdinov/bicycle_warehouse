@@ -1,13 +1,7 @@
 import sys
-from PySide2 import QtGui, QtWidgets, QtCore, Qt
+from PySide2 import QtGui, QtWidgets, QtCore
 from PySide2.QtWidgets import (
-    QApplication,
     QMainWindow,
-    QPushButton,
-    QToolTip,
-    QMessageBox,
-    QLabel,
-    QDialog,
 )
 from library.db import Bicycle_db
 import time
@@ -219,12 +213,16 @@ class GoodsForm(QMainWindow):
 
     def transtlate_category(self, category):
         db = Bicycle_db()
+
         if isinstance(category, str):
             category_id = db.insert(
                 'SELECT id from categories where name like "%{}%"'.format(category)
             )
-            return category_id[0]
+            if category_id:
+                return category_id[0]
+            return 0
         elif isinstance(category, int):
+            
             category_id = db.insert(
                 "SELECT name from categories where id ={}".format(category)
             )
@@ -241,9 +239,11 @@ class GoodsForm(QMainWindow):
         if self.category_title.text() == "категории":
             good_values["category"] = 0
         else:
-            good_values["category"] = (
-                self.transtlate_category(self.category_title.text())
-            )[0]
+            if self.category_title.text():
+                good_values["category"] = (
+                    self.transtlate_category(self.category_title.text())
+                )
+
         good_values["qty"] = str(self.spinBox.value())
         return good_values
 
@@ -374,6 +374,7 @@ class GoodsForm(QMainWindow):
         else:
             self.lineEdit_6.setEnabled(False)
             ids_for_new_good = "SELECT MAX(article)from goods"
+            good_id = 0
             db = Bicycle_db()
             query = db.insert(ids_for_new_good)[0][0] 
             good_id += 1

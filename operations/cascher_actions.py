@@ -113,6 +113,21 @@ class BasketActions:
         self.tableWidget_6.display_items(from_date_string, to_date_string)
         self.update_labels()
         self.sum_payments()
+<<<<<<< HEAD
+    
+    def values_from_comment_and_summa_windows(self):
+        summa = self.textEdit.text()
+        comment = self.textEdit_2.text()
+        return  summa,comment
+
+
+    def get_money(self):
+        pass
+
+    def put_money(self):
+        pass
+=======
+>>>>>>> master
     
     def basket_actions(self):
         self.setDefaultTime()

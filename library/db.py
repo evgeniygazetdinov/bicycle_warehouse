@@ -25,7 +25,12 @@ class Bicycle_db:
                 [article] integer )""",
             """CREATE TABLE [settings] ( [Код] integer, 
                 [name] text, [value] text, [type] text );""",
+<<<<<<< HEAD
+            """CREATE TABLE [cur_category] ( [name] text );""" ,
+            """insert into categories(id, name,parent_id,export) values(1,'все', 1,1)"""]
+=======
             """CREATE TABLE [cur_category] ( [name] text );""" ]
+>>>>>>> master
         self.tables_scheme = ["categories", "basket", "goods", "settings"]
         self.schema = {
             "categories": ["id", "name", "parent_id", "export"],
