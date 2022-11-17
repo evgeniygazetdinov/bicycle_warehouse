@@ -220,7 +220,11 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                                 cart_values_from_table[cart_item]["кол-во"],
                                 cart_values_from_table[cart_item]["сумма"],
                                 button_value,
+<<<<<<< HEAD
                                 cart_array_item["Продаж"],
+=======
+                                cart_values_from_table[cart_item]["цена"],
+>>>>>>> master
                                 dated,
                                 cart_values_from_table[cart_item]["название"],
                             )
@@ -367,5 +371,9 @@ class Views_Main_Window(FixesMainWindow, CartFinance_methods, BasketActions):
                 self.pushButton_7, self.cart_items, self.tableWidget_2
             )
         )
+<<<<<<< HEAD
         self.pushButton_17.clicked.connect(self.put_money)
         self.pushButton_18.clicked.connect(self.get_money)
+=======
+                                                                                                
+>>>>>>> master
